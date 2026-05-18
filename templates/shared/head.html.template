@@ -1,0 +1,68 @@
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>{{page_title}}</title>
+<meta name="description" content="{{page_meta_description}}">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family={{brand.font.heading_google}}&family={{brand.font.body_google}}&display=swap" rel="stylesheet" />
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          ink: '{{brand.color.ink}}',
+          navy: '{{brand.color.primary}}',
+          'navy-2': '{{brand.color.primary_2}}',
+          card: '{{brand.color.card}}',
+          gold: { DEFAULT: '{{brand.color.accent}}', light: '{{brand.color.accent_light}}', dark: '{{brand.color.accent_dark}}' },
+        },
+        fontFamily: {
+          heading: ['{{brand.font.heading}}', 'sans-serif'],
+          body: ['{{brand.font.body}}', 'sans-serif'],
+        },
+      },
+    },
+  };
+</script>
+<style>
+  body { font-family: '{{brand.font.body}}', sans-serif; overflow-x: hidden; background: {{brand.color.primary}}; }
+  .font-heading { font-family: '{{brand.font.heading}}', sans-serif; }
+  .font-body { font-family: '{{brand.font.body}}', sans-serif; }
+  .heading-metallic {
+    background: linear-gradient(180deg, #ffffff 0%, #ffffff 48%, #c2cad6 100%);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; color: transparent;
+  }
+  .btn-gold {
+    background: linear-gradient(180deg, {{brand.color.accent_light}} 0%, {{brand.color.accent}} 48%, {{brand.color.accent_dark}} 100%);
+    color: {{brand.color.primary}}; border-radius: 0;
+    transition: filter .18s ease, transform .18s ease;
+  }
+  .btn-gold:hover { filter: brightness(1.07); }
+  .btn-gold:active { transform: translateY(1px); }
+  .gold-text { color: {{brand.color.accent}}; }
+  .form-input {
+    width: 100%; border-radius: 0; outline: none;
+    transition: border-color .15s ease;
+  }
+  .form-input:focus { border-color: {{brand.color.accent}} !important; }
+  .form-input::placeholder { color: rgba(255,255,255,0.4); }
+  .diag { background-image: repeating-linear-gradient(135deg, rgba(255,255,255,0.022) 0 1px, transparent 1px 24px); }
+  .marquee-band {
+    background-color: {{brand.color.primary_2}};
+    background-image: repeating-linear-gradient(135deg, rgba(255,255,255,0.045) 0 2px, transparent 2px 13px);
+  }
+  .glass { background: rgba(255,255,255,0.09); border: 1px solid rgba(255,255,255,0.16); backdrop-filter: blur(10px); }
+  .hero-overlay {
+    background: linear-gradient(100deg, rgba(8,14,26,0.97) 0%, rgba(11,19,34,0.92) 36%, rgba(15,23,42,0.74) 66%, rgba(15,23,42,0.5) 100%);
+  }
+  .cta-overlay {
+    background: linear-gradient(100deg, rgba(8,14,26,0.96) 0%, rgba(11,19,34,0.9) 45%, rgba(15,23,42,0.68) 100%);
+  }
+  details > summary { list-style: none; }
+  details > summary::-webkit-details-marker { display: none; }
+  details[open] .faq-icon { transform: rotate(45deg); }
+</style>
+</head>

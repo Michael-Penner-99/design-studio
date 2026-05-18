@@ -1,0 +1,24 @@
+<!-- ================= SERVICE AREAS ================= -->
+<section id="areas" class="py-20 bg-navy-2 diag">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="grid lg:grid-cols-2 gap-14 items-center">
+      <div>
+        <p class="text-[11px] tracking-[0.32em] gold-text font-bold mb-4">{{areas_kicker}}</p>
+        <h2 class="font-heading heading-metallic text-4xl md:text-5xl leading-[1.05] tracking-wide">{{areas_h2}}</h2>
+        <p class="mt-5 text-sm text-white/55 leading-relaxed">
+          {{areas_intro}}
+        </p>
+        <div class="mt-7 grid grid-cols-2 gap-x-8 gap-y-3">
+          {{#loop:areas}}
+            <div class="flex items-center gap-2 text-xs text-gray-200"><span class="gold-text">&#10003;</span> {{item.name}}</div>
+          {{/loop:areas}}
+        </div>
+      </div>
+      <div>
+        <a href="{{map_link}}" target="_blank" rel="noopener noreferrer" class="block">
+          <img src="{{asset:map}}" alt="{{brand_name}} service area map" class="w-full h-[380px] object-cover border border-white/10" />
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

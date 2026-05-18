@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+{{section:head}}
+<body class="text-white antialiased">
+
+{{section:header}}
+
+<!-- hero_variant=service-specific -->
+{{section:hero}}
+
+{{section:marquee}}
+
+{{section:service-detail}}
+
+{{section:marquee}}
+
+{{section:gallery}}
+
+{{section:marquee}}
+
+{{section:faq}}
+
+{{section:pricing}}
+
+{{section:contact}}
+
+{{section:footer}}
+
+</body>
+</html>

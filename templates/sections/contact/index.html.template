@@ -1,0 +1,57 @@
+<!-- ================= CONTACT / CTA ================= -->
+<section id="contact" class="relative py-24 overflow-hidden">
+  <img src="{{asset:cta}}" alt="" class="absolute inset-0 w-full h-full object-cover" />
+  <div class="absolute inset-0 cta-overlay"></div>
+  <div class="absolute inset-0 diag"></div>
+  <div class="relative max-w-7xl mx-auto px-6">
+    <div class="grid lg:grid-cols-2 gap-14 items-center">
+      <div>
+        <a href="/" class="flex items-center gap-3 mb-6">
+          <img src="{{asset:logo}}" alt="{{brand_name}}" class="h-9 w-auto" />
+          <div class="leading-none">
+            <div class="font-heading text-2xl tracking-wide">{{brand_name_primary}}</div>
+            <div class="text-[8px] tracking-[0.46em] gold-text font-bold mt-1">{{brand_name_secondary}}</div>
+          </div>
+        </a>
+        <p class="text-[11px] tracking-[0.32em] gold-text font-bold mb-4">{{contact_kicker}}</p>
+        <h2 class="font-heading heading-metallic text-5xl md:text-6xl leading-[1.0] tracking-wide">{{contact_h2}}</h2>
+        <p class="mt-5 text-sm text-white/55 max-w-md leading-relaxed">
+          {{contact_intro}}
+        </p>
+        <div class="mt-7 flex flex-wrap gap-4">
+          <a href="tel:{{phone_tel}}" class="btn-gold font-body font-bold text-[11px] uppercase tracking-wider px-6 py-3.5">{{contact_cta_phone_label}}</a>
+          <a href="#quote" class="glass font-body font-bold text-[11px] uppercase tracking-wider px-6 py-3.5 hover:border-[{{brand.color.accent}}] transition-colors">{{contact_cta_secondary_label}}</a>
+        </div>
+      </div>
+      <div class="overflow-hidden" style="background: rgba(15,23,42,0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); box-shadow: rgba(0,0,0,0.55) 0px 20px 60px, rgba(0,0,0,0.3) 0px 4px 16px;">
+        <div class="px-6 pt-6 pb-4" style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+          <span class="heading-metallic font-heading font-bold text-white text-xl uppercase tracking-wide block">{{contact_form_heading}}</span>
+          <span class="text-white/50 text-[11px] font-body">{{contact_form_subheading}}</span>
+        </div>
+        <form action="{{contact_form_endpoint}}" method="POST" class="p-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <input class="form-input px-4 py-3 text-sm placeholder-white/40" placeholder="Your Name" name="name" required style="background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14); color: white;" />
+          <input class="form-input px-4 py-3 text-sm placeholder-white/40" placeholder="Phone Number" type="tel" name="phone" required style="background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14); color: white;" />
+          <input class="form-input sm:col-span-2 px-4 py-3 text-sm placeholder-white/40" placeholder="Email Address" type="email" name="email" required style="background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14); color: white;" />
+          <select name="service" class="form-input sm:col-span-2 px-4 py-3 text-sm" style="background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14); color: rgba(255,255,255,0.75);">
+            <option style="background: rgb(30,41,59); color: white;">How Can We Help?</option>
+            {{#loop:services}}
+              <option style="background: rgb(30,41,59); color: white;">{{item.name}}</option>
+            {{/loop:services}}
+          </select>
+          <div class="sm:col-span-2 flex items-start gap-2 mt-1">
+            <input id="cta-human-check" required class="mt-0.5 cursor-pointer flex-shrink-0" type="checkbox" name="human_check" style="accent-color: {{brand.color.accent}};" />
+            <label for="cta-human-check" class="text-white/75 text-[11px] font-body cursor-pointer leading-snug">I am not a bot</label>
+          </div>
+          <div class="sm:col-span-2 flex items-start gap-2">
+            <input id="cta-sms-consent" class="mt-0.5 cursor-pointer flex-shrink-0" type="checkbox" name="sms_consent" style="accent-color: {{brand.color.accent}};" />
+            <label for="cta-sms-consent" class="text-white/50 text-[10px] font-body cursor-pointer leading-snug">{{sms_consent_text}}</label>
+          </div>
+          <div class="sm:col-span-2">
+            <button type="submit" class="btn-gold w-full font-heading font-bold text-lg uppercase tracking-widest py-3.5">{{contact_form_submit_label}}</button>
+            <p class="text-center text-white/35 font-body text-[10px] mt-2">{{contact_form_footer_text}}</p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>

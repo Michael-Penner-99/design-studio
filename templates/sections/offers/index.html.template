@@ -1,0 +1,53 @@
+<!-- ================= PROCESS BAND ================= -->
+<section class="py-20 bg-navy-2 diag">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="grid lg:grid-cols-2 gap-14 items-center">
+      <div>
+        <img src="{{asset:process-feature}}" alt="{{process_image_alt}}" class="w-full h-[520px] object-cover" />
+      </div>
+      <div>
+        <p class="text-[11px] tracking-[0.32em] gold-text font-bold mb-4">{{process_kicker}}</p>
+        <h2 class="font-heading heading-metallic text-4xl md:text-5xl leading-[1.05] tracking-wide">{{process_h2}}</h2>
+        <p class="mt-5 text-sm text-white/55 leading-relaxed">
+          {{process_intro}}
+        </p>
+        <div class="mt-7 space-y-4">
+          {{#loop:process_steps,N=4}}
+            <div class="flex items-start gap-4">
+              <span class="w-10 h-10 shrink-0 btn-gold font-heading flex items-center justify-center text-lg">{{item.number}}</span>
+              <div class="pt-2"><div class="text-xs font-bold tracking-wide">{{item.label}}</div></div>
+            </div>
+          {{/loop:process_steps}}
+        </div>
+        <a href="#quote" class="mt-7 inline-flex items-center gap-2 btn-gold font-body font-bold text-[11px] uppercase tracking-wider px-6 py-3.5">
+          {{process_cta_label}}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SPECIAL OFFERS ================= -->
+<section id="offers" class="py-20 bg-navy diag">
+  <div class="max-w-7xl mx-auto px-6 text-center">
+    <p class="text-[11px] tracking-[0.32em] gold-text font-bold mb-4">{{offers_kicker}}</p>
+    <h2 class="font-heading heading-metallic text-4xl md:text-5xl leading-[1.05] tracking-wide">
+      {{offers_h2}}
+    </h2>
+    <p class="mt-5 text-sm text-white/55 max-w-2xl mx-auto leading-relaxed">
+      {{offers_intro}}
+    </p>
+    <div class="mt-11 grid md:grid-cols-3 gap-6">
+      {{#loop:offers,N=3}}
+        <div class="bg-card border border-white/10 p-8">
+          <div class="w-14 h-14 rounded-full bg-gold/15 gold-text flex items-center justify-center text-2xl mx-auto">{{item.icon}}</div>
+          <h3 class="mt-4 font-heading text-lg tracking-wide">{{item.title}}</h3>
+          <p class="mt-2 text-xs text-white/55 leading-relaxed">{{item.body}}</p>
+        </div>
+      {{/loop:offers}}
+    </div>
+    <div class="mt-6 bg-card border border-white/10 px-6 py-4 text-xs text-white/55">
+      {{offers_footnote}}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,175 @@
+# Recipe — Plumbing contractors (residential + commercial)
+# Loaded by content-architect (SOP 05) and seo-strategist (SOP 07).
+
+trade: plumbing
+sub_trades: [residential, commercial, both]
+
+services_canonical:
+  - slug: drain-cleaning
+    name: "Drain Cleaning"
+    intent: transactional
+    priority: 1
+  - slug: pipe-repair
+    name: "Pipe Repair"
+    intent: transactional
+    priority: 1
+  - slug: water-heater-install
+    name: "Water Heater Installation"
+    intent: transactional
+    priority: 1
+  - slug: water-heater-repair
+    name: "Water Heater Repair"
+    intent: transactional
+    priority: 1
+  - slug: leak-detection
+    name: "Leak Detection"
+    intent: transactional
+    priority: 1
+  - slug: sewer-line
+    name: "Sewer Line Repair & Replacement"
+    intent: transactional
+    priority: 1
+  - slug: garbage-disposal
+    name: "Garbage Disposal Install & Repair"
+    intent: transactional
+    priority: 2
+  - slug: fixture-install
+    name: "Fixture Installation"
+    intent: transactional
+    priority: 2
+  - slug: repipe
+    name: "Whole-Home Repiping"
+    intent: transactional
+    priority: 2
+  - slug: emergency-plumbing
+    name: "24/7 Emergency Plumbing"
+    intent: transactional
+    priority: 1
+  - slug: commercial-plumbing
+    name: "Commercial Plumbing"
+    intent: transactional
+    priority: 1
+    sub_trade: commercial
+
+default_sitemap:
+  - path: "/"
+    name: "Home"
+    role: router
+  - path: "/about"
+    name: "About"
+    role: trust
+  - path: "/services"
+    name: "Services Index"
+    role: hub
+  - path: "/services/service-slug"
+    name: "Service Detail"
+    role: bofu
+    fanout: services
+  - path: "/reviews"
+    name: "Reviews"
+    role: proof
+  - path: "/contact"
+    name: "Contact"
+    role: conversion
+
+optional_pages:
+  - path: "/emergency-service"
+    name: "Emergency Service"
+    condition: "always - 24/7 is plumbing-table-stakes"
+  - path: "/financing"
+    name: "Financing"
+    condition: "financing_offered true"
+  - path: "/areas/area-slug"
+    name: "Service Area"
+    condition: ">= 3 service_areas in brief"
+    fanout: geography.service_areas
+  - path: "/maintenance-plan"
+    name: "Maintenance Plan"
+    condition: "service includes maintenance plans"
+  - path: "/commercial"
+    name: "Commercial Plumbing"
+    condition: "commercial sub_trade"
+
+home_section_sequence_by_archetype:
+  hero_premium: [hero, marquee, reviews, about, services, pricing, offers, faq, service-areas, contact]
+  caretaker:    [hero, marquee, about, reviews, services, offers, faq, service-areas, contact]
+  everyman:     [hero, services, reviews, marquee, offers, faq, service-areas, contact]
+  commercial:   [hero, services, certifications, marquee, reviews, faq, contact]
+
+signature_moves_defaults:
+  - "24/7 emergency CTA pinned to header (blue accent)"
+  - "Response-time promise band ('on-site within 60 minutes')"
+  - "Upfront, flat-rate quote messaging in hero subline"
+  - "Licensed-and-bonded badge row above the fold"
+  - "Real Google review carousel pulled from evidence/reviews.json"
+  - "Owner photo + first-name signature in About"
+  - "Sticky 'Call Now' CTA on mobile"
+  - "Service-area chips with internal links"
+
+certifications_master:
+  - "Master Plumber License (insert state)"
+  - "Journeyman Plumber License (insert state)"
+  - "BBB Accredited Business"
+  - "PHCC Member"
+  - "Roto-Rooter Authorized"
+  - "Rinnai Pro"
+  - "Bradford White Pro Partner"
+  - "A.O. Smith ProMax Certified"
+  - "Watts Certified"
+  - "Green Plumbers USA"
+
+keyword_clusters:
+  drain-cleaning:
+    primary: "city drain cleaning"
+    secondary: ["clogged drain city", "drain snake service city", "main line cleaning city"]
+  pipe-repair:
+    primary: "city pipe repair"
+    secondary: ["burst pipe repair city", "leaking pipe city", "copper pipe repair city"]
+  water-heater-install:
+    primary: "city water heater installation"
+    secondary: ["tankless water heater city", "new water heater install city", "gas water heater city"]
+  water-heater-repair:
+    primary: "city water heater repair"
+    secondary: ["no hot water city", "water heater leaking city", "water heater pilot light city"]
+  leak-detection:
+    primary: "city leak detection"
+    secondary: ["slab leak detection city", "hidden leak finder city", "water leak repair city"]
+  sewer-line:
+    primary: "city sewer line repair"
+    secondary: ["trenchless sewer repair city", "sewer line replacement city", "sewer camera inspection city"]
+  emergency-plumbing:
+    primary: "city emergency plumber"
+    secondary: ["24 hour plumber city", "weekend plumber city", "after hours plumber city"]
+
+voice_defaults:
+  tone: "Trustworthy, fast, calm-under-pressure"
+  vocabulary_use:
+    - "licensed and bonded"
+    - "upfront pricing"
+    - "flat-rate quote"
+    - "24/7"
+    - "on-site fast"
+    - "your home"
+    - "no surprises"
+    - "warranty-backed"
+    - "real plumbers, not subcontractors"
+  vocabulary_avoid:
+    - "leverage"
+    - "synergize"
+    - "best-in-class"
+    - "premier provider"
+    - "industry-leading"
+    - "elevate"
+    - "any water-damage humor or panic language"
+
+pricing_band_defaults:
+  type: pillars
+  pillars:
+    - "Upfront flat-rate quotes — you approve the price before any work starts"
+    - "24/7 emergency response — real plumbers answering real phones"
+    - "Licensed, bonded, and insured master plumbers on every job"
+    - "Workmanship warranty on every repair and install"
+
+financing_default:
+  enabled: false
+  partners: [GreenSky, Synchrony, Wisetack]

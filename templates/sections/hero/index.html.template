@@ -1,0 +1,90 @@
+<!-- ================= HERO ================= -->
+<section class="relative pt-[72px] overflow-hidden">
+  <img src="{{asset:hero}}" alt="" class="absolute inset-0 w-full h-full object-cover" />
+  <div class="absolute inset-0 hero-overlay"></div>
+  <div class="absolute inset-0 diag"></div>
+  <div class="relative max-w-7xl mx-auto px-6">
+    <div class="flex flex-col lg:flex-row lg:gap-12 lg:items-center">
+      <!-- Hero text -->
+      <div class="flex-1 pt-10 pb-10 lg:py-16">
+        <p class="text-[11px] tracking-[0.3em] gold-text font-bold">{{hero_kicker}}</p>
+        <h1 class="font-heading heading-metallic text-[52px] md:text-[68px] xl:text-[78px] leading-[0.95] tracking-wide mt-5">
+          {{hero_headline}}
+        </h1>
+        <div class="w-16 h-[3px] bg-gold mt-7"></div>
+        <p class="mt-5 text-sm text-white/55 max-w-md leading-relaxed">
+          {{hero_subline}}
+        </p>
+        <!-- Glass review badges -->
+        <div class="mt-7 flex flex-wrap gap-3">
+          <a href="{{google_reviews_url}}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 px-3 py-1.5 transition-all hover:border-[{{brand.color.accent}}]" style="background: rgba(255,255,255,0.09); border: 1px solid rgba(255,255,255,0.16); backdrop-filter: blur(10px);">
+            <svg class="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"></path><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"></path><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"></path><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"></path></svg>
+            <div>
+              <div class="flex items-center gap-1">
+                <span class="font-bold text-xs text-white">{{google_rating}}</span>
+                <div class="flex text-yellow-400 text-xs leading-none">★★★★★</div>
+                <span class="text-white/50 text-[10px]">({{google_count}})</span>
+              </div>
+              <div class="text-[10px] text-white/55 leading-none">Google Reviews</div>
+            </div>
+          </a>
+          <a href="{{facebook_reviews_url}}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 px-3 py-1.5 transition-all hover:border-[{{brand.color.accent}}]" style="background: rgba(255,255,255,0.09); border: 1px solid rgba(255,255,255,0.16); backdrop-filter: blur(10px);">
+            <svg class="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24"><path fill="#1877F2" d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07c0 6.02 4.39 11.01 10.13 11.93v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.69.24 2.69.24v2.97h-1.51c-1.49 0-1.96.93-1.96 1.89v2.25h3.33l-.53 3.49h-2.8v8.44C19.61 23.08 24 18.09 24 12.07z"></path></svg>
+            <div>
+              <div class="flex items-center gap-1">
+                <span class="font-bold text-xs text-white">{{facebook_rating}}</span>
+                <div class="flex text-yellow-400 text-xs leading-none">★★★★★</div>
+                <span class="text-white/50 text-[10px]">({{facebook_count}})</span>
+              </div>
+              <div class="text-[10px] text-white/55 leading-none">Facebook Reviews</div>
+            </div>
+          </a>
+        </div>
+        <!-- Checkmark list -->
+        <div class="mt-7 space-y-3">
+          {{#loop:hero_proof_points}}
+            <div class="flex items-center gap-3">
+              <span class="w-5 h-5 btn-gold flex items-center justify-center text-[11px] font-bold">&#10003;</span>
+              <span class="text-sm font-bold text-white">{{item.label}}</span>
+            </div>
+          {{/loop:hero_proof_points}}
+        </div>
+      </div>
+
+      <!-- Estimate form -->
+      <div id="quote" class="mt-8 lg:mt-0 lg:w-[420px] lg:flex-shrink-0 lg:py-16">
+        <div class="overflow-hidden" style="background: rgba(15,23,42,0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); box-shadow: rgba(0,0,0,0.55) 0px 20px 60px, rgba(0,0,0,0.3) 0px 4px 16px;">
+          <div class="px-6 pt-6 pb-4" style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+            <span class="heading-metallic font-heading font-bold text-white text-xl uppercase tracking-wide block">{{hero_form_heading}}</span>
+            <span class="text-white/50 text-[11px] font-body">{{hero_form_subheading}}</span>
+          </div>
+          <form action="{{contact_form_endpoint}}" method="POST" class="p-4 grid grid-cols-2 gap-3">
+            <input class="form-input px-4 py-3 text-sm placeholder-white/40" placeholder="Your Name" name="name" required style="background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14); color: white;" />
+            <input class="form-input px-4 py-3 text-sm placeholder-white/40" placeholder="Phone Number" type="tel" name="phone" required style="background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14); color: white;" />
+            <input class="form-input col-span-2 px-4 py-3 text-sm placeholder-white/40" placeholder="Email Address" type="email" name="email" required style="background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14); color: white;" />
+            <select name="service" class="form-input col-span-2 px-4 py-3 text-sm" style="background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14); color: rgba(255,255,255,0.75);">
+              <option style="background: rgb(30,41,59); color: white;">How Can We Help?</option>
+              {{#loop:services}}
+                <option style="background: rgb(30,41,59); color: white;">{{item.name}}</option>
+              {{/loop:services}}
+            </select>
+            <input class="form-input col-span-2 px-4 py-3 text-sm placeholder-white/40" placeholder="Property Address" name="address" style="background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14); color: white;" />
+            <input class="form-input col-span-2 px-4 py-3 text-sm placeholder-white/40" placeholder="Brief message (optional)" name="message" style="background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14); color: white;" />
+            <div class="col-span-2 flex items-start gap-2 mt-1">
+              <input id="hero-human-check" required class="mt-0.5 cursor-pointer flex-shrink-0" type="checkbox" name="human_check" style="accent-color: {{brand.color.accent}};" />
+              <label for="hero-human-check" class="text-white/75 text-[11px] font-body cursor-pointer leading-snug">I am not a bot</label>
+            </div>
+            <div class="col-span-2 flex items-start gap-2">
+              <input id="hero-sms-consent" class="mt-0.5 cursor-pointer flex-shrink-0" type="checkbox" name="sms_consent" style="accent-color: {{brand.color.accent}};" />
+              <label for="hero-sms-consent" class="text-white/50 text-[10px] font-body cursor-pointer leading-snug">{{sms_consent_text}}</label>
+            </div>
+            <div class="col-span-2">
+              <button type="submit" class="btn-gold w-full font-heading font-bold text-base uppercase tracking-widest py-3.5">{{hero_form_submit_label}}</button>
+              <p class="text-center text-white/35 font-body text-[10px] mt-2">{{hero_form_footer_text}}</p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

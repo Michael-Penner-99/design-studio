@@ -1,0 +1,120 @@
+# Recipe — Remodel / Renovation contractors (kitchens, baths, full-home)
+
+trade: remodel
+sub_trades: [residential, commercial, both]
+
+services_canonical:
+  - slug: kitchen-remodel
+    name: "Kitchen Remodel"
+    intent: transactional
+    priority: 1
+  - slug: bathroom-remodel
+    name: "Bathroom Remodel"
+    intent: transactional
+    priority: 1
+  - slug: home-additions
+    name: "Home Additions"
+    intent: transactional
+    priority: 1
+  - slug: basement-finishing
+    name: "Basement Finishing"
+    intent: transactional
+    priority: 2
+  - slug: whole-home-remodel
+    name: "Whole-Home Remodel"
+    intent: transactional
+    priority: 1
+  - slug: design-build
+    name: "Design-Build"
+    intent: commercial
+    priority: 2
+  - slug: adu-construction
+    name: "ADU Construction"
+    intent: transactional
+    priority: 2
+  - slug: outdoor-living
+    name: "Outdoor Living"
+    intent: transactional
+    priority: 3
+
+default_sitemap:
+  - path: "/"
+    name: "Home"
+    role: router
+  - path: "/about"
+    name: "About"
+    role: trust
+  - path: "/services"
+    name: "Services Index"
+    role: hub
+  - path: "/services/{service-slug}"
+    name: "Service Detail"
+    role: bofu
+    fanout: services
+  - path: "/portfolio"
+    name: "Portfolio"
+    role: proof
+  - path: "/process"
+    name: "Our Process"
+    role: trust
+  - path: "/reviews"
+    name: "Reviews"
+    role: proof
+  - path: "/contact"
+    name: "Contact"
+    role: conversion
+
+optional_pages:
+  - path: "/financing"
+    name: "Financing"
+    condition: "financing_offered true"
+  - path: "/design-studio"
+    name: "Design Studio"
+    condition: "studio location exists"
+  - path: "/careers"
+    name: "Careers"
+    condition: "hiring true"
+
+home_section_sequence_by_archetype:
+  premium:      [hero, marquee, portfolio-grid, about, reviews, services, process, faq, contact]
+  caretaker:    [hero, about, portfolio-grid, reviews, services, process, faq, contact]
+  design-build: [hero, portfolio-grid, process, about, reviews, services, faq, contact]
+
+signature_moves_defaults:
+  - "Large portfolio grid (12-24 projects) front-and-center"
+  - "Our Process band — 4-step visual (Consult → Design → Build → Reveal)"
+  - "Designer + Builder team photos (not just owner)"
+  - "Magazine-quality typography (serif heading option)"
+  - "Featured-in-press logos band (if applicable)"
+
+certifications_master:
+  - "NARI Member"
+  - "NKBA Member"
+  - "NAHB Member"
+  - "BBB Accredited Business"
+  - "Houzz Best of Service"
+  - "State-licensed General Contractor"
+
+keyword_clusters:
+  kitchen-remodel:
+    primary: "{city} kitchen remodel"
+    secondary: ["kitchen remodeling {city}", "custom kitchen design {city}", "{city} kitchen renovation"]
+  bathroom-remodel:
+    primary: "{city} bathroom remodel"
+    secondary: ["bathroom renovation {city}", "master bath remodel {city}"]
+  home-additions:
+    primary: "{city} home additions"
+    secondary: ["room addition {city}", "second story addition {city}"]
+
+voice_defaults:
+  tone: "Designer-craftsman, warm, process-driven"
+  vocabulary_use: ["design-build", "your vision", "craftsmanship", "process", "team", "lived-in", "intentional", "considered"]
+  vocabulary_avoid: ["cheap", "fast", "leverage", "synergize"]
+
+pricing_band_defaults:
+  type: pillars
+  pillars:
+    - "Design-build under one roof — one team, one accountable contract"
+    - "Transparent allowances — no fixture surprises"
+    - "Real timeline you can plan around — and we hit it"
+    - "Lifetime workmanship warranty on every project"

@@ -1,0 +1,21 @@
+<!-- ================= BLOG ================= -->
+<section id="blog" class="py-20 bg-navy-2 diag">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="text-center">
+      <p class="text-[11px] tracking-[0.32em] gold-text font-bold mb-4">{{blog_kicker}}</p>
+      <h2 class="font-heading heading-metallic text-4xl md:text-5xl leading-[1.05] tracking-wide">{{blog_h2}}</h2>
+    </div>
+    <div class="mt-11 grid md:grid-cols-3 gap-6">
+      {{#loop:blog_posts,N=3}}
+        <article class="bg-card border border-white/10 overflow-hidden">
+          <img src="{{item.image}}" alt="{{item.alt}}" class="w-full h-48 object-cover" />
+          <div class="p-6">
+            <h3 class="text-sm font-bold leading-snug">{{item.title}}</h3>
+            <p class="mt-2 text-xs text-white/55 leading-relaxed">{{item.excerpt}}</p>
+            <a href="{{item.href}}" class="mt-4 inline-block text-[11px] font-bold tracking-wider gold-text">READ MORE &rarr;</a>
+          </div>
+        </article>
+      {{/loop:blog_posts}}
+    </div>
+  </div>
+</section>

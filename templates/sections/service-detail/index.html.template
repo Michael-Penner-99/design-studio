@@ -1,0 +1,52 @@
+<!-- ================= SERVICE DETAIL ================= -->
+<section class="py-20 bg-navy-2 diag">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="grid lg:grid-cols-2 gap-14 items-center">
+      <div>
+        <p class="text-[11px] tracking-[0.32em] gold-text font-bold mb-4">{{service_detail_kicker}}</p>
+        <h2 class="font-heading heading-metallic text-4xl md:text-5xl leading-[1.05] tracking-wide">
+          {{service_detail_h2}}
+        </h2>
+        <p class="mt-5 text-sm text-white/55 leading-relaxed">
+          {{service_detail_body_1}}
+        </p>
+        <p class="mt-4 text-sm text-white/55 leading-relaxed">
+          {{service_detail_body_2}}
+        </p>
+
+        <!-- Inclusions -->
+        <div class="mt-7">
+          <h3 class="font-heading text-lg tracking-wide mb-4">{{service_detail_includes_h3}}</h3>
+          <div class="grid sm:grid-cols-2 gap-3">
+            {{#loop:service_inclusions,N=6}}
+              <div class="flex items-start gap-3">
+                <span class="w-7 h-7 shrink-0 bg-gold/15 gold-text flex items-center justify-center text-xs font-bold">&#10003;</span>
+                <span class="text-xs text-white/75 pt-0.5">{{item.label}}</span>
+              </div>
+            {{/loop:service_inclusions}}
+          </div>
+        </div>
+
+        <a href="#quote" class="mt-8 inline-flex items-center gap-2 btn-gold font-body font-bold text-[11px] uppercase tracking-wider px-6 py-3.5">
+          {{service_detail_cta_label}}
+        </a>
+      </div>
+      <div>
+        <img src="{{asset:service-hero}}" alt="{{service_detail_image_alt}}" class="w-full h-[520px] object-cover" />
+      </div>
+    </div>
+
+    <!-- Process strip for this service -->
+    <div class="mt-16 grid md:grid-cols-3 gap-6">
+      {{#loop:service_process,N=3}}
+        <div class="bg-card border border-white/10 p-7">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="w-10 h-10 btn-gold font-heading flex items-center justify-center text-lg">{{item.number}}</span>
+            <h3 class="font-heading text-lg tracking-wide">{{item.title}}</h3>
+          </div>
+          <p class="text-xs text-white/55 leading-relaxed">{{item.body}}</p>
+        </div>
+      {{/loop:service_process}}
+    </div>
+  </div>
+</section>

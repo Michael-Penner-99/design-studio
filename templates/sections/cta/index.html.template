@@ -1,0 +1,18 @@
+<!-- ================= CTA STRIP (compact contact bar) ================= -->
+<section class="relative py-16 overflow-hidden">
+  <div class="absolute inset-0" style="background: {{brand.color.ink}};"></div>
+  <div class="absolute inset-0 diag"></div>
+  <div class="relative max-w-5xl mx-auto px-6 text-center">
+    <p class="text-[11px] tracking-[0.32em] gold-text font-bold mb-4">{{cta_kicker}}</p>
+    <h2 class="font-heading heading-metallic text-4xl md:text-5xl leading-[1.05] tracking-wide">
+      {{cta_h2}}
+    </h2>
+    <p class="mt-5 text-sm text-white/55 max-w-xl mx-auto leading-relaxed">
+      {{cta_body}}
+    </p>
+    <div class="mt-7 flex flex-wrap justify-center gap-4">
+      <a href="tel:{{phone_tel}}" class="btn-gold font-body font-bold text-[11px] uppercase tracking-wider px-6 py-3.5">{{cta_phone_label}}</a>
+      <a href="#quote" class="glass font-body font-bold text-[11px] uppercase tracking-wider px-6 py-3.5 hover:border-[{{brand.color.accent}}] transition-colors">{{cta_secondary_label}}</a>
+    </div>
+  </div>
+</section>

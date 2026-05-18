@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+{{section:head}}
+<body class="text-white antialiased">
+
+{{section:header}}
+
+{{section:hero}}
+
+{{section:marquee}}
+
+{{section:reviews}}
+
+{{section:marquee}}
+
+{{section:about}}
+
+{{section:marquee}}
+
+{{section:services}}
+
+{{section:marquee}}
+
+{{section:pricing}}
+
+{{section:marquee}}
+
+{{section:gallery}}
+
+{{section:marquee}}
+
+{{section:offers}}
+
+{{section:blog}}
+
+{{section:faq}}
+
+{{section:service-areas}}
+
+{{section:contact}}
+
+{{section:footer}}
+
+</body>
+</html>

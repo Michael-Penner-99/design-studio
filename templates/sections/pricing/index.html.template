@@ -1,0 +1,30 @@
+<!-- ================= WHY CHOOSE / PRICING-TRANSPARENCY ================= -->
+<section id="pricing" class="py-20 bg-navy-2 diag">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="grid lg:grid-cols-2 gap-14 items-center">
+      <div>
+        <p class="text-[11px] tracking-[0.32em] gold-text font-bold mb-4">{{pricing_kicker}}</p>
+        <h2 class="font-heading heading-metallic text-4xl md:text-5xl leading-[1.05] tracking-wide">
+          {{pricing_h2}}
+        </h2>
+        <p class="mt-5 text-sm text-white/55 leading-relaxed">
+          {{pricing_intro}}
+        </p>
+        <div class="mt-7 grid sm:grid-cols-2 gap-5">
+          {{#loop:pricing_pillars,N=4}}
+            <div class="flex items-start gap-3">
+              <span class="w-10 h-10 shrink-0 bg-gold/15 gold-text flex items-center justify-center font-bold">&#10003;</span>
+              <div>
+                <div class="text-xs font-bold tracking-wide">{{item.title}}</div>
+                <p class="text-[11px] text-white/55 mt-1 leading-relaxed">{{item.body}}</p>
+              </div>
+            </div>
+          {{/loop:pricing_pillars}}
+        </div>
+      </div>
+      <div>
+        <img src="{{asset:pricing-feature}}" alt="{{pricing_image_alt}}" class="w-full h-[440px] object-cover" />
+      </div>
+    </div>
+  </div>
+</section>

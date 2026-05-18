@@ -1,0 +1,59 @@
+<!-- ================= FOOTER ================= -->
+<footer style="background:{{brand.color.ink}};">
+  <div class="max-w-7xl mx-auto px-6 py-14">
+    <div class="grid md:grid-cols-4 gap-10">
+      <div>
+        <a href="/" class="flex items-center gap-3 mb-4">
+          <img src="{{asset:logo}}" alt="{{brand_name}}" class="h-9 w-auto" />
+          <div class="leading-none">
+            <div class="font-heading text-2xl tracking-wide">{{brand_name_primary}}</div>
+            <div class="text-[8px] tracking-[0.46em] gold-text font-bold mt-1">{{brand_name_secondary}}</div>
+          </div>
+        </a>
+        <p class="text-xs text-white/45 leading-relaxed">
+          {{footer_blurb}}
+        </p>
+        <div class="mt-5 flex gap-3">
+          {{#loop:social_links}}
+            <a href="{{item.href}}" class="w-9 h-9 glass flex items-center justify-center gold-text text-xs font-bold" aria-label="{{item.label}}">{{item.icon}}</a>
+          {{/loop:social_links}}
+        </div>
+      </div>
+      <div>
+        <h4 class="font-heading text-base tracking-widest mb-4">{{footer_col1_heading}}</h4>
+        <ul class="space-y-2.5 text-xs text-white/45">
+          {{#loop:footer_company_links}}
+            <li><a href="{{item.href}}" class="hover:text-gold transition-colors">{{item.label}}</a></li>
+          {{/loop:footer_company_links}}
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-heading text-base tracking-widest mb-4">{{footer_col2_heading}}</h4>
+        <ul class="space-y-2.5 text-xs text-white/45">
+          {{#loop:footer_service_links}}
+            <li><a href="{{item.href}}" class="hover:text-gold transition-colors">{{item.label}}</a></li>
+          {{/loop:footer_service_links}}
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-heading text-base tracking-widest mb-4">{{footer_col3_heading}}</h4>
+        <ul class="space-y-2.5 text-xs text-white/45">
+          <li><a href="tel:{{phone_tel}}" class="hover:text-gold transition-colors">{{phone_display}}</a></li>
+          <li><a href="mailto:{{email}}" class="hover:text-gold transition-colors">{{email}}</a></li>
+          <li>{{address_line}}</li>
+          <li>{{hours_line}}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="border-t border-white/5">
+    <div class="max-w-7xl mx-auto px-6 py-5 flex flex-col md:flex-row justify-between items-center gap-3 text-[10px] text-white/35">
+      <p>&copy; {{copyright_year}} {{brand_name}}. {{copyright_rights}}</p>
+      <div class="flex gap-5">
+        <a href="/privacy-policy" class="hover:text-gold transition-colors">Privacy Policy</a>
+        <a href="/terms-and-conditions" class="hover:text-gold transition-colors">Terms of Service</a>
+        <a href="/sitemap.xml" class="hover:text-gold transition-colors">Sitemap</a>
+      </div>
+    </div>
+  </div>
+</footer>

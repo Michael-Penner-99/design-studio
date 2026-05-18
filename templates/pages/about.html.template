@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+{{section:head}}
+<body class="text-white antialiased">
+
+{{section:header}}
+
+<!-- hero_variant=compact -->
+{{section:hero}}
+
+{{section:marquee}}
+
+{{section:about}}
+
+{{section:marquee}}
+
+{{section:reviews}}
+
+{{section:faq}}
+
+{{section:contact}}
+
+{{section:footer}}
+
+</body>
+</html>

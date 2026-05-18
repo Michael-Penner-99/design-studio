@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+{{section:head}}
+<body class="text-white antialiased">
+
+{{section:header}}
+
+<!-- hero_variant=reviews-overview compact -->
+{{section:hero}}
+
+{{section:marquee}}
+
+<!-- reviews_loop_count=20 -->
+{{section:reviews}}
+
+{{section:marquee}}
+
+{{section:service-areas}}
+
+{{section:contact}}
+
+{{section:footer}}
+
+</body>
+</html>

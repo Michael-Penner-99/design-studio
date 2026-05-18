@@ -1,0 +1,25 @@
+# Local-only worker logs
+.worker.log
+.worker.out.log
+.worker.err.log
+
+# Per-client outputs are big and ephemeral — only the deployed-manifest is tracked
+clients/*
+!clients/_deployed.json
+!clients/.gitkeep
+
+# Env files
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Node / Next.js (for web/)
+web/node_modules
+web/.next
+web/out
+web/.vercel
+
+# OS junk
+.DS_Store
+Thumbs.db

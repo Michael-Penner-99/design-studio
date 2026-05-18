@@ -1,0 +1,19 @@
+<!-- ================= LOGO STRIP ================= -->
+<section class="bg-white py-7">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="flex flex-wrap items-center justify-between gap-x-10 gap-y-4">
+      {{#loop:brand_partners}}
+        <span class="font-heading text-2xl tracking-wide" style="color: {{item.color}};">{{item.name}}</span>
+      {{/loop:brand_partners}}
+    </div>
+  </div>
+</section>
+
+<!-- ===== MARQUEE BAND ===== -->
+<div class="marquee-band py-2.5 overflow-hidden border-y border-white/5">
+  <div class="flex items-center gap-6 whitespace-nowrap text-[10px] font-bold tracking-[0.28em] uppercase justify-center" style="color:rgba(198,167,94,0.55);">
+    {{#loop:marquee_repeat,N=6}}
+      <span>{{brand_name}}</span><span class="gold-text">&#10022;</span>
+    {{/loop:marquee_repeat}}
+  </div>
+</div>

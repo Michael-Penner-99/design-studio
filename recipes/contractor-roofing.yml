@@ -1,0 +1,141 @@
+# Recipe — Roofing contractors (residential + commercial)
+# Loaded by content-architect (SOP 05) and seo-strategist (SOP 07).
+
+trade: roofing
+sub_trades: [residential, commercial, both]
+
+services_canonical:
+  - slug: roof-replacement
+    name: "Roof Replacement"
+    intent: transactional
+    priority: 1
+  - slug: roof-repair
+    name: "Roof Repair"
+    intent: transactional
+    priority: 1
+  - slug: storm-damage
+    name: "Storm Damage Restoration"
+    intent: transactional
+    priority: 1
+  - slug: roof-inspection
+    name: "Free Roof Inspection"
+    intent: commercial
+    priority: 2
+  - slug: insurance-claims
+    name: "Insurance Claim Assistance"
+    intent: commercial
+    priority: 2
+  - slug: gutters
+    name: "Gutter Installation & Repair"
+    intent: transactional
+    priority: 3
+  - slug: siding
+    name: "Siding"
+    intent: transactional
+    priority: 3
+  - slug: windows
+    name: "Windows"
+    intent: transactional
+    priority: 4
+  - slug: commercial-roofing
+    name: "Commercial Roofing"
+    intent: transactional
+    priority: 1
+    sub_trade: commercial
+
+default_sitemap:
+  - path: "/"
+    name: "Home"
+    role: router
+  - path: "/about"
+    name: "About"
+    role: trust
+  - path: "/services"
+    name: "Services Index"
+    role: hub
+  - path: "/services/{service-slug}"
+    name: "Service Detail"
+    role: bofu
+    fanout: services
+  - path: "/reviews"
+    name: "Reviews"
+    role: proof
+  - path: "/contact"
+    name: "Contact"
+    role: conversion
+
+optional_pages:
+  - path: "/financing"
+    name: "Financing"
+    condition: "competitor_gap_or_recipe_enabled"
+  - path: "/gallery"
+    name: "Project Gallery"
+    condition: ">= 12 project photos extracted"
+  - path: "/areas/{slug}"
+    name: "Service Area"
+    condition: ">= 3 service_areas in brief"
+    fanout: geography.service_areas
+  - path: "/blog"
+    name: "Blog Hub"
+    condition: "pro_tier or storm-active region"
+  - path: "/case-studies"
+    name: "Case Studies"
+    condition: "commercial sub_trade"
+
+home_section_sequence_by_archetype:
+  hero_premium: [hero, marquee, reviews, about, services, pricing, gallery, offers, blog, faq, service-areas, contact]
+  caretaker:    [hero, marquee, about, reviews, services, gallery, offers, faq, service-areas, contact]
+  everyman:     [hero, services, reviews, gallery, marquee, offers, faq, service-areas, contact]
+  commercial:   [hero, services, gallery, marquee, reviews, certifications, faq, contact]
+
+signature_moves_defaults:
+  - "Metallic gradient on every H1/H2 (Capstone heading-metallic class)"
+  - "Diagonal pattern background on alternating sections (.diag)"
+  - "Gold gradient primary CTA buttons (.btn-gold)"
+  - "Marquee band between hero and the next section"
+  - "Real Google review carousel pulled from evidence/reviews.json"
+  - "Owner photo + first-name signature in About"
+  - "Certifications row in footer + on About"
+  - "Sticky 'Call Now' CTA on mobile"
+  - "Service-area chips with internal links"
+
+certifications_master:
+  - "GAF Master Elite"
+  - "Owens Corning Platinum Preferred"
+  - "CertainTeed SELECT ShingleMaster"
+  - "IKO ShieldPRO Plus"
+  - "BBB Accredited Business"
+  - "HAAG Certified Inspector"
+  - "NRCA Member"
+  - "State-licensed (insert state)"
+
+keyword_clusters:
+  roof-replacement:
+    primary: "{city} roof replacement"
+    secondary: ["{city} roofers", "best roofers in {city}", "shingle replacement {city}"]
+  roof-repair:
+    primary: "{city} roof repair"
+    secondary: ["roof leak repair {city}", "emergency roof repair {city}"]
+  storm-damage:
+    primary: "{city} storm damage roofer"
+    secondary: ["hail damage roof {city}", "wind damage roofing {city}", "insurance roof claim {city}"]
+  roof-inspection:
+    primary: "free roof inspection {city}"
+    secondary: ["roof inspection cost {city}", "roof inspection near me"]
+
+voice_defaults:
+  tone: "Trustworthy, neighborly, evidence-anchored"
+  vocabulary_use: ["family-owned", "local", "your home", "your investment", "decades", "real customers", "free inspection", "no obligation"]
+  vocabulary_avoid: ["leverage", "synergize", "world-class", "best-in-class", "industry-leading", "elevate"]
+
+pricing_band_defaults:
+  type: pillars
+  pillars:
+    - "Free roof inspections — no pressure, no upsell"
+    - "Transparent quotes — every line item explained"
+    - "Lifetime workmanship warranty on full roofs"
+    - "Insurance-claim assistance from inspection to payout"
+
+financing_default:
+  enabled: false
+  partners: [GreenSky, Hearth, Sunlight Financial]

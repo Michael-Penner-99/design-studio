@@ -1,0 +1,29 @@
+<!-- ================= HEADER (single bar) ================= -->
+<header class="absolute top-0 inset-x-0 z-50">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="flex items-center justify-between py-3.5">
+      <!-- Logo -->
+      <a href="/" class="flex items-center gap-3">
+        <img src="{{asset:logo}}" alt="{{brand_name}}" class="h-9 w-auto" />
+        <div class="leading-none">
+          <div class="font-heading text-2xl tracking-wide">{{brand_name_primary}}</div>
+          <div class="text-[8px] tracking-[0.46em] gold-text font-bold mt-1">{{brand_name_secondary}}</div>
+        </div>
+      </a>
+      <!-- Nav -->
+      <nav class="hidden lg:flex items-center gap-7 text-[13px] font-semibold">
+        {{#loop:nav_items}}
+          <a href="{{item.href}}" class="text-white/85 hover:text-gold transition-colors">{{item.label}}</a>
+        {{/loop:nav_items}}
+      </nav>
+      <!-- Right: phone + CTA -->
+      <div class="flex items-center gap-5">
+        <a href="tel:{{phone_tel}}" class="hidden md:flex items-center gap-2 text-sm font-bold text-white">
+          <span class="w-2.5 h-2.5 rounded-full bg-green-500 shadow-[0_0_8px_2px_rgba(34,197,94,0.6)]"></span>
+          {{phone_display}}
+        </a>
+        <a href="#quote" class="btn-gold font-heading text-sm uppercase tracking-widest px-6 py-3">{{header_cta_label}}</a>
+      </div>
+    </div>
+  </div>
+</header>

@@ -1,0 +1,21 @@
+<!-- ================= GALLERY ================= -->
+<section id="gallery" class="py-20 bg-navy diag">
+  <div class="max-w-7xl mx-auto px-6 text-center">
+    <p class="text-[11px] tracking-[0.32em] gold-text font-bold mb-4">{{gallery_kicker}}</p>
+    <h2 class="font-heading heading-metallic text-4xl md:text-5xl leading-[1.05] tracking-wide">{{gallery_h2}}</h2>
+    <p class="mt-5 text-sm text-white/55 max-w-2xl mx-auto leading-relaxed">
+      {{gallery_intro}}
+    </p>
+    <div class="mt-10 grid grid-cols-2 md:grid-cols-4 gap-4">
+      {{#loop:gallery,N=8}}
+        <img src="{{item.src}}" alt="{{item.alt}}" class="w-full h-56 object-cover" />
+      {{/loop:gallery}}
+    </div>
+    <div class="mt-7 flex justify-center gap-2">
+      <span class="w-2 h-2 rounded-full bg-gold"></span>
+      <span class="w-2 h-2 rounded-full bg-white/15"></span>
+      <span class="w-2 h-2 rounded-full bg-white/15"></span>
+      <span class="w-2 h-2 rounded-full bg-white/15"></span>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,7 @@
+{
+  "_meta": {
+    "purpose": "Tracks every successfully-deployed client so the local clients/{slug}/ folder can be safely cleaned up. Lightweight metadata only — actual files live on Vercel from deploy onward.",
+    "schema_version": 1
+  },
+  "clients": []
+}

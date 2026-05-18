@@ -1,0 +1,229 @@
+# Action Studio — Quality Gates
+# Read by qa-auditor (SOP 11). Failures route to iterator (SOP 12). Max 3 iterations.
+#
+# Severity: critical = must pass to deploy; major = must pass or be explicitly deferred;
+#           minor = nice-to-have, deferral allowed.
+
+gates:
+
+  # ─── Structure & files ───────────────────────────────────────────────
+  - id: G-01
+    name: "All sitemap pages exist"
+    severity: critical
+    check: "For each path in strategy/sitemap.md, the corresponding file exists in clients/{slug}/site/."
+    pass_when: "every sitemap path maps to a real file on disk"
+
+  - id: G-02
+    name: "tailwind.config.js exists and is valid JS"
+    severity: critical
+    check: "site/tailwind.config.js exists; node --check site/tailwind.config.js exits 0"
+    pass_when: "file present and parses"
+
+  - id: G-03
+    name: "All internal links resolve"
+    severity: critical
+    check: "Walk every <a href>, <img src>, <link href>, <script src> in built pages. Each must resolve to a file inside site/ OR be an absolute URL with protocol."
+    pass_when: "zero broken references"
+
+  # ─── Real evidence ───────────────────────────────────────────────────
+  - id: G-04
+    name: "Real review evidence used on Home"
+    severity: critical
+    check: "Every review quote on site/index.html appears verbatim in evidence/reviews.json"
+    pass_when: "100% match rate"
+
+  - id: G-05
+    name: "Real review evidence used on Reviews page"
+    severity: critical
+    check: "Same as G-04 but for site/reviews.html"
+    pass_when: "100% match rate"
+
+  - id: G-06
+    name: "Star ratings on site match evidence"
+    severity: critical
+    check: "Any X.X stars or X.X/5 claim on any page equals brief.md.review_summary or a row in evidence/reviews.json"
+    pass_when: "every numeric rating is traceable"
+
+  - id: G-07
+    name: "Review count claims are real"
+    severity: major
+    check: "Any 'trusted by N customers' or 'N+ reviews' claim must be <= brief.md.review_summary.google_count + facebook_count"
+    pass_when: "every count claim is supported by evidence"
+
+  # ─── Assets ──────────────────────────────────────────────────────────
+  - id: G-08
+    name: "Logo is the real extracted logo"
+    severity: critical
+    check: "site/assets/logo.* is byte-identical or a resize of assets/raw/logo.*"
+    pass_when: "hash or visual match"
+
+  - id: G-09
+    name: "No stock photos used"
+    severity: critical
+    check: "Every <img src> on every page resolves to a file in site/assets/ that traces back to assets/manifest.json (no externally-loaded stock CDN URLs)"
+    pass_when: "zero references to known stock CDNs (unsplash, pexels, shutterstock, istock, getty) and zero externally-hosted images"
+    exclude_domains: [fonts.gstatic.com, cdn.tailwindcss.com]
+
+  - id: G-10
+    name: "Owner photo present if available"
+    severity: major
+    check: "If assets/raw/owner.* exists, it appears at least once on site/about.html"
+    pass_when: "condition holds"
+
+  - id: G-11
+    name: "Project gallery has 6 or more real photos"
+    severity: critical
+    check: "site/index.html (gallery section) OR site/services/*.html OR a dedicated gallery page references >= 6 distinct project photos"
+    pass_when: "distinct count >= 6"
+
+  # ─── Brand fidelity ──────────────────────────────────────────────────
+  - id: G-12
+    name: "Palette matches brand/palette.json"
+    severity: critical
+    check: "tailwind.config.js theme.colors values equal brand/palette.json"
+    pass_when: "keys and hex codes match exactly"
+
+  - id: G-13
+    name: "Fonts match brand/typography.json"
+    severity: critical
+    check: "Google Fonts URL family names equal brand/typography.json heading + body families"
+    pass_when: "both families loaded; no extras"
+
+  - id: G-14
+    name: "No leftover tokens on any page"
+    severity: critical
+    check: "grep -r '{{' site/*.html site/services/*.html returns zero matches"
+    pass_when: "zero matches"
+
+  - id: G-15
+    name: "No template fragment markers leaked"
+    severity: critical
+    check: "grep -rE 'loop|section:' site/ for template-fragment patterns returns zero matches"
+    pass_when: "zero matches"
+
+  # ─── Copy quality ────────────────────────────────────────────────────
+  - id: G-16
+    name: "Voice matches brand/voice.md"
+    severity: major
+    check: "Spot-check 5 random headlines against the do/don't list in voice.md"
+    pass_when: "zero matches against the don't list"
+
+  - id: G-17
+    name: "No agency cliches"
+    severity: major
+    check: "grep for clichés (leverage, synergize, robust solution, in today's digital landscape, elevate your brand, cutting-edge, state-of-the-art) returns zero matches"
+    pass_when: "zero matches"
+
+  - id: G-18
+    name: "Headlines follow voice convention"
+    severity: minor
+    check: "Every h1/h2 follows brand voice convention from voice.md (typically short, declarative, ALL CAPS for hero-style metallic headings)"
+    pass_when: "judgment pass"
+
+  - id: G-19
+    name: "CTAs use action verbs"
+    severity: major
+    check: "Every primary CTA starts with an action verb (Get, Book, Schedule, Request, See, Start, Call, Claim)"
+    pass_when: "100% rate"
+
+  # ─── Information architecture ────────────────────────────────────────
+  - id: G-20
+    name: "Every page has a unique title"
+    severity: critical
+    check: "Collect all <title> tags across site/. No duplicates."
+    pass_when: "titles are unique"
+
+  - id: G-21
+    name: "Every page has a meta description under 155 chars"
+    severity: major
+    check: "meta name=description present on every page; length <= 155"
+    pass_when: "condition holds for every page"
+
+  - id: G-22
+    name: "Every page declares Open Graph tags"
+    severity: minor
+    check: "og:title, og:description, og:image, og:url on every page"
+    pass_when: "all four present"
+
+  - id: G-23
+    name: "Every page has one and only one h1"
+    severity: major
+    check: "Count h1 tags per page"
+    pass_when: "count equals 1 for every page"
+
+  # ─── Accessibility ───────────────────────────────────────────────────
+  - id: G-24
+    name: "Every img has non-empty alt"
+    severity: critical
+    check: "Every non-decorative img has an alt attribute and the alt is non-empty"
+    pass_when: "every non-decorative img has alt"
+
+  - id: G-25
+    name: "Form inputs have labels"
+    severity: major
+    check: "For each input/textarea/select, a corresponding label[for] or aria-label exists"
+    pass_when: "every input is labeled"
+
+  - id: G-26
+    name: "Color contrast on body text 4.5 to 1"
+    severity: major
+    check: "Body text color over background passes WCAG AA. Spot-check 5 sections."
+    pass_when: "every check >= 4.5 to 1"
+
+  # ─── Responsive / mobile ─────────────────────────────────────────────
+  - id: G-27
+    name: "Viewport meta tag present"
+    severity: critical
+    check: "meta name=viewport content='width=device-width, initial-scale=1.0' in every page"
+    pass_when: "present on every page"
+
+  - id: G-28
+    name: "No horizontal overflow at 360px"
+    severity: major
+    check: "Render at 360px width (or static-analyze for fixed widths > 360px or non-responsive grids)"
+    pass_when: "every section fits"
+
+  - id: G-29
+    name: "Mobile nav exists"
+    severity: major
+    check: "Header contains a mobile-toggle button visible at smaller breakpoint"
+    pass_when: "present and functional"
+
+  # ─── Conversion ──────────────────────────────────────────────────────
+  - id: G-30
+    name: "Phone number present and click-to-call"
+    severity: critical
+    check: "brief.md.contact.phone appears on every page wrapped in tel link"
+    pass_when: "present on every page"
+
+  - id: G-31
+    name: "At least 3 CTAs per page"
+    severity: major
+    check: "Count primary CTAs per page (header CTA, hero CTA, mid-page CTA, contact form)"
+    pass_when: "3 or more per page"
+
+  - id: G-32
+    name: "Contact form posts to a configured endpoint"
+    severity: critical
+    check: "form action attribute is not empty or hash; resolves to a real URL or webhook"
+    pass_when: "configured per brief.md.contact_form_endpoint"
+
+  # ─── Trust signals ───────────────────────────────────────────────────
+  - id: G-33
+    name: "Certifications/badges from evidence are displayed"
+    severity: major
+    check: "At least one badge from badges.json appears on Home and About"
+    pass_when: "1 or more badge per page"
+
+  - id: G-34
+    name: "Service areas are displayed"
+    severity: major
+    check: "brief.md.geography.service_areas[] are listed somewhere accessible (areas section, footer, or dedicated page)"
+    pass_when: "all areas appear at least once on the site"
+
+  # ─── Design signature ────────────────────────────────────────────────
+  - id: G-35
+    name: "All design-direction signature moves are present"
+    severity: major
+    check: "For each signature move in strategy/design-direction.md, a matching DOM pattern appears in site/"
+    pass_when: "every signature is realized in at least one location"

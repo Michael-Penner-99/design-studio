@@ -1,0 +1,178 @@
+# Recipe — Electrical contractors (residential + commercial)
+# Loaded by content-architect (SOP 05) and seo-strategist (SOP 07).
+
+trade: electrical
+sub_trades: [residential, commercial, both]
+
+services_canonical:
+  - slug: panel-upgrade
+    name: "Electrical Panel Upgrade"
+    intent: transactional
+    priority: 1
+  - slug: outlet-switch-install
+    name: "Outlet & Switch Installation"
+    intent: transactional
+    priority: 2
+  - slug: interior-lighting
+    name: "Interior Lighting"
+    intent: transactional
+    priority: 2
+  - slug: outdoor-lighting
+    name: "Outdoor & Landscape Lighting"
+    intent: transactional
+    priority: 2
+  - slug: generator-install
+    name: "Whole-Home Generator Installation"
+    intent: transactional
+    priority: 1
+  - slug: ev-charger-install
+    name: "EV Charger Installation"
+    intent: transactional
+    priority: 1
+  - slug: whole-home-surge
+    name: "Whole-Home Surge Protection"
+    intent: transactional
+    priority: 2
+  - slug: ceiling-fan
+    name: "Ceiling Fan Installation"
+    intent: transactional
+    priority: 3
+  - slug: smart-home-wiring
+    name: "Smart Home Wiring"
+    intent: transactional
+    priority: 2
+  - slug: commercial-electrical
+    name: "Commercial Electrical"
+    intent: transactional
+    priority: 1
+    sub_trade: commercial
+  - slug: emergency-electrical
+    name: "24/7 Emergency Electrical"
+    intent: transactional
+    priority: 1
+
+default_sitemap:
+  - path: "/"
+    name: "Home"
+    role: router
+  - path: "/about"
+    name: "About"
+    role: trust
+  - path: "/services"
+    name: "Services Index"
+    role: hub
+  - path: "/services/service-slug"
+    name: "Service Detail"
+    role: bofu
+    fanout: services
+  - path: "/reviews"
+    name: "Reviews"
+    role: proof
+  - path: "/contact"
+    name: "Contact"
+    role: conversion
+
+optional_pages:
+  - path: "/emergency-service"
+    name: "Emergency Service"
+    condition: "always - safety-critical work"
+  - path: "/financing"
+    name: "Financing"
+    condition: "financing_offered true"
+  - path: "/areas/area-slug"
+    name: "Service Area"
+    condition: ">= 3 service_areas in brief"
+    fanout: geography.service_areas
+  - path: "/commercial"
+    name: "Commercial Electrical"
+    condition: "commercial sub_trade"
+  - path: "/safety-inspection"
+    name: "Whole-Home Safety Inspection"
+    condition: "always - lead magnet"
+
+home_section_sequence_by_archetype:
+  hero_premium: [hero, marquee, reviews, about, services, certifications, pricing, offers, faq, service-areas, contact]
+  caretaker:    [hero, marquee, about, reviews, services, certifications, offers, faq, service-areas, contact]
+  everyman:     [hero, services, reviews, marquee, certifications, offers, faq, service-areas, contact]
+  commercial:   [hero, services, certifications, gallery, marquee, reviews, faq, contact]
+
+signature_moves_defaults:
+  - "Licensed-electrician badge row above the fold"
+  - "Safety-first messaging in hero subline (no DIY shame, just expertise)"
+  - "Code-compliance promise band"
+  - "EV charger and generator install spotlight tiles (highest-margin work)"
+  - "Whole-home safety inspection lead magnet ribbon"
+  - "Real Google review carousel pulled from evidence/reviews.json"
+  - "Owner photo + first-name signature in About"
+  - "Sticky 'Call Now' CTA on mobile"
+  - "Service-area chips with internal links"
+
+certifications_master:
+  - "Master Electrician License (insert state)"
+  - "Journeyman Electrician License (insert state)"
+  - "BBB Accredited Business"
+  - "NECA Member"
+  - "IBEW Affiliated"
+  - "Tesla Certified Installer"
+  - "ChargePoint Certified Installer"
+  - "Generac Authorized Dealer"
+  - "Kohler Generator Certified"
+  - "Cummins Certified Installer"
+  - "ESFI Partner"
+
+keyword_clusters:
+  panel-upgrade:
+    primary: "city electrical panel upgrade"
+    secondary: ["200 amp panel upgrade city", "panel replacement city", "fuse box to breaker city"]
+  outlet-switch-install:
+    primary: "city outlet installation"
+    secondary: ["add outlet city", "install switch city", "gfci outlet city"]
+  generator-install:
+    primary: "city generator installation"
+    secondary: ["whole house generator city", "standby generator city", "generac installer city"]
+  ev-charger-install:
+    primary: "city ev charger installation"
+    secondary: ["tesla charger install city", "level 2 ev charger city", "home ev charger city"]
+  interior-lighting:
+    primary: "city lighting installation"
+    secondary: ["recessed lighting city", "led lighting upgrade city", "chandelier installation city"]
+  outdoor-lighting:
+    primary: "city landscape lighting"
+    secondary: ["outdoor lighting installer city", "low voltage lighting city", "security lighting city"]
+  smart-home-wiring:
+    primary: "city smart home wiring"
+    secondary: ["smart switch installation city", "structured wiring city", "home automation electrician city"]
+  emergency-electrical:
+    primary: "city emergency electrician"
+    secondary: ["24 hour electrician city", "after hours electrician city", "power outage electrician city"]
+
+voice_defaults:
+  tone: "Precise, safety-first, code-compliant"
+  vocabulary_use:
+    - "licensed master electrician"
+    - "code-compliant"
+    - "permit-pulled"
+    - "safety inspection included"
+    - "your family's safety"
+    - "no shortcuts"
+    - "warranty-backed"
+    - "fully insured"
+  vocabulary_avoid:
+    - "leverage"
+    - "synergize"
+    - "best-in-class"
+    - "industry-leading"
+    - "elevate"
+    - "any fire-risk humor or panic language"
+
+pricing_band_defaults:
+  type: pillars
+  pillars:
+    - "Licensed master electricians on every job — no apprentices solo"
+    - "Whole-home safety inspection included with every service call"
+    - "Code-compliant, permit-pulled, inspector-ready work"
+    - "24/7 emergency response for sparks, smoke, or sudden outages"
+
+financing_default:
+  enabled: false
+  partners: [GreenSky, Synchrony, Wisetack]

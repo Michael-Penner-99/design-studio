@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Read",
+      "Write",
+      "Edit",
+      "Bash",
+      "Glob",
+      "Grep",
+      "Task",
+      "WebFetch",
+      "WebSearch"
+    ]
+  },
+  "subagents_dir": ".claude/agents",
+  "notes": "Action Studio website factory. See CLAUDE.md for the orchestrator contract."
+}

@@ -1,0 +1,129 @@
+# Recipe — HVAC contractors (heating, cooling, indoor air)
+
+trade: hvac
+sub_trades: [residential, commercial, both]
+
+services_canonical:
+  - slug: ac-installation
+    name: "AC Installation"
+    intent: transactional
+    priority: 1
+  - slug: ac-repair
+    name: "AC Repair"
+    intent: transactional
+    priority: 1
+  - slug: heating-installation
+    name: "Heating Installation"
+    intent: transactional
+    priority: 1
+  - slug: heating-repair
+    name: "Heating Repair"
+    intent: transactional
+    priority: 1
+  - slug: furnace-replacement
+    name: "Furnace Replacement"
+    intent: transactional
+    priority: 1
+  - slug: heat-pumps
+    name: "Heat Pumps"
+    intent: transactional
+    priority: 2
+  - slug: indoor-air-quality
+    name: "Indoor Air Quality"
+    intent: commercial
+    priority: 3
+  - slug: maintenance-plans
+    name: "Maintenance Plans"
+    intent: commercial
+    priority: 2
+  - slug: ductwork
+    name: "Ductwork"
+    intent: transactional
+    priority: 3
+  - slug: commercial-hvac
+    name: "Commercial HVAC"
+    intent: transactional
+    priority: 1
+    sub_trade: commercial
+
+default_sitemap:
+  - path: "/"
+    name: "Home"
+    role: router
+  - path: "/about"
+    name: "About"
+    role: trust
+  - path: "/services"
+    name: "Services Index"
+    role: hub
+  - path: "/services/{service-slug}"
+    name: "Service Detail"
+    role: bofu
+    fanout: services
+  - path: "/reviews"
+    name: "Reviews"
+    role: proof
+  - path: "/contact"
+    name: "Contact"
+    role: conversion
+
+optional_pages:
+  - path: "/maintenance-plan"
+    name: "Maintenance Plan"
+    condition: "service includes maintenance plans"
+  - path: "/financing"
+    name: "Financing"
+    condition: "financing_offered true"
+  - path: "/emergency-service"
+    name: "Emergency Service"
+    condition: "always - 24/7 is hvac-table-stakes"
+  - path: "/areas/{slug}"
+    name: "Service Area"
+    condition: ">= 3 service_areas"
+    fanout: geography.service_areas
+
+home_section_sequence_by_archetype:
+  premium:    [hero, marquee, services, reviews, about, pricing, gallery, faq, service-areas, contact]
+  caretaker:  [hero, about, reviews, services, faq, offers, service-areas, contact]
+  commercial: [hero, services, gallery, certifications, reviews, faq, contact]
+
+signature_moves_defaults:
+  - "24/7 emergency CTA in header (red accent)"
+  - "Same-day-service promise band"
+  - "Maintenance-plan teaser between services and reviews"
+  - "Energy-savings calculator embed (optional, pro tier)"
+  - "Trane / Carrier / Lennox dealer-tier badge in hero"
+
+certifications_master:
+  - "NATE Certified"
+  - "EPA 608 Certified"
+  - "Trane Comfort Specialist"
+  - "Carrier Factory Authorized Dealer"
+  - "Lennox Premier Dealer"
+  - "Bryant Factory Authorized Dealer"
+  - "BBB Accredited Business"
+  - "HVAC Excellence Certified"
+
+keyword_clusters:
+  ac-installation:
+    primary: "{city} ac installation"
+    secondary: ["new ac unit {city}", "central air installation {city}"]
+  ac-repair:
+    primary: "{city} ac repair"
+    secondary: ["emergency ac repair {city}", "24 hour ac repair {city}"]
+  heating-installation:
+    primary: "{city} furnace installation"
+    secondary: ["new heating system {city}", "furnace replacement {city}"]
+
+voice_defaults:
+  tone: "Reliable, fast, no-nonsense"
+  vocabulary_use: ["24/7", "same-day", "comfort", "your family", "transparent pricing", "upfront quote", "certified technicians", "fully licensed"]
+  vocabulary_avoid: ["leverage", "synergize", "best-in-class", "premier provider", "leading"]
+
+pricing_band_defaults:
+  type: pillars
+  pillars:
+    - "24/7 emergency service — real humans, real fast"
+    - "Upfront pricing — never a surprise on the invoice"
+    - "Licensed, insured, NATE-certified technicians"
+    - "Satisfaction guarantee on every install"

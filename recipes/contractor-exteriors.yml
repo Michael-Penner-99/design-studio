@@ -1,0 +1,110 @@
+# Recipe — Exterior contractors (siding, windows, doors, decks, fences)
+
+trade: exteriors
+sub_trades: [residential, commercial, both]
+
+services_canonical:
+  - slug: siding
+    name: "Siding"
+    intent: transactional
+    priority: 1
+  - slug: windows
+    name: "Windows"
+    intent: transactional
+    priority: 1
+  - slug: doors
+    name: "Doors"
+    intent: transactional
+    priority: 2
+  - slug: gutters
+    name: "Gutters"
+    intent: transactional
+    priority: 2
+  - slug: decks
+    name: "Decks"
+    intent: transactional
+    priority: 2
+  - slug: fences
+    name: "Fences"
+    intent: transactional
+    priority: 3
+  - slug: outdoor-living
+    name: "Outdoor Living"
+    intent: commercial
+    priority: 3
+  - slug: storm-damage
+    name: "Storm Damage Restoration"
+    intent: transactional
+    priority: 1
+
+default_sitemap:
+  - path: "/"
+    name: "Home"
+    role: router
+  - path: "/about"
+    name: "About"
+    role: trust
+  - path: "/services"
+    name: "Services Index"
+    role: hub
+  - path: "/services/{service-slug}"
+    name: "Service Detail"
+    role: bofu
+    fanout: services
+  - path: "/reviews"
+    name: "Reviews"
+    role: proof
+  - path: "/contact"
+    name: "Contact"
+    role: conversion
+
+optional_pages:
+  - path: "/gallery"
+    name: "Project Gallery"
+    condition: ">= 12 project photos"
+  - path: "/financing"
+    name: "Financing"
+    condition: "financing_offered true"
+  - path: "/areas/{slug}"
+    name: "Service Area"
+    condition: ">= 3 service_areas"
+    fanout: geography.service_areas
+
+home_section_sequence_by_archetype:
+  premium:   [hero, marquee, gallery, services, reviews, about, pricing, faq, service-areas, contact]
+  caretaker: [hero, about, reviews, services, gallery, faq, service-areas, contact]
+
+signature_moves_defaults:
+  - "Before/after slider in gallery (each project)"
+  - "Material/manufacturer logos band (James Hardie, LP, etc.)"
+  - "Lifetime workmanship warranty banner"
+  - "Visualizer link or upload-your-home prompt (pro tier)"
+
+certifications_master:
+  - "James Hardie Elite Preferred"
+  - "LP SmartSide Preferred"
+  - "Andersen Certified Contractor"
+  - "Pella Certified Contractor"
+  - "NARI Member"
+  - "BBB Accredited Business"
+
+keyword_clusters:
+  siding:
+    primary: "{city} siding contractor"
+    secondary: ["james hardie installer {city}", "vinyl siding {city}", "siding replacement {city}"]
+  windows:
+    primary: "{city} window replacement"
+    secondary: ["new windows {city}", "andersen windows {city}", "pella windows {city}"]
+
+voice_defaults:
+  tone: "Craftsman, quality-focused, owner-led"
+  vocabulary_use: ["craftsmanship", "curb appeal", "your investment", "lifetime", "guaranteed", "manufacturer-certified"]
+  vocabulary_avoid: ["leverage", "synergize", "best-in-class"]
+
+pricing_band_defaults:
+  type: pillars
+  pillars:
+    - "Manufacturer-certified — every install meets warranty spec"
+    - "Lifetime workmanship warranty"
+    - "Free in-home consultations and material samples"
+    - "Real local crews — no subcontractors you've never met"

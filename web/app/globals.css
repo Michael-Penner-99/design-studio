@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  background-color: #0f172a;
+  color: #f8fafc;
+  font-family: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
+}
+
+/* Subtle focus ring using the gold accent */
+*:focus-visible {
+  outline: 2px solid #c6a75e;
+  outline-offset: 2px;
+}
+
+/* Inputs */
+.field {
+  @apply w-full rounded-md border border-white/10 bg-surface px-3 py-2 text-sm text-ink placeholder:text-white/40 focus:border-accent focus:outline-none;
+}
+
+.label {
+  @apply block text-xs font-semibold uppercase tracking-wider text-muted mb-1.5;
+}
+
+.btn-primary {
+  @apply inline-flex items-center justify-center gap-2 rounded-md bg-accent px-4 py-2 text-sm font-semibold text-bg transition hover:bg-accent-light disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.btn-secondary {
+  @apply inline-flex items-center justify-center gap-2 rounded-md border border-white/15 bg-transparent px-4 py-2 text-sm font-medium text-ink transition hover:border-white/30 hover:bg-white/5;
+}
+
+.card {
+  @apply rounded-lg border border-white/10 bg-surface p-5 shadow-sm;
+}
+
+.tag {
+  @apply inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wider;
+}

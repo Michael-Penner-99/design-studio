@@ -1,0 +1,27 @@
+<!-- ================= SERVICES ================= -->
+<section id="services" class="py-20 bg-navy diag">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="grid lg:grid-cols-2 gap-14 items-center">
+      <div class="order-2 lg:order-1">
+        <img src="{{asset:services-feature}}" alt="{{services_image_alt}}" class="w-full h-[520px] object-cover" />
+      </div>
+      <div class="order-1 lg:order-2">
+        <p class="text-[11px] tracking-[0.32em] gold-text font-bold mb-4">{{services_kicker}}</p>
+        <h2 class="font-heading heading-metallic text-4xl md:text-5xl leading-[1.05] tracking-wide">
+          {{services_h2}}
+        </h2>
+        <p class="mt-5 text-sm text-white/55 leading-relaxed">
+          {{services_intro}}
+        </p>
+        <div class="mt-7 grid grid-cols-3 gap-3">
+          {{#loop:services}}
+            <a href="/services/{{item.slug}}.html" class="bg-card border border-white/10 hover:border-gold p-4 text-center transition-colors">
+              <div class="gold-text text-2xl mb-2">{{item.icon}}</div>
+              <div class="text-[10px] font-bold tracking-wide">{{item.name}}</div>
+            </a>
+          {{/loop:services}}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
