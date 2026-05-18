@@ -1,0 +1,28 @@
+{
+  "run_id": "run-20260518-214857-wn7r",
+  "slug": "windrosemechanical",
+  "mode": "url",
+  "url": "https://windrosemechanical.ca/",
+  "business_name": "Wind Rose Mechanical",
+  "started_at": "2026-05-18T21:49:30Z",
+  "updated_at": "2026-05-18T22:25:30Z",
+  "status": "halted",
+  "current_phase": 2,
+  "phases": {
+    "1": { "name": "Discovery", "status": "completed", "started_at": "2026-05-18T21:49:30Z", "completed_at": "2026-05-18T21:54:30Z" },
+    "2": { "name": "Capture", "status": "halted", "started_at": "2026-05-18T21:54:30Z", "completed_at": "2026-05-18T22:25:30Z" },
+    "3": { "name": "Brand DNA", "status": "pending" },
+    "4": { "name": "Strategy", "status": "pending" },
+    "5": { "name": "Build", "status": "pending" },
+    "6": { "name": "Quality", "status": "pending" },
+    "7": { "name": "Sales-Ready", "status": "pending" },
+    "8": { "name": "Deploy & Handoff", "status": "pending" }
+  },
+  "outputs": {
+    "site_url": null,
+    "sales_walkthrough_url": null,
+    "proposal_pdf_path": null
+  },
+  "halt_reason": "Phase 2 Capture: 0 real project photos (gate requires >=6) and 0 verified Google+Facebook reviews (gate requires >=10). No Google Business Profile exists; the contractor site's media library is Divi HVAC-theme stock demo photography. The factory does not paper over missing real assets with stock.",
+  "halt_phase": 2
+}
