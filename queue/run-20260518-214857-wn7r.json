@@ -1,0 +1,12 @@
+{
+  "run_id": "run-20260518-214857-wn7r",
+  "submitted_at": "2026-05-18T21:48:57.989Z",
+  "submitted_by": "michael@innovusaccounting.com",
+  "mode": "url",
+  "url": "https://windrosemechanical.ca/",
+  "options": {
+    "skip_deploy": false,
+    "force_archetype": null,
+    "ai_image_provider": "openai"
+  }
+}
