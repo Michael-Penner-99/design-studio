@@ -25,12 +25,18 @@ function getConfig(): GithubConfig {
   return { token, owner, repo, branch };
 }
 
-let octokitClient: Octokit | null = null;
+// Never cache the Octokit client — always fresh so Vercel doesn't serve stale data.
 function client(): Octokit {
-  if (octokitClient) return octokitClient;
   const { token } = getConfig();
-  octokitClient = new Octokit({ auth: token });
-  return octokitClient;
+  return new Octokit({
+    auth: token,
+    request: {
+      // Bypass any CDN/edge caching for GitHub API responses
+      headers: {
+        "Cache-Control": "no-cache, no-store",
+      },
+    },
+  });
 }
 
 /**
@@ -70,21 +76,26 @@ export async function writeQueueSpec(spec: JobSpec): Promise<{ commitSha: string
  */
 export async function listRuns(limit?: number): Promise<RunSummary[]> {
   const { owner, repo, branch } = getConfig();
+  const octokit = client();
   let entries: Array<{ name: string; path: string; type: string }> = [];
   try {
-    const res = await client().repos.getContent({
+    const res = await octokit.repos.getContent({
       owner,
       repo,
+      // Append a cache-buster to force GitHub to return fresh data
       ref: branch,
       path: "runs",
-    });
+      headers: {
+        "If-None-Match": "",
+        "Cache-Control": "no-cache",
+      },
+    } as Parameters<typeof octokit.repos.getContent>[0]);
     if (Array.isArray(res.data)) {
       entries = res.data
         .filter((e) => e.type === "file" && e.name.endsWith(".json"))
         .map((e) => ({ name: e.name, path: e.path, type: e.type }));
     }
   } catch (err) {
-    // 404 means the runs/ directory doesn't exist yet — that's fine.
     const status = (err as { status?: number }).status;
     if (status === 404) return [];
     throw err;
@@ -123,18 +134,21 @@ export async function listRuns(limit?: number): Promise<RunSummary[]> {
  */
 export async function getRun(runId: string): Promise<RunStatus | null> {
   const { owner, repo, branch } = getConfig();
+  const octokit = client();
   try {
-    const res = await client().repos.getContent({
+    const res = await octokit.repos.getContent({
       owner,
       repo,
       ref: branch,
       path: `runs/${runId}.json`,
       mediaType: { format: "raw" },
-    });
-    // When mediaType.format = raw, res.data is a string.
+      headers: {
+        "If-None-Match": "",
+        "Cache-Control": "no-cache",
+      },
+    } as Parameters<typeof octokit.repos.getContent>[0]);
     const raw = typeof res.data === "string" ? res.data : null;
     if (!raw) {
-      // Fallback: data is an object with `content` base64-encoded.
       const obj = res.data as { content?: string; encoding?: string };
       if (obj && obj.content && obj.encoding === "base64") {
         const decoded = Buffer.from(obj.content, "base64").toString("utf8");
@@ -155,8 +169,6 @@ function parseStatus(raw: string): RunStatus | null {
     const json = JSON.parse(raw);
     const parsed = runStatusSchema.safeParse(json);
     if (parsed.success) return parsed.data;
-    // Be lenient: return the raw object cast — the worker may write extra fields
-    // we haven't modeled, and pages should still render.
     return json as RunStatus;
   } catch {
     return null;
@@ -169,14 +181,19 @@ function parseStatus(raw: string): RunStatus | null {
  */
 export async function getQueueSpec(runId: string): Promise<JobSpec | null> {
   const { owner, repo, branch } = getConfig();
+  const octokit = client();
   try {
-    const res = await client().repos.getContent({
+    const res = await octokit.repos.getContent({
       owner,
       repo,
       ref: branch,
       path: `queue/${runId}.json`,
       mediaType: { format: "raw" },
-    });
+      headers: {
+        "If-None-Match": "",
+        "Cache-Control": "no-cache",
+      },
+    } as Parameters<typeof octokit.repos.getContent>[0]);
     const raw = typeof res.data === "string" ? res.data : null;
     if (!raw) return null;
     const json = JSON.parse(raw);

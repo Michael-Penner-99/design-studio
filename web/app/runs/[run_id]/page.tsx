@@ -17,7 +17,6 @@ export default async function RunDetailPage({
   params: Params;
 }) {
   const status = await getRun(params.run_id);
-  // If no status yet, fall back to the queue spec so we can show "queued".
   let synthetic: RunStatus | null = status;
   if (!synthetic) {
     const spec = await getQueueSpec(params.run_id);
@@ -40,22 +39,12 @@ export default async function RunDetailPage({
   }
 
   const run = synthetic;
-  const isRunning = run.status === "running" || run.status === "queued";
 
   return (
     <div className="space-y-8">
-      {/* Auto-refresh while running. <meta refresh> works on a server-rendered page. */}
-      {isRunning && (
-        // eslint-disable-next-line @next/next/no-head-element
-        <meta httpEquiv="refresh" content="30" />
-      )}
-
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <Link
-            href="/runs"
-            className="text-xs text-muted hover:text-ink"
-          >
+          <Link href="/runs" className="text-xs text-muted hover:text-ink">
             ← All runs
           </Link>
           <h1 className="mt-1 text-2xl font-bold tracking-tight">
@@ -72,16 +61,15 @@ export default async function RunDetailPage({
         <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted">
           Phase progress
         </h2>
-        <PhaseStepper run={run} />
+        {/* poll=true enables client-side live updates every 15s */}
+        <PhaseStepper run={run} poll={true} />
       </section>
 
       {run.status === "completed" && run.outputs ? (
         <OutputsPanel outputs={run.outputs} />
       ) : null}
 
-      {run.status === "halted" ? (
-        <HaltPanel run={run} />
-      ) : null}
+      {run.status === "halted" ? <HaltPanel run={run} /> : null}
     </div>
   );
 }
@@ -93,9 +81,7 @@ function StatusBadge({ status }: { status: RunStatus["status"] }) {
     completed: "bg-emerald-500/15 text-emerald-300",
     halted: "bg-rose-500/15 text-rose-300",
   };
-  return (
-    <span className={`tag text-xs ${styles[status]}`}>{status}</span>
-  );
+  return <span className={`tag text-xs ${styles[status]}`}>{status}</span>;
 }
 
 function SpecPanel({ run }: { run: RunStatus }) {
@@ -192,8 +178,13 @@ function HaltPanel({ run }: { run: RunStatus }) {
         {run.halt_reason ?? "No reason recorded."}
       </p>
       <p className="mt-3 text-xs text-muted">
-        Suggested next: open <span className="font-mono">clients/{run.slug ?? "{slug}"}/halt.md</span> on the worker
-        and run <span className="font-mono">resume {run.slug ?? "{slug}"}</span> in Claude Code.
+        Suggested next: open{" "}
+        <span className="font-mono">
+          clients/{run.slug ?? "{slug}"}/halt.md
+        </span>{" "}
+        on the worker and run{" "}
+        <span className="font-mono">resume {run.slug ?? "{slug}"}</span> in
+        Claude Code.
       </p>
     </section>
   );

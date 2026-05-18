@@ -55,3 +55,20 @@ select {
 .tag {
   @apply inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wider;
 }
+/* Add this to the bottom of your existing globals.css */
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.progress-shimmer {
+  background: linear-gradient(
+    90deg,
+    currentColor 25%,
+    color-mix(in srgb, currentColor 60%, transparent) 50%,
+    currentColor 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
