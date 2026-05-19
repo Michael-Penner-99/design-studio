@@ -4,7 +4,6 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import type { RunStatus, PhaseStatus } from "../lib/schemas";
 import { PHASE_NAMES } from "../lib/schemas";
-import { LiveLog } from "./live-log";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -38,11 +37,11 @@ function timeAgo(iso: string): string {
   if (mins < 1) return "just now";
   if (mins < 60) return `${mins}m ago`;
   if (hrs < 24) return `${hrs}h ago`;
-  return new Date(iso).toLocaleString("en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
+  return new Date(iso).toLocaleString(undefined, { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
 }
 
 function fmtTime(iso: string): string {
-  try { return new Date(iso).toLocaleString("en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }); }
+  try { return new Date(iso).toLocaleString(undefined, { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }); }
   catch { return iso; }
 }
 
@@ -159,7 +158,7 @@ function PhaseSidebar({ run }: { run: RunStatus }) {
           run.business_name ? ["biz", run.business_name] : null,
           ["started", fmtTime(run.started_at)],
           run.updated_at ? ["updated", fmtTime(run.updated_at)] : null,
-        ].filter((x): x is string[] => Array.isArray(x)).map(([k, v]) => (
+        ].filter(Boolean).map(([k, v]) => (
           <div key={k} className="flex gap-2 text-[11px]">
             <span className="w-12 shrink-0 text-muted">{k}</span>
             <span className="text-ink truncate font-mono">{v}</span>
@@ -240,7 +239,6 @@ export function RunShell({ initialRun, formToken }: Props) {
   const [resumeText, setResumeText] = useState("");
   const [resumeSending, setResumeSending] = useState(false);
   const [resumeDone, setResumeDone] = useState(false);
-  const [activeTab, setActiveTab] = useState<"log" | "activity">("log");
   const feedRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const isActive = run.status === "running" || run.status === "queued";
@@ -380,19 +378,8 @@ export function RunShell({ initialRun, formToken }: Props) {
             </div>
           )}
 
-          {/* Tabs */}
-          <div className="flex-shrink-0 flex border-b border-white/10 px-4">
-            {(["log", "activity"] as const).map(tab => (
-              <button key={tab} onClick={() => setActiveTab(tab)}
-                className={`px-3 py-2 text-xs font-medium border-b-2 transition-colors -mb-px ${activeTab === tab ? "border-accent text-accent-light" : "border-transparent text-muted hover:text-ink"}`}>
-                {tab === "log" ? <span className="flex items-center gap-1.5">{isActive && <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" />}Live log</span>
-                  : <span className="flex items-center gap-1.5">Commits{activity.length > 0 && <span className="rounded-full bg-white/10 px-1.5 py-0.5 text-[10px]">{activity.length}</span>}</span>}
-              </button>
-            ))}
-          </div>
-          <div className="flex-1 overflow-hidden">
-            {activeTab === "log" ? <LiveLog runId={run.run_id} isActive={isActive} /> : (
-          <div ref={feedRef} className="h-full overflow-y-auto p-4 space-y-1">
+          {/* Activity feed */}
+          <div ref={feedRef} className="flex-1 overflow-y-auto p-4 space-y-1">
             {activity.length === 0 ? (
               <div className="flex items-center justify-center h-full text-sm text-muted">
                 {isActive ? (
@@ -415,9 +402,13 @@ export function RunShell({ initialRun, formToken }: Props) {
                 {operatorMsgs.map((m, i) => (
                   <OperatorMessage key={i} text={m.text} time={m.time} />
                 ))}
+                {isActive && (
+                  <div className="flex items-center gap-2 px-3 py-2 text-xs text-muted">
+                    <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" />
+                    Live — refreshing every 20s
+                  </div>
+                )}
               </>
-            )}
-          </div>
             )}
           </div>
 
