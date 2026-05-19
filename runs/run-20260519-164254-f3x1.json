@@ -5,9 +5,9 @@
   "url": "https://www.saskair.ca/",
   "business_name": "Sask Air Solutions",
   "started_at": "2026-05-19T16:56:36Z",
-  "updated_at": "2026-05-19T17:01:29Z",
+  "updated_at": "2026-05-19T19:03:00Z",
   "status": "running",
-  "current_phase": 2,
+  "current_phase": 3,
   "phases": {
     "1": {
       "name": "Discovery",
@@ -17,9 +17,9 @@
     },
     "2": {
       "name": "Capture",
-      "status": "pending",
-      "started_at": null,
-      "completed_at": null
+      "status": "completed",
+      "started_at": "2026-05-19T17:01:29Z",
+      "completed_at": "2026-05-19T19:03:00Z"
     },
     "3": {
       "name": "Brand DNA",
