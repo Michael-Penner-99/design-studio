@@ -158,7 +158,7 @@ function PhaseSidebar({ run }: { run: RunStatus }) {
           run.business_name ? ["biz", run.business_name] : null,
           ["started", fmtTime(run.started_at)],
           run.updated_at ? ["updated", fmtTime(run.updated_at)] : null,
-        ].filter((x): x is string[] => Array.isArray(x)).map(([k, v]) => (
+        ].filter(Boolean).map(([k, v]) => (
           <div key={k} className="flex gap-2 text-[11px]">
             <span className="w-12 shrink-0 text-muted">{k}</span>
             <span className="text-ink truncate font-mono">{v}</span>

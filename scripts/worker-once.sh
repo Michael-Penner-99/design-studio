@@ -110,7 +110,9 @@ print(phases.get('${phase}',{}).get('status','pending'))
 
     PROMPT="Execute ONLY phase ${phase} (${phase_name}) of queue job queue/${run_id}.json. Follow CLAUDE.md and sops/00-orchestrator-contract.md. Update runs/${run_id}.json status after this phase completes. Commit and push after this phase. Do NOT proceed to phase $((phase+1)) — stop after phase ${phase} is done."
 
-    if ! claude -p --dangerously-skip-permissions "$PROMPT" 2>&1; then
+    RUN_LOG="$ROOT/.runs/${run_id}.log"
+    mkdir -p "$ROOT/.runs"
+    if ! claude -p --dangerously-skip-permissions "$PROMPT" 2>&1 | tee -a "$RUN_LOG"; then
       echo "  ❌ phase $phase failed for $run_id"
       python3 - << PYEOF
 import json, datetime, os
