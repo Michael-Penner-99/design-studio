@@ -1,0 +1,41 @@
+<!-- ================= BEFORE / AFTER STAT ================= -->
+<!--
+  Sub-component of the `gallery` partial. Renders the brand's hardest proof as a
+  paired-number chip: an elevated radon reading in `danger` red, an arrow, the
+  post-mitigation reading in `success` green. Figures are quoted verbatim from
+  named Google reviews in evidence/reviews.json — never fabricated.
+
+  Created Phase 5 (Build), site-builder, per design-direction.md signature move #5
+  (flagged NEW). Reusable on future radon-mitigation builds.
+
+  Tokens:
+    {{ba_kicker}} {{ba_h2}} {{ba_intro}}
+    {{#loop:ba_stats}} -> item.before, item.after, item.note
+-->
+<section class="py-20 bg-primary-deep relative overflow-hidden">
+  <div class="diag absolute inset-0"></div>
+  <div class="relative max-w-6xl mx-auto px-6 text-center">
+    <p class="font-body text-tiny tracking-[0.3em] uppercase text-accent font-semibold">{{ba_kicker}}</p>
+    <h2 class="font-heading text-3xl md:text-h2 font-semibold text-white mt-4">{{ba_h2}}</h2>
+    <div class="w-16 h-[3px] bg-accent mx-auto mt-5"></div>
+    <p class="font-body text-white/70 max-w-2xl mx-auto mt-5 leading-relaxed">{{ba_intro}}</p>
+    <div class="mt-12 grid gap-6 md:grid-cols-3">
+      {{#loop:ba_stats}}
+      <div class="bg-white/[0.05] border border-white/10 p-7 text-left">
+        <div class="flex items-center justify-between gap-3">
+          <div class="flex-1">
+            <div class="font-body text-tiny uppercase tracking-wider text-white/45">Before</div>
+            <div class="font-heading text-2xl font-bold text-danger mt-1">{{item.before}}</div>
+          </div>
+          <span class="text-accent text-2xl" aria-hidden="true">&rarr;</span>
+          <div class="flex-1 text-right">
+            <div class="font-body text-tiny uppercase tracking-wider text-white/45">After</div>
+            <div class="font-heading text-2xl font-bold text-success mt-1">{{item.after}}</div>
+          </div>
+        </div>
+        <p class="font-body text-small text-white/55 mt-4 leading-relaxed border-t border-white/10 pt-4">{{item.note}}</p>
+      </div>
+      {{/loop:ba_stats}}
+    </div>
+  </div>
+</section>
