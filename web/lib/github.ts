@@ -315,7 +315,7 @@ export async function requeueRun(
     phases: Object.fromEntries(
       Object.entries(run.phases ?? {}).map(([k, v]) => [
         k,
-        Number(k) >= resumeFromPhase
+        Number(k) >= resumeFromPhase && v.status !== "completed"
           ? { ...v, status: "pending", started_at: null, completed_at: null }
           : v,
       ]),
@@ -428,6 +428,7 @@ export async function getRecentActivity(runId: string): Promise<ActivityEntry[]>
   // Fetch commits touching runs/{run_id}.json (phase updates)
   const paths = [
     `runs/${runId}.json`,
+    `queue/${runId}.json`,
     ...(slug ? [`clients/${slug}`] : []),
   ];
 
