@@ -17,8 +17,8 @@ export default function RootLayout({
     <html lang="en">
       <body className="min-h-screen bg-bg text-ink">
         <Header />
-        <main className="mx-auto w-full max-w-container px-6 py-8">{children}</main>
-        <footer className="mx-auto w-full max-w-container px-6 py-8 text-xs text-muted">
+        <main className="mx-auto w-full max-w-[90rem] px-6 py-6">{children}</main>
+        <footer className="mx-auto w-full max-w-[90rem] px-6 py-4 text-xs text-muted">
           Action Studio · Factory operator console
         </footer>
       </body>

@@ -470,3 +470,49 @@ export async function getRecentActivity(runId: string): Promise<ActivityEntry[]>
   allCommits.sort((a, b) => (a.timestamp < b.timestamp ? 1 : -1));
   return allCommits.slice(0, 30);
 }
+// ─── APPEND TO BOTTOM OF web/lib/github.ts ────────────────────────────────────
+
+/**
+ * Append an operator note to clients/{slug}/operator-notes.md.
+ * The worker and orchestrator will read this file on the next tick.
+ */
+export async function writeOperatorNote({
+  slug,
+  runId,
+  note,
+}: {
+  slug: string;
+  runId: string;
+  note: string;
+}): Promise<void> {
+  const { owner, repo, branch } = getConfig();
+  const octokit = client();
+  const path = `clients/${slug}/operator-notes.md`;
+  const now = new Date().toISOString();
+
+  let existingContent = "";
+  let sha: string | undefined;
+
+  try {
+    const existing = await octokit.repos.getContent({ owner, repo, ref: branch, path });
+    const data = existing.data as { sha?: string; content?: string; encoding?: string };
+    sha = data.sha;
+    if (data.content && data.encoding === "base64") {
+      existingContent = Buffer.from(data.content, "base64").toString("utf8");
+    }
+  } catch {
+    // File doesn't exist yet — start fresh
+    existingContent = `# Operator Notes — ${slug}\n\n`;
+  }
+
+  const newContent = existingContent + `\n---\n**${now}** (run: ${runId})\n\n${note}\n`;
+  const contentB64 = Buffer.from(newContent).toString("base64");
+
+  await octokit.repos.createOrUpdateFileContents({
+    owner, repo, path, branch,
+    message: `operator(${runId}): note added`,
+    content: contentB64,
+    sha,
+    committer: { name: "Action Studio Factory", email: "factory@actiondesignstudio.com" },
+  });
+}
