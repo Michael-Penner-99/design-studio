@@ -5,8 +5,8 @@
   "url": "https://www.saskair.ca/",
   "business_name": "Sask Air Solutions",
   "started_at": "2026-05-19T16:56:36Z",
-  "updated_at": "2026-05-19T21:06:17Z",
-  "status": "queued",
+  "updated_at": "2026-05-19T21:19:53Z",
+  "status": "completed",
   "current_phase": 8,
   "phases": {
     "1": {
@@ -53,14 +53,14 @@
     },
     "8": {
       "name": "Deploy & Handoff",
-      "status": "pending",
-      "started_at": null,
-      "completed_at": null
+      "status": "completed",
+      "started_at": "2026-05-19T21:11:23Z",
+      "completed_at": "2026-05-19T21:19:53Z"
     }
   },
   "outputs": {
-    "site_url": null,
-    "sales_walkthrough_url": null,
+    "site_url": "https://saskair.actiondesignstudio.com",
+    "sales_walkthrough_url": "https://saskair-sales.actiondesignstudio.com",
     "proposal_pdf_path": "clients/saskair/proposal/proposal.pdf"
   },
   "halt_reason": null,

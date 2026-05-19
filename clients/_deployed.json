@@ -3,5 +3,21 @@
     "purpose": "Tracks every successfully-deployed client so the local clients/{slug}/ folder can be safely cleaned up. Lightweight metadata only — actual files live on Vercel from deploy onward.",
     "schema_version": 1
   },
-  "clients": []
+  "clients": [
+    {
+      "slug": "saskair",
+      "site": {
+        "vercel_project_id": "prj_g7mMxvzPRzF2MjvNAgozf0RfNdvC",
+        "preview_url": "https://saskair.actiondesignstudio.com"
+      },
+      "sales": {
+        "vercel_project_id": "prj_vzxqVvDtv2yfelHN7YLWNR5QxFnI",
+        "preview_url": "https://saskair-sales.actiondesignstudio.com"
+      },
+      "deployed_at": "2026-05-19T21:16:42Z",
+      "last_status": "deployed",
+      "local_present": true,
+      "cleaned_up_at": null
+    }
+  ]
 }
