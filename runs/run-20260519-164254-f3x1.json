@@ -1,7 +1,68 @@
 {
   "run_id": "run-20260519-164254-f3x1",
-  "status": "queued",
+  "slug": "saskair",
+  "mode": "url",
+  "url": "https://www.saskair.ca/",
+  "business_name": "Sask Air Solutions",
+  "started_at": "2026-05-19T16:56:36Z",
+  "updated_at": "2026-05-19T17:01:29Z",
+  "status": "running",
+  "current_phase": 2,
+  "phases": {
+    "1": {
+      "name": "Discovery",
+      "status": "completed",
+      "started_at": "2026-05-19T16:56:36Z",
+      "completed_at": "2026-05-19T17:01:29Z"
+    },
+    "2": {
+      "name": "Capture",
+      "status": "pending",
+      "started_at": null,
+      "completed_at": null
+    },
+    "3": {
+      "name": "Brand DNA",
+      "status": "pending",
+      "started_at": null,
+      "completed_at": null
+    },
+    "4": {
+      "name": "Strategy",
+      "status": "pending",
+      "started_at": null,
+      "completed_at": null
+    },
+    "5": {
+      "name": "Build",
+      "status": "pending",
+      "started_at": null,
+      "completed_at": null
+    },
+    "6": {
+      "name": "Quality",
+      "status": "pending",
+      "started_at": null,
+      "completed_at": null
+    },
+    "7": {
+      "name": "Sales-Ready",
+      "status": "pending",
+      "started_at": null,
+      "completed_at": null
+    },
+    "8": {
+      "name": "Deploy & Handoff",
+      "status": "pending",
+      "started_at": null,
+      "completed_at": null
+    }
+  },
+  "outputs": {
+    "site_url": null,
+    "sales_walkthrough_url": null,
+    "proposal_pdf_path": null
+  },
   "halt_reason": null,
-  "halt_phase": null,
-  "updated_at": "2026-05-19T16:54:54.446166+00:00"
+  "halt_phase": null
 }
