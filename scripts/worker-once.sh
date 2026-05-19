@@ -4,8 +4,9 @@
 # What it does:
 #   1. git pull --rebase to fetch any new queue specs from GitHub
 #   2. find queue/*.json files that don't yet have a corresponding runs/{run-id}.json
+#      OR have runs/{run-id}.json with status "queued" (operator re-queued a halted run)
 #   3. for each pending spec: invoke Claude Code in non-interactive mode (claude -p)
-#      with the "run job {run-id}" trigger
+#      with the "run job {run-id}" trigger, including resume_from_phase if present
 #   4. Claude Code (the orchestrator) handles all status updates + git commits
 #
 # Intended to be called either:
@@ -43,14 +44,31 @@ if ! git pull --rebase --quiet 2>/dev/null; then
   exit 0
 fi
 
-# Collect pending run IDs: any queue/*.json without a matching runs/*.json
+# Collect pending run IDs:
+#   - queue/*.json with no matching runs/*.json (fresh run)
+#   - queue/*.json where runs/*.json has status "queued" (operator re-queued a halted run)
 mkdir -p queue runs
 pending=()
+resume_phases=()
+
 for spec in queue/*.json; do
   [ -f "$spec" ] || continue
   run_id=$(basename "$spec" .json)
-  if [ ! -f "runs/${run_id}.json" ]; then
+  run_file="runs/${run_id}.json"
+
+  if [ ! -f "$run_file" ]; then
+    # Fresh run — no status file yet
     pending+=("$run_id")
+    resume_phases+=("")
+  else
+    # Check if operator re-queued it (status == "queued")
+    run_status=$(python3 -c "import json; d=json.load(open('$run_file')); print(d.get('status',''))" 2>/dev/null || echo "")
+    if [ "$run_status" = "queued" ]; then
+      # Get resume_from_phase from the queue spec if present
+      resume_phase=$(python3 -c "import json; d=json.load(open('$spec')); print(d.get('resume_from_phase',''))" 2>/dev/null || echo "")
+      pending+=("$run_id")
+      resume_phases+=("$resume_phase")
+    fi
   fi
 done
 
@@ -61,16 +79,22 @@ fi
 
 echo "  pending: ${pending[*]}"
 
-for run_id in "${pending[@]}"; do
+for i in "${!pending[@]}"; do
+  run_id="${pending[$i]}"
+  resume_phase="${resume_phases[$i]}"
+
   echo ""
   echo "[$(date -u +%Y-%m-%dT%H:%M:%SZ)] picking up $run_id"
 
-  # Hand off to Claude Code. The orchestrator reads queue/{run_id}.json,
-  # executes all 8 phases, writes runs/{run_id}.json incrementally, and
-  # commits + pushes at the end.
-  #
-  # -p (--print) runs non-interactively and exits when the task is done.
-  if ! claude -p "Execute queue job queue/${run_id}.json. Follow CLAUDE.md and sops/00-orchestrator-contract.md. Write status updates to runs/${run_id}.json after each phase. Commit and push when complete or halted." 2>&1; then
+  # Build the prompt — include resume instruction if this is a re-queue
+  if [ -n "$resume_phase" ]; then
+    echo "  resuming from phase $resume_phase (operator re-queued)"
+    PROMPT="Resume queue job queue/${run_id}.json from phase ${resume_phase}. The operator has supplied additional inputs in clients/\$(cat queue/${run_id}.json | python3 -c \"import json,sys; print(json.load(sys.stdin).get('slug', '??'))\")/resume-input.md and evidence/reviews-raw.txt (if reviews were provided). Follow CLAUDE.md and sops/00-orchestrator-contract.md. Skip phases 1 through $((resume_phase - 1)) — they are already complete. Write status updates to runs/${run_id}.json after each phase. Commit and push when complete or halted."
+  else
+    PROMPT="Execute queue job queue/${run_id}.json. Follow CLAUDE.md and sops/00-orchestrator-contract.md. Write status updates to runs/${run_id}.json after each phase. Commit and push when complete or halted."
+  fi
+
+  if ! claude -p "$PROMPT" 2>&1; then
     echo "  ❌ claude CLI returned non-zero for $run_id. See $LOG for details."
     # Mark the run halted at the worker layer so the operator app shows the failure.
     python3 - <<PYEOF
@@ -79,7 +103,7 @@ status = {
   "run_id": "${run_id}",
   "status": "halted",
   "halt_reason": "worker-invocation-failed",
-  "halt_phase": 0,
+  "halt_phase": ${resume_phase:-0},
   "updated_at": datetime.datetime.utcnow().isoformat() + "Z"
 }
 path = f"runs/${run_id}.json"

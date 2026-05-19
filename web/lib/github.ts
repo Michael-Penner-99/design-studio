@@ -205,3 +205,201 @@ export async function getQueueSpec(runId: string): Promise<JobSpec | null> {
     throw err;
   }
 }
+// ─── ADD THESE TWO FUNCTIONS TO THE BOTTOM OF web/lib/github.ts ───────────────
+
+/**
+ * Write operator-supplied resume inputs into the client folder on GitHub.
+ * Creates:
+ *   clients/{slug}/evidence/reviews-raw.txt  (the pasted reviews)
+ *   clients/{slug}/resume-input.md            (operator notes + context)
+ */
+export async function writeResumeInput({
+  slug,
+  runId,
+  resumePhase,
+  reviewsText,
+  notes,
+}: {
+  slug: string;
+  runId: string;
+  resumePhase: number;
+  reviewsText: string;
+  notes: string;
+}): Promise<void> {
+  const { owner, repo, branch } = getConfig();
+  const octokit = client();
+  const now = new Date().toISOString();
+
+  const files: Array<{ path: string; content: string; message: string }> = [];
+
+  if (reviewsText.trim()) {
+    files.push({
+      path: `clients/${slug}/evidence/reviews-raw.txt`,
+      content: reviewsText,
+      message: `resume(${runId}): operator-supplied reviews for phase ${resumePhase}`,
+    });
+  }
+
+  const resumeMd = [
+    `# Resume Input — ${runId}`,
+    ``,
+    `**Submitted at:** ${now}`,
+    `**Resume from phase:** ${resumePhase}`,
+    ``,
+    notes ? `## Operator notes\n\n${notes}` : "",
+    reviewsText
+      ? `## Reviews supplied\n\nSee \`evidence/reviews-raw.txt\``
+      : "## Reviews supplied\n\nNone — operator did not supply reviews.",
+  ]
+    .filter((l) => l !== "")
+    .join("\n");
+
+  files.push({
+    path: `clients/${slug}/resume-input.md`,
+    content: resumeMd,
+    message: `resume(${runId}): operator resume input`,
+  });
+
+  // Write each file — get current SHA if it exists so we can update it
+  for (const file of files) {
+    const contentB64 = Buffer.from(file.content + "\n").toString("base64");
+    let sha: string | undefined;
+    try {
+      const existing = await octokit.repos.getContent({
+        owner,
+        repo,
+        ref: branch,
+        path: file.path,
+      });
+      const data = existing.data as { sha?: string };
+      sha = data.sha;
+    } catch {
+      // File doesn't exist yet — that's fine
+    }
+    await octokit.repos.createOrUpdateFileContents({
+      owner,
+      repo,
+      path: file.path,
+      branch,
+      message: file.message,
+      content: contentB64,
+      sha,
+      committer: {
+        name: "Action Studio Factory",
+        email: "factory@actiondesignstudio.com",
+      },
+    });
+  }
+}
+
+/**
+ * Reset a halted run's status to "queued" and write a new queue spec
+ * with resume_from_phase so the worker knows to pick it up mid-pipeline.
+ */
+export async function requeueRun(
+  run: RunStatus,
+  resumeFromPhase: number,
+): Promise<void> {
+  const { owner, repo, branch } = getConfig();
+  const octokit = client();
+  const now = new Date().toISOString();
+
+  // 1. Reset runs/{run_id}.json status to queued
+  const updatedStatus = {
+    ...run,
+    status: "queued" as const,
+    updated_at: now,
+    halt_reason: null,
+    halt_phase: null,
+    // Reset the halted phase back to running so it retries
+    phases: Object.fromEntries(
+      Object.entries(run.phases ?? {}).map(([k, v]) => [
+        k,
+        Number(k) >= resumeFromPhase
+          ? { ...v, status: "pending", started_at: null, completed_at: null }
+          : v,
+      ]),
+    ),
+  };
+
+  const statusContent = Buffer.from(
+    JSON.stringify(updatedStatus, null, 2) + "\n",
+  ).toString("base64");
+
+  // Get current SHA of runs file
+  let runsSha: string | undefined;
+  try {
+    const existing = await octokit.repos.getContent({
+      owner,
+      repo,
+      ref: branch,
+      path: `runs/${run.run_id}.json`,
+    });
+    runsSha = (existing.data as { sha?: string }).sha;
+  } catch {
+    // won't happen since run exists
+  }
+
+  await octokit.repos.createOrUpdateFileContents({
+    owner,
+    repo,
+    path: `runs/${run.run_id}.json`,
+    branch,
+    message: `resume(${run.run_id}): operator re-queued from phase ${resumeFromPhase}`,
+    content: statusContent,
+    sha: runsSha,
+    committer: {
+      name: "Action Studio Factory",
+      email: "factory@actiondesignstudio.com",
+    },
+  });
+
+  // 2. Write a new queue spec with resume_from_phase field
+  // Re-use the same run_id so history stays intact
+  const resumeSpec = {
+    run_id: run.run_id,
+    submitted_at: now,
+    submitted_by: "operator-resume",
+    mode: run.mode,
+    url: run.url ?? undefined,
+    business_name: run.business_name ?? undefined,
+    resume_from_phase: resumeFromPhase,
+    options: {
+      skip_deploy: false,
+      force_archetype: null,
+      ai_image_provider: "openai",
+    },
+  };
+
+  const specContent = Buffer.from(
+    JSON.stringify(resumeSpec, null, 2) + "\n",
+  ).toString("base64");
+
+  // Get SHA of existing queue spec (always exists for a run that ran)
+  let queueSha: string | undefined;
+  try {
+    const existing = await octokit.repos.getContent({
+      owner,
+      repo,
+      ref: branch,
+      path: `queue/${run.run_id}.json`,
+    });
+    queueSha = (existing.data as { sha?: string }).sha;
+  } catch {
+    // fine if missing
+  }
+
+  await octokit.repos.createOrUpdateFileContents({
+    owner,
+    repo,
+    path: `queue/${run.run_id}.json`,
+    branch,
+    message: `resume(${run.run_id}): re-queue from phase ${resumeFromPhase}`,
+    content: specContent,
+    sha: queueSha,
+    committer: {
+      name: "Action Studio Factory",
+      email: "factory@actiondesignstudio.com",
+    },
+  });
+}
