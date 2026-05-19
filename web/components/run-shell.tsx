@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import type { RunStatus, PhaseStatus } from "../lib/schemas";
 import { PHASE_NAMES } from "../lib/schemas";
+import { LiveLog } from "./live-log";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -239,6 +240,7 @@ export function RunShell({ initialRun, formToken }: Props) {
   const [resumeText, setResumeText] = useState("");
   const [resumeSending, setResumeSending] = useState(false);
   const [resumeDone, setResumeDone] = useState(false);
+  const [activeTab, setActiveTab] = useState<"log" | "activity">("log");
   const feedRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const isActive = run.status === "running" || run.status === "queued";
@@ -378,8 +380,19 @@ export function RunShell({ initialRun, formToken }: Props) {
             </div>
           )}
 
-          {/* Activity feed */}
-          <div ref={feedRef} className="flex-1 overflow-y-auto p-4 space-y-1">
+          {/* Tabs */}
+          <div className="flex-shrink-0 flex border-b border-white/10 px-4">
+            {(["log", "activity"] as const).map(tab => (
+              <button key={tab} onClick={() => setActiveTab(tab)}
+                className={`px-3 py-2 text-xs font-medium border-b-2 transition-colors -mb-px ${activeTab === tab ? "border-accent text-accent-light" : "border-transparent text-muted hover:text-ink"}`}>
+                {tab === "log" ? <span className="flex items-center gap-1.5">{isActive && <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" />}Live log</span>
+                  : <span className="flex items-center gap-1.5">Commits{activity.length > 0 && <span className="rounded-full bg-white/10 px-1.5 py-0.5 text-[10px]">{activity.length}</span>}</span>}
+              </button>
+            ))}
+          </div>
+          <div className="flex-1 overflow-hidden">
+            {activeTab === "log" ? <LiveLog runId={run.run_id} isActive={isActive} /> : (
+          <div ref={feedRef} className="h-full overflow-y-auto p-4 space-y-1">
             {activity.length === 0 ? (
               <div className="flex items-center justify-center h-full text-sm text-muted">
                 {isActive ? (
@@ -402,13 +415,9 @@ export function RunShell({ initialRun, formToken }: Props) {
                 {operatorMsgs.map((m, i) => (
                   <OperatorMessage key={i} text={m.text} time={m.time} />
                 ))}
-                {isActive && (
-                  <div className="flex items-center gap-2 px-3 py-2 text-xs text-muted">
-                    <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" />
-                    Live — refreshing every 20s
-                  </div>
-                )}
               </>
+            )}
+          </div>
             )}
           </div>
 
