@@ -5,8 +5,8 @@
   "url": "https://windrosemechanical.ca/",
   "business_name": "Wind Rose Mechanical",
   "started_at": "2026-05-18T21:49:30Z",
-  "updated_at": "2026-05-19T15:38:05.027177Z",
-  "status": "halted",
+  "updated_at": "2026-05-19T15:44:03.052Z",
+  "status": "queued",
   "current_phase": 3,
   "phases": {
     "1": {
@@ -63,6 +63,6 @@
     "sales_walkthrough_url": null,
     "proposal_pdf_path": null
   },
-  "halt_reason": "worker-invocation-failed",
-  "halt_phase": 2
+  "halt_reason": null,
+  "halt_phase": null
 }
