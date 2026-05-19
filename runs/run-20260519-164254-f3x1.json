@@ -5,9 +5,9 @@
   "url": "https://www.saskair.ca/",
   "business_name": "Sask Air Solutions",
   "started_at": "2026-05-19T16:56:36Z",
-  "updated_at": "2026-05-19T19:44:16Z",
+  "updated_at": "2026-05-19T20:09:56Z",
   "status": "queued",
-  "current_phase": 4,
+  "current_phase": 5,
   "phases": {
     "1": {
       "name": "Discovery",
@@ -29,9 +29,9 @@
     },
     "4": {
       "name": "Strategy",
-      "status": "pending",
-      "started_at": null,
-      "completed_at": null
+      "status": "completed",
+      "started_at": "2026-05-19T20:03:30Z",
+      "completed_at": "2026-05-19T20:09:56Z"
     },
     "5": {
       "name": "Build",
