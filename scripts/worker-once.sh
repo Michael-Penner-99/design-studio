@@ -94,7 +94,7 @@ for i in "${!pending[@]}"; do
     PROMPT="Execute queue job queue/${run_id}.json. Follow CLAUDE.md and sops/00-orchestrator-contract.md. Write status updates to runs/${run_id}.json after each phase. Commit and push when complete or halted."
   fi
 
-  if ! claude -p "$PROMPT" 2>&1; then
+  if ! claude -p --timeout 600 "$PROMPT" 2>&1; then
     echo "  ❌ claude CLI returned non-zero for $run_id. See $LOG for details."
     # Mark the run halted at the worker layer so the operator app shows the failure.
     python3 - <<PYEOF
