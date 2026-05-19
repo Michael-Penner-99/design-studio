@@ -5,9 +5,10 @@
   "url": "https://windrosemechanical.ca/",
   "business_name": "Wind Rose Mechanical",
   "started_at": "2026-05-18T21:49:30Z",
-  "updated_at": "2026-05-19T02:15:23.354Z",
-  "status": "queued",
-  "current_phase": 2,
+  "updated_at": "2026-05-19T04:27:21.844503Z",
+  "status": "halted",
+  "current_phase": 3,
+  "resume_note": "Resumed from phase 2 by operator. Phase 2 halt gates (no project photos, no review corpus) overridden by explicit operator instruction. Build proceeds with zero reviews and neutral-pattern imagery.",
   "phases": {
     "1": {
       "name": "Discovery",
@@ -17,14 +18,15 @@
     },
     "2": {
       "name": "Capture",
-      "status": "pending",
-      "started_at": null,
-      "completed_at": null
+      "status": "completed",
+      "started_at": "2026-05-19T02:19:49Z",
+      "completed_at": "2026-05-19T02:19:49Z",
+      "note": "Halt gates overridden by operator. Logo + brand graphics retained; 0 project photos (neutral patterns); 0 verified reviews."
     },
     "3": {
       "name": "Brand DNA",
-      "status": "pending",
-      "started_at": null,
+      "status": "running",
+      "started_at": "2026-05-19T02:19:49Z",
       "completed_at": null
     },
     "4": {
@@ -63,6 +65,6 @@
     "sales_walkthrough_url": null,
     "proposal_pdf_path": null
   },
-  "halt_reason": null,
-  "halt_phase": null
+  "halt_reason": "worker-invocation-failed",
+  "halt_phase": 2
 }
