@@ -1,21 +1,4 @@
 #!/usr/bin/env bash
-# worker-once.sh — execute ONE poll cycle of the factory worker.
-#
-# What it does:
-#   1. git pull --rebase to fetch any new queue specs from GitHub
-#   2. find queue/*.json files that don't yet have a corresponding runs/{run-id}.json
-#      OR have runs/{run-id}.json with status "queued" (operator re-queued a halted run)
-#   3. for each pending spec: invoke Claude Code in non-interactive mode (claude -p)
-#      with the "run job {run-id}" trigger, including resume_from_phase if present
-#   4. Claude Code (the orchestrator) handles all status updates + git commits
-#
-# Intended to be called either:
-#   - from a `while true` loop in worker.sh
-#   - from launchd every 30 seconds
-#   - manually for testing
-#
-# Usage: scripts/worker-once.sh
-
 set -uo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -26,27 +9,21 @@ exec > >(tee -a "$LOG") 2>&1
 
 echo "[$(date -u +%Y-%m-%dT%H:%M:%SZ)] worker-once tick"
 
-# Bail if we don't have a clean working tree — won't mess with operator's WIP.
 if [ -n "$(git status --porcelain 2>/dev/null)" ]; then
-  echo "  ⚠ working tree dirty; skipping this tick. Stash or commit, then resume."
+  echo "  ⚠ working tree dirty; skipping this tick."
   exit 0
 fi
 
-# Bail if claude CLI not available.
 if ! command -v claude > /dev/null 2>&1; then
   echo "  ❌ 'claude' CLI not found in PATH. Install Claude Code first."
   exit 1
 fi
 
-# Bail if git not authed for push (we'll find out fast either way).
 if ! git pull --rebase --quiet 2>/dev/null; then
-  echo "  ⚠ git pull failed. Check auth (gh auth status) or network. Skipping tick."
+  echo "  ⚠ git pull failed. Check auth or network. Skipping tick."
   exit 0
 fi
 
-# Collect pending run IDs:
-#   - queue/*.json with no matching runs/*.json (fresh run)
-#   - queue/*.json where runs/*.json has status "queued" (operator re-queued a halted run)
 mkdir -p queue runs
 pending=()
 resume_phases=()
@@ -57,17 +34,14 @@ for spec in queue/*.json; do
   run_file="runs/${run_id}.json"
 
   if [ ! -f "$run_file" ]; then
-    # Fresh run — no status file yet
     pending+=("$run_id")
-    resume_phases+=("")
+    resume_phases+=("1")
   else
-    # Check if operator re-queued it (status == "queued")
     run_status=$(python3 -c "import json; d=json.load(open('$run_file')); print(d.get('status',''))" 2>/dev/null || echo "")
     if [ "$run_status" = "queued" ]; then
-      # Get resume_from_phase from the queue spec if present
-      resume_phase=$(python3 -c "import json; d=json.load(open('$spec')); print(d.get('resume_from_phase',''))" 2>/dev/null || echo "")
+      resume_phase=$(python3 -c "import json; d=json.load(open('$spec')); print(d.get('resume_from_phase','1'))" 2>/dev/null || echo "1")
       pending+=("$run_id")
-      resume_phases+=("$resume_phase")
+      resume_phases+=("${resume_phase:-1}")
     fi
   fi
 done
@@ -79,44 +53,88 @@ fi
 
 echo "  pending: ${pending[*]}"
 
+PHASE_SOPS=(
+  ""
+  "sops/01-brief.md sops/02-research.md"
+  "sops/03-asset-extraction.md"
+  "sops/04-brand-audit.md"
+  "sops/05-sitemap.md sops/06-wireframes.md sops/07-seo.md sops/08-design-direction.md"
+  "sops/10-build.md"
+  "sops/11-qa.md sops/12-iterate.md"
+  "sops/13-proposal.md"
+  "sops/14-deploy.md"
+)
+
+PHASE_NAMES=(
+  ""
+  "Discovery"
+  "Capture"
+  "Brand DNA"
+  "Strategy"
+  "Build"
+  "Quality"
+  "Sales-Ready"
+  "Deploy & Handoff"
+)
+
 for i in "${!pending[@]}"; do
   run_id="${pending[$i]}"
-  resume_phase="${resume_phases[$i]}"
+  start_phase="${resume_phases[$i]}"
+  slug=$(python3 -c "import json; d=json.load(open('runs/${run_id}.json')); print(d.get('slug',''))" 2>/dev/null || echo "")
 
   echo ""
-  echo "[$(date -u +%Y-%m-%dT%H:%M:%SZ)] picking up $run_id"
+  echo "[$(date -u +%Y-%m-%dT%H:%M:%SZ)] picking up $run_id (starting at phase $start_phase)"
 
-  # Build the prompt — include resume instruction if this is a re-queue
-  if [ -n "$resume_phase" ]; then
-    echo "  resuming from phase $resume_phase (operator re-queued)"
-    PROMPT="Resume queue job queue/${run_id}.json from phase ${resume_phase}. The operator has supplied additional inputs in clients/\$(cat queue/${run_id}.json | python3 -c \"import json,sys; print(json.load(sys.stdin).get('slug', '??'))\")/resume-input.md and evidence/reviews-raw.txt (if reviews were provided). Follow CLAUDE.md and sops/00-orchestrator-contract.md. Skip phases 1 through $((resume_phase - 1)) — they are already complete. Write status updates to runs/${run_id}.json after each phase. Commit and push when complete or halted."
-  else
-    PROMPT="Execute queue job queue/${run_id}.json. Follow CLAUDE.md and sops/00-orchestrator-contract.md. Write status updates to runs/${run_id}.json after each phase. Commit and push when complete or halted."
-  fi
+  # Run one phase at a time
+  for phase in 1 2 3 4 5 6 7 8; do
+    # Skip already-completed phases
+    if [ "$phase" -lt "$start_phase" ]; then
+      continue
+    fi
 
-  if ! claude -p --dangerously-skip-permissions --timeout 600 "$PROMPT" 2>&1; then
-    echo "  ❌ claude CLI returned non-zero for $run_id. See $LOG for details."
-    # Mark the run halted at the worker layer so the operator app shows the failure.
-    python3 - <<PYEOF
+    # Check if this phase is already completed in the run file
+    phase_status=$(python3 -c "
+import json
+d=json.load(open('runs/${run_id}.json'))
+phases=d.get('phases',{})
+print(phases.get('${phase}',{}).get('status','pending'))
+" 2>/dev/null || echo "pending")
+
+    if [ "$phase_status" = "completed" ]; then
+      echo "  phase $phase already completed, skipping"
+      continue
+    fi
+
+    phase_name="${PHASE_NAMES[$phase]}"
+    echo "[$(date -u +%Y-%m-%dT%H:%M:%SZ)] running phase $phase: $phase_name"
+
+    PROMPT="Execute ONLY phase ${phase} (${phase_name}) of queue job queue/${run_id}.json. Follow CLAUDE.md and sops/00-orchestrator-contract.md. Update runs/${run_id}.json status after this phase completes. Commit and push after this phase. Do NOT proceed to phase $((phase+1)) — stop after phase ${phase} is done."
+
+    if ! claude -p --dangerously-skip-permissions --timeout 600 "$PROMPT" 2>&1; then
+      echo "  ❌ phase $phase failed for $run_id"
+      python3 - << PYEOF
 import json, datetime, os
-status = {
-  "run_id": "${run_id}",
+path = "runs/${run_id}.json"
+d = json.load(open(path)) if os.path.isfile(path) else {"run_id": "${run_id}"}
+d.update({
   "status": "halted",
-  "halt_reason": "worker-invocation-failed",
-  "halt_phase": ${resume_phase:-0},
-  "updated_at": datetime.datetime.utcnow().isoformat() + "Z"
-}
-path = f"runs/${run_id}.json"
-if os.path.isfile(path):
-  existing = json.load(open(path))
-  existing.update(status)
-  status = existing
-json.dump(status, open(path, "w"), indent=2)
+  "halt_reason": "worker-invocation-failed at phase ${phase} (${phase_name})",
+  "halt_phase": ${phase},
+  "updated_at": datetime.datetime.now(datetime.timezone.utc).isoformat()
+})
+json.dump(d, open(path, "w"), indent=2)
 PYEOF
-    git add "runs/${run_id}.json"
-    git commit -m "worker: halt ${run_id} (claude invocation failed)" --quiet
-    git push --quiet || echo "  ⚠ push failed; will retry next tick"
-  fi
+      git add "runs/${run_id}.json"
+      git commit -m "worker: halt ${run_id} at phase ${phase} (invocation failed)" --quiet
+      git push --quiet || echo "  ⚠ push failed"
+      break
+    fi
+
+    echo "  ✓ phase $phase complete"
+
+    # Re-pull after each phase in case Claude committed
+    git pull --rebase --quiet 2>/dev/null || true
+  done
 done
 
 echo "[$(date -u +%Y-%m-%dT%H:%M:%SZ)] tick complete"
