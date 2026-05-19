@@ -1,0 +1,13 @@
+{
+  "run_id": "run-20260519-164254-f3x1",
+  "submitted_at": "2026-05-19T16:42:54.805Z",
+  "submitted_by": "michael@innovusaccounting.com",
+  "mode": "url",
+  "url": "https://www.saskair.ca/",
+  "manual_notes": "Make this website like the capstone roofing one",
+  "options": {
+    "skip_deploy": false,
+    "force_archetype": null,
+    "ai_image_provider": "openai"
+  }
+}
