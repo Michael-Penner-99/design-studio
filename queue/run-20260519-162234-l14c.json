@@ -1,0 +1,16 @@
+{
+  "run_id": "run-20260519-162234-l14c",
+  "submitted_at": "2026-05-19T16:22:34.863Z",
+  "submitted_by": "michael@innovusaccounting.com",
+  "mode": "name-and-reviews",
+  "business_name": "Wind Rose Mechanical",
+  "trade_hint": "plumbing",
+  "primary_city": "Regina, SK",
+  "reviews_text": "Wind Rose Mechanical\n5.0\n1 reviews\n\n\nG Grad\n2 years ago\nSo happy we hired Wind Rose Mechanical for recent repairs to the plumbing in our home! The extra effort and time was much appreciated. Their knowledge, skill and willingness to solve our issues were key factors contributing to the success of our challenging project. These are good people with integrity. I would highly recommend and would contact them for any future projects.",
+  "manual_notes": "This company does Radon mitigation, Boiler replacements, and plumbing and heating work",
+  "options": {
+    "skip_deploy": false,
+    "force_archetype": null,
+    "ai_image_provider": "openai"
+  }
+}
