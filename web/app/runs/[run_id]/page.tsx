@@ -2,7 +2,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getQueueSpec, getRun } from "../../../lib/github";
 import { PhaseStepper } from "../../../components/phase-stepper";
-import { ResumeForm } from "../../../components/resume-form";
 import type { RunStatus } from "../../../lib/schemas";
 
 export const dynamic = "force-dynamic";
@@ -40,7 +39,6 @@ export default async function RunDetailPage({
   }
 
   const run = synthetic;
-  const formToken = process.env.FORM_SUBMIT_TOKEN ?? "";
 
   return (
     <div className="space-y-8">
@@ -63,6 +61,7 @@ export default async function RunDetailPage({
         <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted">
           Phase progress
         </h2>
+        {/* poll=true enables client-side live updates every 15s */}
         <PhaseStepper run={run} poll={true} />
       </section>
 
@@ -70,9 +69,7 @@ export default async function RunDetailPage({
         <OutputsPanel outputs={run.outputs} />
       ) : null}
 
-      {run.status === "halted" ? (
-        <ResumeForm run={run} formToken={formToken} />
-      ) : null}
+      {run.status === "halted" ? <HaltPanel run={run} /> : null}
     </div>
   );
 }
@@ -109,16 +106,32 @@ function SpecPanel({ run }: { run: RunStatus }) {
   );
 }
 
-function Row({ label, value, mono }: { label: string; value: string; mono?: boolean }) {
+function Row({
+  label,
+  value,
+  mono,
+}: {
+  label: string;
+  value: string;
+  mono?: boolean;
+}) {
   return (
     <div className="flex gap-2">
-      <dt className="w-24 text-xs uppercase tracking-wider text-muted">{label}</dt>
-      <dd className={`flex-1 ${mono ? "font-mono text-xs" : "text-sm"}`}>{value}</dd>
+      <dt className="w-24 text-xs uppercase tracking-wider text-muted">
+        {label}
+      </dt>
+      <dd className={`flex-1 ${mono ? "font-mono text-xs" : "text-sm"}`}>
+        {value}
+      </dd>
     </div>
   );
 }
 
-function OutputsPanel({ outputs }: { outputs: NonNullable<RunStatus["outputs"]> }) {
+function OutputsPanel({
+  outputs,
+}: {
+  outputs: NonNullable<RunStatus["outputs"]>;
+}) {
   return (
     <section className="rounded-lg border border-emerald-500/30 bg-emerald-500/5 p-5">
       <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-emerald-300">
@@ -126,12 +139,22 @@ function OutputsPanel({ outputs }: { outputs: NonNullable<RunStatus["outputs"]> 
       </h2>
       <div className="flex flex-wrap gap-3">
         {outputs.site_url ? (
-          <a href={outputs.site_url} target="_blank" rel="noreferrer" className="btn-primary">
+          <a
+            href={outputs.site_url}
+            target="_blank"
+            rel="noreferrer"
+            className="btn-primary"
+          >
             Open contractor site →
           </a>
         ) : null}
         {outputs.sales_walkthrough_url ? (
-          <a href={outputs.sales_walkthrough_url} target="_blank" rel="noreferrer" className="btn-secondary">
+          <a
+            href={outputs.sales_walkthrough_url}
+            target="_blank"
+            rel="noreferrer"
+            className="btn-secondary"
+          >
             Open sales walkthrough →
           </a>
         ) : null}
@@ -141,6 +164,28 @@ function OutputsPanel({ outputs }: { outputs: NonNullable<RunStatus["outputs"]> 
           </span>
         ) : null}
       </div>
+    </section>
+  );
+}
+
+function HaltPanel({ run }: { run: RunStatus }) {
+  return (
+    <section className="rounded-lg border border-rose-500/30 bg-rose-500/5 p-5">
+      <h2 className="mb-2 text-sm font-semibold uppercase tracking-wider text-rose-300">
+        Halted at phase {run.halt_phase ?? "—"}
+      </h2>
+      <p className="text-sm text-ink">
+        {run.halt_reason ?? "No reason recorded."}
+      </p>
+      <p className="mt-3 text-xs text-muted">
+        Suggested next: open{" "}
+        <span className="font-mono">
+          clients/{run.slug ?? "{slug}"}/halt.md
+        </span>{" "}
+        on the worker and run{" "}
+        <span className="font-mono">resume {run.slug ?? "{slug}"}</span> in
+        Claude Code.
+      </p>
     </section>
   );
 }

@@ -403,3 +403,69 @@ export async function requeueRun(
     },
   });
 }
+// ─── APPEND TO BOTTOM OF web/lib/github.ts ────────────────────────────────────
+
+export interface ActivityEntry {
+  sha: string;
+  message: string;
+  timestamp: string;
+  author: string;
+}
+
+/**
+ * Fetch the 30 most recent commits that touch files related to a run.
+ * Looks at: runs/{run_id}.json, queue/{run_id}.json, and clients/{slug}/
+ * Returns them newest-first.
+ */
+export async function getRecentActivity(runId: string): Promise<ActivityEntry[]> {
+  const { owner, repo, branch } = getConfig();
+  const octokit = client();
+
+  // Get the run to find the slug
+  const run = await getRun(runId);
+  const slug = run?.slug ?? null;
+
+  // Fetch commits touching runs/{run_id}.json (phase updates)
+  const paths = [
+    `runs/${runId}.json`,
+    ...(slug ? [`clients/${slug}`] : []),
+  ];
+
+  const allCommits: ActivityEntry[] = [];
+  const seen = new Set<string>();
+
+  await Promise.all(
+    paths.map(async (path) => {
+      try {
+        const res = await octokit.repos.listCommits({
+          owner,
+          repo,
+          sha: branch,
+          path,
+          per_page: 20,
+          headers: {
+            "If-None-Match": "",
+            "Cache-Control": "no-cache",
+          },
+        } as Parameters<typeof octokit.repos.listCommits>[0]);
+
+        for (const c of res.data) {
+          if (seen.has(c.sha)) continue;
+          seen.add(c.sha);
+          allCommits.push({
+            sha: c.sha.slice(0, 7),
+            message: c.commit.message.split("\n")[0], // first line only
+            timestamp: c.commit.author?.date ?? c.commit.committer?.date ?? "",
+            author: c.commit.author?.name ?? "worker",
+          });
+        }
+      } catch {
+        // ignore per-path failures
+      }
+    }),
+  );
+
+  // Sort newest first
+  allCommits.sort((a, b) => (a.timestamp < b.timestamp ? 1 : -1));
+  return allCommits.slice(0, 30);
+}
