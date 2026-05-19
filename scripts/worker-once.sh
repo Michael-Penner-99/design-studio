@@ -112,7 +112,8 @@ print(phases.get('${phase}',{}).get('status','pending'))
 
     RUN_LOG="$ROOT/.runs/${run_id}.log"
     mkdir -p "$ROOT/.runs"
-    if ! claude -p --dangerously-skip-permissions "$PROMPT" 2>&1 | tee -a "$RUN_LOG"; then
+    echo "[$(date -u +%Y-%m-%dT%H:%M:%SZ)] phase ${phase} starting" >> "$RUN_LOG"
+    if ! claude -p --dangerously-skip-permissions "$PROMPT" 2>&1 | tee -a "$RUN_LOG" | tee -a "$ROOT/.worker.out.log" > /dev/null; then
       echo "  ❌ phase $phase failed for $run_id"
       python3 - << PYEOF
 import json, datetime, os
