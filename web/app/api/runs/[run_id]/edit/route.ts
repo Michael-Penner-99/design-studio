@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getRun } from "../../../../../lib/github";
-import { execSync } from "child_process";
+import { spawn } from "child_process";
 import * as fs from "fs";
 import * as path from "path";
 import * as os from "os";
@@ -34,71 +33,73 @@ export async function POST(
   const siteDir = path.join(root, "clients", slug, "site");
 
   if (!fs.existsSync(siteDir)) {
-    return NextResponse.json({ error: `Site directory not found: ${siteDir}` }, { status: 404 });
+    return NextResponse.json({ error: `Site not found: ${siteDir}` }, { status: 404 });
   }
 
   const vercelToken = process.env.VERCEL_TOKEN;
   const vercelScope = process.env.VERCEL_SCOPE;
 
-  // Build the Claude prompt
-  const fullPrompt = `You are editing the website for client "${slug}" located at ${siteDir}.
+  const redeployCmd = redeploy && vercelToken
+    ? `cd "${siteDir}" && vercel deploy --prod --yes${vercelScope ? ` --scope ${vercelScope}` : ""} --token "${vercelToken}"`
+    : "";
 
-The operator has requested the following change:
-"${prompt}"
+  const fullPrompt = `You are editing the website for client "${slug}" at ${siteDir}.
+
+Operator request: "${prompt}"
 
 Instructions:
-1. Read the relevant HTML/CSS files in ${siteDir}
-2. Make ONLY the requested change — don't rewrite or restructure anything else
-3. Preserve all existing classes, IDs, and structure
-4. After editing, print a short summary: what files you changed and exactly what you changed
-5. Format your summary as:
+1. Read the relevant HTML files in ${siteDir}
+2. Make ONLY the requested change — preserve all existing structure
+3. After editing, print exactly:
    FILES_CHANGED: file1.html, file2.html
-   SUMMARY: [what changed]
+   SUMMARY: one sentence describing what changed
 
 Do the edits now.`;
 
-  try {
-    // Run Claude Code on the site directory
-    const claudeOutput = execSync(
-      `cd "${root}" && claude -p --dangerously-skip-permissions "${fullPrompt.replace(/"/g, '\\"')}"`,
-      { timeout: 120000, encoding: "utf8", maxBuffer: 10 * 1024 * 1024 }
-    );
+  // Write prompt to a temp file to avoid shell escaping issues
+  const tmpPrompt = path.join(os.tmpdir(), `edit-${params.run_id}-${Date.now()}.txt`);
+  fs.writeFileSync(tmpPrompt, fullPrompt);
 
-    // Parse files changed from output
-    const filesMatch = claudeOutput.match(/FILES_CHANGED:\s*(.+)/);
-    const filesChanged = filesMatch
-      ? filesMatch[1].split(",").map(f => f.trim()).filter(Boolean)
-      : [];
+  return new Promise<NextResponse>((resolve) => {
+    let output = "";
+    let errOutput = "";
+    const timeout = setTimeout(() => {
+      resolve(NextResponse.json({ 
+        error: "Claude Code timed out (5 min). The edit may still be running — check the site in a moment.",
+        result: "Timed out — try a simpler edit or check the site manually.",
+        files_changed: [],
+        redeployed: false,
+      }));
+    }, 300000); // 5 minutes
 
-    const summaryMatch = claudeOutput.match(/SUMMARY:\s*(.+)/s);
-    const summary = summaryMatch ? summaryMatch[1].trim() : claudeOutput.slice(-500);
+    const proc = spawn("bash", ["-c", 
+      `cd "${root}" && claude -p --dangerously-skip-permissions "$(cat ${tmpPrompt})"`
+    ], { env: { ...process.env, PATH: `/Users/${os.userInfo().username}/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin` } });
 
-    // Redeploy if requested and Vercel token is available
-    let redeployed = false;
-    let deployUrl = null;
+    proc.stdout.on("data", (d: Buffer) => { output += d.toString(); });
+    proc.stderr.on("data", (d: Buffer) => { errOutput += d.toString(); });
 
-    if (redeploy && vercelToken) {
-      try {
-        const deployOutput = execSync(
-          `cd "${siteDir}" && vercel deploy --prod --yes${vercelScope ? ` --scope ${vercelScope}` : ""} --token "${vercelToken}"`,
-          { timeout: 120000, encoding: "utf8" }
-        );
-        deployUrl = deployOutput.trim().split("\n").pop();
-        redeployed = true;
-      } catch (deployErr) {
-        console.error("Deploy failed:", deployErr);
+    proc.on("close", async (code) => {
+      clearTimeout(timeout);
+      fs.unlinkSync(tmpPrompt);
+
+      const filesMatch = output.match(/FILES_CHANGED:\s*(.+)/);
+      const filesChanged = filesMatch ? filesMatch[1].split(",").map(f => f.trim()) : [];
+      const summaryMatch = output.match(/SUMMARY:\s*(.+)/);
+      const summary = summaryMatch ? summaryMatch[1].trim() : output.slice(-800).trim() || errOutput.slice(-400);
+
+      let redeployed = false;
+      if (redeployCmd && code === 0) {
+        try {
+          await new Promise<void>((res, rej) => {
+            const dp = spawn("bash", ["-c", redeployCmd]);
+            dp.on("close", c => c === 0 ? res() : rej(new Error("deploy failed")));
+          });
+          redeployed = true;
+        } catch { /* deploy failed silently */ }
       }
-    }
 
-    return NextResponse.json({
-      result: summary,
-      files_changed: filesChanged,
-      redeployed,
-      deploy_url: deployUrl,
+      resolve(NextResponse.json({ result: summary, files_changed: filesChanged, redeployed }));
     });
-
-  } catch (err) {
-    const message = err instanceof Error ? err.message : String(err);
-    return NextResponse.json({ error: message.slice(0, 500) }, { status: 500 });
-  }
+  });
 }
