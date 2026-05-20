@@ -49,3 +49,18 @@ Assemble the multi-page site from templates, section partials, copy, and design 
 - Link check passes (no broken references).
 - HTML linter passes.
 - All design-direction signature moves are present in at least one page.
+
+## Contact form (all builds)
+
+All forms must use `action="/api/contact" method="POST"`.
+Never use `action="/api/lead"` — that endpoint does not exist.
+
+The `/api/contact` handler is wired at handoff time via:
+  scripts/wire-contact.sh {slug} {client-email}
+
+During build and QA the form action is present but the handler
+is not deployed — this is expected. The QA checklist (G-30)
+verifies the form markup is correct but does not test live submission.
+
+The `{{client_email}}` token must be recorded in `strategy/copy.md`
+before Phase 8 runs, so the deploy phase can wire it automatically.
