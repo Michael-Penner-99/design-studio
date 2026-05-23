@@ -5,9 +5,9 @@
   "url": "",
   "business_name": "Platinum Plumbing & Heating Ltd.",
   "started_at": "2026-05-23T19:09:27Z",
-  "updated_at": "2026-05-23T19:24:00Z",
+  "updated_at": "2026-05-23T19:33:00Z",
   "status": "running",
-  "current_phase": 3,
+  "current_phase": 4,
   "phases": {
     "1": {
       "name": "Discovery",
@@ -29,9 +29,9 @@
     },
     "4": {
       "name": "Strategy",
-      "status": "pending",
-      "started_at": null,
-      "completed_at": null
+      "status": "completed",
+      "started_at": "2026-05-23T19:24:30Z",
+      "completed_at": "2026-05-23T19:33:00Z"
     },
     "5": {
       "name": "Build",
