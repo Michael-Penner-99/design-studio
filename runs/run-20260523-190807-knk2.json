@@ -5,9 +5,9 @@
   "url": "",
   "business_name": "Platinum Plumbing & Heating Ltd.",
   "started_at": "2026-05-23T19:09:27Z",
-  "updated_at": "2026-05-23T20:07:41Z",
+  "updated_at": "2026-05-23T20:17:31Z",
   "status": "running",
-  "current_phase": 6,
+  "current_phase": 7,
   "phases": {
     "1": {
       "name": "Discovery",
@@ -49,9 +49,12 @@
     },
     "7": {
       "name": "Sales-Ready",
-      "status": "pending",
-      "started_at": null,
-      "completed_at": null
+      "status": "completed",
+      "started_at": "2026-05-23T20:11:49Z",
+      "completed_at": "2026-05-23T20:17:31Z",
+      "new_site_score": "119/120",
+      "site_preview_url": "https://platinum-plumbing-heating.actiondesignstudio.com",
+      "note": "Phase 7 ran before Phase 8 (queue order); used deterministic preview URL since deploy/ not yet populated."
     },
     "8": {
       "name": "Deploy & Handoff",
@@ -63,7 +66,7 @@
   "outputs": {
     "site_url": null,
     "sales_walkthrough_url": null,
-    "proposal_pdf_path": null
+    "proposal_pdf_path": "clients/platinum-plumbing-heating/proposal/proposal.pdf"
   },
   "halt_reason": null,
   "halt_phase": null
