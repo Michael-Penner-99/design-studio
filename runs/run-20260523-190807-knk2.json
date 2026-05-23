@@ -5,9 +5,9 @@
   "url": "",
   "business_name": "Platinum Plumbing & Heating Ltd.",
   "started_at": "2026-05-23T19:09:27Z",
-  "updated_at": "2026-05-23T20:17:31Z",
-  "status": "running",
-  "current_phase": 7,
+  "updated_at": "2026-05-23T20:21:59Z",
+  "status": "halted",
+  "current_phase": 8,
   "phases": {
     "1": {
       "name": "Discovery",
@@ -58,9 +58,11 @@
     },
     "8": {
       "name": "Deploy & Handoff",
-      "status": "pending",
-      "started_at": null,
-      "completed_at": null
+      "status": "halted",
+      "started_at": "2026-05-23T20:19:00Z",
+      "completed_at": null,
+      "halt_reason": "dns-site-not-resolving",
+      "note": "Wildcard CNAME *.actiondesignstudio.com not configured; target platinum-plumbing-heating.actiondesignstudio.com returns DNS NXDOMAIN and apex points to Bluehost not Vercel. Phase 8 exit gate (HEAD 200 on custom domain) cannot pass. No deployment created (avoids orphan Vercel projects). Build is QA-passed and unaffected. See clients/platinum-plumbing-heating/halt.md."
     }
   },
   "outputs": {
@@ -68,6 +70,6 @@
     "sales_walkthrough_url": null,
     "proposal_pdf_path": "clients/platinum-plumbing-heating/proposal/proposal.pdf"
   },
-  "halt_reason": null,
-  "halt_phase": null
+  "halt_reason": "dns-site-not-resolving: wildcard CNAME for *.actiondesignstudio.com not configured (target subdomain NXDOMAIN; apex points to Bluehost not Vercel). One-time DNS prerequisite. Fix per clients/platinum-plumbing-heating/halt.md, then `redeploy platinum-plumbing-heating`.",
+  "halt_phase": 8
 }
