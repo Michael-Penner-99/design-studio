@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getRun, writeResumeInput, requeueRun } from "../../../../../lib/github";
+import { getRun, writeResumeInput, requeueRun, getRecentActivity } from "../../../../../lib/github";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -22,6 +22,13 @@ function checkAuth(req: NextRequest): NextResponse | null {
   return null;
 }
 
+export async function GET(
+  _req: NextRequest,
+  { params }: { params: { run_id: string } },
+) {
+  const activity = await getRecentActivity(params.run_id);
+  return NextResponse.json({ activity });
+}
 export async function POST(
   req: NextRequest,
   { params }: { params: { run_id: string } },
