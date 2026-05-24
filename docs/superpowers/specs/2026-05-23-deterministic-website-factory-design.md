@@ -85,7 +85,8 @@ One flat-ish object covering every page. Sketch (full schema lives in `docs/cont
   "areas_section": {"eyebrow","h2_lines":[...],"body"},
   "cta": {"eyebrow","h2","body"},
   "seo": { "<page>": {"title","description"} },
-  "assets": { "logo":"logo.svg", "hero":"hero-house.jpg", "gallery":["..."], "avatars":["..."], "about":"...", "map":"..." }
+  "assets": { "logo":"logo.svg", "hero":"hero-house.jpg", "gallery":["..."], "avatars":["..."], "about":"...", "map":"..." },
+  "walkthrough": { "price":"$X,XXX", "price_note":"...", "script_blocks":[ {"label","text"} ] }
 }
 ```
 
@@ -140,6 +141,13 @@ One agent, one SOP. Given a URL (crawl) or business-name + pasted reviews:
 ### Walkthrough — `scripts/walkthrough.py`
 
 Renders `templates/walkthrough/walkthrough.html.template` from `content.json` + the deployed URL. Deterministic; no LLM. (Replaces the `proposal-writer` PDF step; a sales HTML page is the deliverable.)
+
+**Live-editable on the sales call (required).** The walkthrough must let the operator edit the sales script and—critically—**the price** directly in the browser during a call, with no code editing:
+- Price and any "sales script" copy render inside `contenteditable` regions marked with a `data-editable` attribute and a subtle visual affordance (dotted underline + edit cursor on hover).
+- A small inline script persists every edit to `localStorage` keyed by slug, so a refresh or accidental navigation does **not** lose the operator's changes mid-call.
+- A small "Reset to default" control restores the rendered values.
+- Default price/terms come from `content.json.walkthrough` (e.g. `price`, `price_note`, `script_blocks[]`); intake/recipe seed sensible defaults so the field is never empty.
+- The page stays a single self-contained HTML file (Tailwind via CDN, inline script) — no build step or server needed to edit.
 
 ### Worker — `scripts/worker-once.sh`
 
