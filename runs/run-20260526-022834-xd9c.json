@@ -4,11 +4,11 @@
   "mode": "url",
   "url": "https://windrosemechanical.ca/",
   "started_at": "2026-05-26T02:30:00Z",
-  "updated_at": "2026-05-26T02:30:00Z",
+  "updated_at": "2026-05-26T02:33:00Z",
   "status": "running",
   "current_phase": 1,
   "phases": {
-    "1": { "name": "Discovery", "status": "pending" },
+    "1": { "name": "Discovery", "status": "running", "started_at": "2026-05-26T02:33:00Z" },
     "2": { "name": "Capture", "status": "pending" },
     "3": { "name": "Brand DNA", "status": "pending" },
     "4": { "name": "Strategy", "status": "pending" },
