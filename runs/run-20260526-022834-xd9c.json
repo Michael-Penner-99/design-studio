@@ -4,9 +4,9 @@
   "mode": "url",
   "url": "https://windrosemechanical.ca/",
   "started_at": "2026-05-26T02:30:00Z",
-  "updated_at": "2026-05-26T02:40:00Z",
-  "status": "running",
-  "current_phase": 1,
+  "updated_at": "2026-05-26T02:50:00Z",
+  "status": "halted",
+  "current_phase": 2,
   "phases": {
     "1": {
       "name": "Discovery",
@@ -15,7 +15,13 @@
       "completed_at": "2026-05-26T02:40:00Z",
       "summary": "trade=hvac, services=10, competitors=5, gaps=10, site-score=44/120"
     },
-    "2": { "name": "Capture", "status": "pending" },
+    "2": {
+      "name": "Capture",
+      "status": "halted",
+      "started_at": "2026-05-26T02:42:00Z",
+      "halted_at": "2026-05-26T02:50:00Z",
+      "summary": "logo recovered (PNG + favicon + 517×564 hi-res); 0 real project photos (gate ≥6 FAILED — 51-item WP media library audited, all stock/clipart); 0 reviews (gate ≥10 FAILED — no Google Business Profile, no Facebook page, no BBB listing, no on-site testimonials). See clients/windrosemechanical/halt.md for evidence and operator resolution paths."
+    },
     "3": { "name": "Brand DNA", "status": "pending" },
     "4": { "name": "Strategy", "status": "pending" },
     "5": { "name": "Build", "status": "pending" },
@@ -24,7 +30,7 @@
     "8": { "name": "Deploy & Handoff", "status": "pending" }
   },
   "outputs": { "site_url": null, "sales_walkthrough_url": null, "proposal_pdf_path": null },
-  "halt_reason": null,
-  "halt_phase": null,
+  "halt_reason": "phase-2-no-real-project-photos-and-no-reviews",
+  "halt_phase": 2,
   "manual_notes": "Please make sure to keep the colours based on the logo whiich is red and black. Also, make sure the hero section is visible without scrolling."
 }
