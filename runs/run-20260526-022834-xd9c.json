@@ -4,9 +4,9 @@
   "mode": "url",
   "url": "https://windrosemechanical.ca/",
   "started_at": "2026-05-26T02:30:00Z",
-  "updated_at": "2026-05-26T19:45:00Z",
-  "status": "phase-5-complete",
-  "current_phase": 5,
+  "updated_at": "2026-05-26T20:30:00Z",
+  "status": "phase-6-complete",
+  "current_phase": 6,
   "phases": {
     "1": {
       "name": "Discovery",
@@ -46,7 +46,10 @@
     },
     "6": {
       "name": "Quality",
-      "status": "pending"
+      "status": "completed",
+      "started_at": "2026-05-26T20:00:00Z",
+      "completed_at": "2026-05-26T20:30:00Z",
+      "summary": "qa-auditor pass 0: 30/35 PASS, 3 FAIL (G-22 OG tags minor, G-26 contrast major, G-29 mobile nav major), 2 DEFER_DOCUMENTED (G-10 owner photo, G-11 project gallery — both from Phase 2 halt). iterator iteration 01 regenerated all 19 pages via build.py: contrast classes text-ink/50 and text-surface/90 eliminated; lg:hidden hamburger + collapsible mobile-menu + JS toggle added to all 18 content pages; 5-tag OG block (og:title, og:description, og:image=logo-large.jpg, og:url, og:type) added to all 18 content pages. qa-auditor pass 2: 33/35 PASS, 0 FAIL, 2 DEFER_DOCUMENTED. Verdict: READY TO DEPLOY. Zero regressions. brief.md qa.iteration bumped 0→1. Used 1 of 3 permitted iterations."
     },
     "7": {
       "name": "Sales-Ready",
