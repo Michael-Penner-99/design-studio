@@ -4,11 +4,17 @@
   "mode": "url",
   "url": "https://windrosemechanical.ca/",
   "started_at": "2026-05-26T02:30:00Z",
-  "updated_at": "2026-05-26T02:33:00Z",
+  "updated_at": "2026-05-26T02:40:00Z",
   "status": "running",
   "current_phase": 1,
   "phases": {
-    "1": { "name": "Discovery", "status": "running", "started_at": "2026-05-26T02:33:00Z" },
+    "1": {
+      "name": "Discovery",
+      "status": "completed",
+      "started_at": "2026-05-26T02:33:00Z",
+      "completed_at": "2026-05-26T02:40:00Z",
+      "summary": "trade=hvac, services=10, competitors=5, gaps=10, site-score=44/120"
+    },
     "2": { "name": "Capture", "status": "pending" },
     "3": { "name": "Brand DNA", "status": "pending" },
     "4": { "name": "Strategy", "status": "pending" },
