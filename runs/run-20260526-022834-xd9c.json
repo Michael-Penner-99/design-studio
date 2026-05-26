@@ -4,9 +4,9 @@
   "mode": "url",
   "url": "https://windrosemechanical.ca/",
   "started_at": "2026-05-26T02:30:00Z",
-  "updated_at": "2026-05-26T02:50:00Z",
-  "status": "halted",
-  "current_phase": 2,
+  "updated_at": "2026-05-26T03:55:00Z",
+  "status": "in_progress",
+  "current_phase": 3,
   "phases": {
     "1": {
       "name": "Discovery",
@@ -20,9 +20,16 @@
       "status": "halted",
       "started_at": "2026-05-26T02:42:00Z",
       "halted_at": "2026-05-26T02:50:00Z",
-      "summary": "logo recovered (PNG + favicon + 517×564 hi-res); 0 real project photos (gate ≥6 FAILED — 51-item WP media library audited, all stock/clipart); 0 reviews (gate ≥10 FAILED — no Google Business Profile, no Facebook page, no BBB listing, no on-site testimonials). See clients/windrosemechanical/halt.md for evidence and operator resolution paths."
+      "summary": "logo recovered (PNG + favicon + 517×564 hi-res); 0 real project photos (gate ≥6 FAILED — 51-item WP media library audited, all stock/clipart); 0 reviews (gate ≥10 FAILED — no Google Business Profile, no Facebook page, no BBB listing, no on-site testimonials). See clients/windrosemechanical/halt.md for evidence and operator resolution paths.",
+      "operator_override": "Operator instructed Phase 3 to proceed using recovered logo assets only. Project-photo and review gaps remain unresolved — to be compensated downstream via neutral patterns + credential-evidence framing."
     },
-    "3": { "name": "Brand DNA", "status": "pending" },
+    "3": {
+      "name": "Brand DNA",
+      "status": "completed",
+      "started_at": "2026-05-26T03:42:00Z",
+      "completed_at": "2026-05-26T03:55:00Z",
+      "summary": "archetype=Hero (Protector); primary=#E5524F (Compass Red, hue 1°); ink=#1A1A1A; accent=#D4AF37 (Brass Gold, badges only); display=Bebas Neue; subhead=Oswald; body=Inter; palette anchored on logo per operator mandate; hero-fits-without-scroll constraint carried to Phase 4/5 in brand-dna.md §Phase 5 design constraints."
+    },
     "4": { "name": "Strategy", "status": "pending" },
     "5": { "name": "Build", "status": "pending" },
     "6": { "name": "Quality", "status": "pending" },
@@ -30,7 +37,7 @@
     "8": { "name": "Deploy & Handoff", "status": "pending" }
   },
   "outputs": { "site_url": null, "sales_walkthrough_url": null, "proposal_pdf_path": null },
-  "halt_reason": "phase-2-no-real-project-photos-and-no-reviews",
-  "halt_phase": 2,
+  "halt_reason": null,
+  "halt_phase": null,
   "manual_notes": "Please make sure to keep the colours based on the logo whiich is red and black. Also, make sure the hero section is visible without scrolling."
 }
