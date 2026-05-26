@@ -1,0 +1,12 @@
+<!-- Section: placeholder-note
+     Use: honest disclosure note on /credentials page (in lieu of reviews)
+     Background: bg-surface-alt
+     Style: italic, max-width 600px, centered, Inter 400 17px text-ink/70
+-->
+<section class="bg-surface-alt py-16 md:py-20">
+  <div class="max-w-2xl mx-auto px-6">
+    <p class="font-body italic text-[17px] leading-[1.7] text-ink/70 text-center">
+      {{placeholder_note_body}}
+    </p>
+  </div>
+</section>
