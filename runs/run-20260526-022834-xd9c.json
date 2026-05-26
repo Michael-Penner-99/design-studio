@@ -4,8 +4,8 @@
   "mode": "url",
   "url": "https://windrosemechanical.ca/",
   "started_at": "2026-05-26T02:30:00Z",
-  "updated_at": "2026-05-26T17:12:17.234880+00:00",
-  "status": "queued",
+  "updated_at": "2026-05-26T18:30:00Z",
+  "status": "phase-4-complete",
   "current_phase": 4,
   "phases": {
     "1": {
@@ -32,9 +32,10 @@
     },
     "4": {
       "name": "Strategy",
-      "status": "pending",
+      "status": "completed",
       "started_at": "2026-05-26T18:00:00Z",
-      "notes": "7a content-architect completed prior (sitemap.md + wireframes.md present). Resuming with 7b seo-strategist and 7c design-director in parallel."
+      "completed_at": "2026-05-26T18:30:00Z",
+      "summary": "7a sitemap+wireframes completed prior (18 pages, ~356-token plan). 7b seo-strategist produced keywords.md (per-page primary+secondary, title/meta for 18 pages) and copy.md (480 tokens resolved, 227 source annotations, 22 placeholders flagged, voice spotcheck 5/5 pass, no fabricated reviews). 7c design-director produced design-direction.md (Commercial-industrial + Local-hero overlay, differentiated from ≥3 of 5 competitors, 11 signature moves, compass-rose-as-visual-anchor mascot decision). All 5 strategy artifacts present. Operator mandates (red/black palette, hero-fits-no-scroll) encoded throughout."
     },
     "5": {
       "name": "Build",
