@@ -33,6 +33,21 @@
       "last_status": "deployed",
       "local_present": true,
       "cleaned_up_at": null
+    },
+    {
+      "slug": "windrosemechanical",
+      "site": {
+        "vercel_project_id": "prj_A8xWzLRcfw9kpco9Xg7e3hLghzKH",
+        "preview_url": "https://windrosemechanical.actiondesignstudio.com"
+      },
+      "sales": {
+        "vercel_project_id": "prj_n4Eg0usPbdaVXwxDfhSoQcRPmBfB",
+        "preview_url": "https://windrosemechanical-sales.actiondesignstudio.com"
+      },
+      "deployed_at": "2026-05-26T19:39:00Z",
+      "last_status": "deployed",
+      "local_present": true,
+      "cleaned_up_at": null
     }
   ]
 }

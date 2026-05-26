@@ -4,9 +4,9 @@
   "mode": "url",
   "url": "https://windrosemechanical.ca/",
   "started_at": "2026-05-26T02:30:00Z",
-  "updated_at": "2026-05-26T21:31:00Z",
-  "status": "phase-7-complete",
-  "current_phase": 7,
+  "updated_at": "2026-05-26T13:40:00Z",
+  "status": "phase-8-complete",
+  "current_phase": 8,
   "phases": {
     "1": {
       "name": "Discovery",
@@ -60,11 +60,14 @@
     },
     "8": {
       "name": "Deploy & Handoff",
-      "status": "pending"
+      "status": "completed",
+      "started_at": "2026-05-26T13:32:00Z",
+      "completed_at": "2026-05-26T13:40:00Z",
+      "summary": "Both projects deployed and verified HTTP 200. Contractor site: windrosemechanical-site → https://windrosemechanical.actiondesignstudio.com (25 files). Sales walkthrough: windrosemechanical-sales → https://windrosemechanical-sales.actiondesignstudio.com (2 files). Mid-flight fix: both projects inherited Vercel team-default ssoProtection=all_except_custom_domains which 401'd the custom alias; patched both to ssoProtection=null via Vercel API (saskair/platinum precedent) before re-polling — both then served 200. Four deploy artifacts written: manifest.json (nested site/sales schema), preview-url.txt (overwrote the predicted-URL stub seeded by Phase 7; prediction matched canonical), sales-url.txt, handoff.md (DNS/ownership/decommission instructions). Registered in clients/_deployed.json as third entry. brief.md status → deployed."
     }
   },
   "outputs": {
-    "site_url": null,
+    "site_url": "https://windrosemechanical.actiondesignstudio.com",
     "sales_walkthrough_url": "https://windrosemechanical-sales.actiondesignstudio.com",
     "proposal_pdf_path": "clients/windrosemechanical/proposal/proposal.pdf"
   },
