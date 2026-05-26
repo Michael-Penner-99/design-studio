@@ -4,9 +4,9 @@
   "mode": "url",
   "url": "https://windrosemechanical.ca/",
   "started_at": "2026-05-26T02:30:00Z",
-  "updated_at": "2026-05-26T17:06:26.717881+00:00",
-  "status": "queued",
-  "current_phase": 3,
+  "updated_at": "2026-05-26T17:10:55.339537+00:00",
+  "status": "halted",
+  "current_phase": 4,
   "phases": {
     "1": {
       "name": "Discovery",
@@ -32,7 +32,9 @@
     },
     "4": {
       "name": "Strategy",
-      "status": "pending"
+      "status": "in_progress",
+      "started_at": "2026-05-26T18:00:00Z",
+      "notes": "7a content-architect completed prior (sitemap.md + wireframes.md present). Resuming with 7b seo-strategist and 7c design-director in parallel."
     },
     "5": {
       "name": "Build",
@@ -56,5 +58,7 @@
     "sales_walkthrough_url": null,
     "proposal_pdf_path": null
   },
-  "manual_notes": "Please make sure to keep the colours based on the logo whiich is red and black. Also, make sure the hero section is visible without scrolling."
+  "manual_notes": "Please make sure to keep the colours based on the logo whiich is red and black. Also, make sure the hero section is visible without scrolling.",
+  "halt_reason": "worker-invocation-failed at phase 4 (Strategy)",
+  "halt_phase": 4
 }
