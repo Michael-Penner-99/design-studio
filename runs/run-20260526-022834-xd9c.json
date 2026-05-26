@@ -1,0 +1,24 @@
+{
+  "run_id": "run-20260526-022834-xd9c",
+  "slug": "windrosemechanical",
+  "mode": "url",
+  "url": "https://windrosemechanical.ca/",
+  "started_at": "2026-05-26T02:30:00Z",
+  "updated_at": "2026-05-26T02:30:00Z",
+  "status": "running",
+  "current_phase": 1,
+  "phases": {
+    "1": { "name": "Discovery", "status": "pending" },
+    "2": { "name": "Capture", "status": "pending" },
+    "3": { "name": "Brand DNA", "status": "pending" },
+    "4": { "name": "Strategy", "status": "pending" },
+    "5": { "name": "Build", "status": "pending" },
+    "6": { "name": "Quality", "status": "pending" },
+    "7": { "name": "Sales-Ready", "status": "pending" },
+    "8": { "name": "Deploy & Handoff", "status": "pending" }
+  },
+  "outputs": { "site_url": null, "sales_walkthrough_url": null, "proposal_pdf_path": null },
+  "halt_reason": null,
+  "halt_phase": null,
+  "manual_notes": "Please make sure to keep the colours based on the logo whiich is red and black. Also, make sure the hero section is visible without scrolling."
+}
