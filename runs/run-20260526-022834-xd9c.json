@@ -4,7 +4,7 @@
   "mode": "url",
   "url": "https://windrosemechanical.ca/",
   "started_at": "2026-05-26T02:30:00Z",
-  "updated_at": "2026-05-26T03:55:00Z",
+  "updated_at": "2026-05-26T05:56:27.092688+00:00",
   "status": "halted",
   "current_phase": 3,
   "phases": {
@@ -56,7 +56,7 @@
     "sales_walkthrough_url": null,
     "proposal_pdf_path": null
   },
-  "halt_reason": null,
-  "halt_phase": null,
+  "halt_reason": "worker-invocation-failed at phase 4 (Strategy)",
+  "halt_phase": 4,
   "manual_notes": "Please make sure to keep the colours based on the logo whiich is red and black. Also, make sure the hero section is visible without scrolling."
 }
