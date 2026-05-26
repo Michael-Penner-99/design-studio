@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getRun, writeResumeInput, requeueRun } from "../../../../../lib/github";
+import * as fs from "fs";
+import * as path from "path";
+import * as os from "os";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -29,7 +32,16 @@ export async function POST(
   const authFail = checkAuth(req);
   if (authFail) return authFail;
 
-  const run = await getRun(params.run_id);
+  let run = await getRun(params.run_id);
+  if (!run) {
+    const localPath = path.join(
+      process.env.LOCAL_RUNS_DIR ?? path.join(os.homedir(), "code", "design-studio", "runs"),
+      `${params.run_id}.json`
+    );
+    if (fs.existsSync(localPath)) {
+      run = JSON.parse(fs.readFileSync(localPath, "utf8"));
+    }
+  }
   if (!run) {
     return NextResponse.json({ error: "Run not found" }, { status: 404 });
   }

@@ -287,7 +287,7 @@ export function RunShell({ initialRun, formToken }: Props) {
                   placeholder="Paste 10+ customer reviews here…" rows={4}
                   className="field w-full text-xs font-mono mb-3" />
               )}
-              <button onClick={handleResume} disabled={resumeSending || (needsReviews && !resumeText.trim())}
+              <button onClick={handleResume} disabled={resumeSending}
                 className="btn-primary text-xs disabled:opacity-40">
                 {resumeSending ? "Re-queuing…" : `Resume from phase ${run.halt_phase ?? 2}`}
               </button>
