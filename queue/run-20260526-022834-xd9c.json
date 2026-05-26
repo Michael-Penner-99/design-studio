@@ -9,5 +9,6 @@
     "skip_deploy": false,
     "force_archetype": null,
     "ai_image_provider": "openai"
-  }
+  },
+  "resume_from_phase": 4
 }

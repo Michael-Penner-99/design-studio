@@ -18,6 +18,21 @@
       "last_status": "deployed",
       "local_present": true,
       "cleaned_up_at": null
+    },
+    {
+      "slug": "platinum-plumbing-heating",
+      "site": {
+        "vercel_project_id": "prj_RVZK9eAYlf22KzfaomrJTZr3hiYk",
+        "preview_url": "https://platinum-plumbing-heating.actiondesignstudio.com"
+      },
+      "sales": {
+        "vercel_project_id": "prj_hwm9CwCDtHPTXpYcaUupOOHGY57C",
+        "preview_url": "https://platinum-plumbing-heating-sales.actiondesignstudio.com"
+      },
+      "deployed_at": "2026-05-23T20:48:53Z",
+      "last_status": "deployed",
+      "local_present": true,
+      "cleaned_up_at": null
     }
   ]
 }
