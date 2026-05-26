@@ -4,9 +4,9 @@
   "mode": "url",
   "url": "https://windrosemechanical.ca/",
   "started_at": "2026-05-26T02:30:00Z",
-  "updated_at": "2026-05-26T20:30:00Z",
-  "status": "phase-6-complete",
-  "current_phase": 6,
+  "updated_at": "2026-05-26T21:31:00Z",
+  "status": "phase-7-complete",
+  "current_phase": 7,
   "phases": {
     "1": {
       "name": "Discovery",
@@ -53,7 +53,10 @@
     },
     "7": {
       "name": "Sales-Ready",
-      "status": "pending"
+      "status": "completed",
+      "started_at": "2026-05-26T21:00:00Z",
+      "completed_at": "2026-05-26T21:31:00Z",
+      "summary": "proposal-writer ran with operator-inverted phase order (7 before 8). Predicted deploy URL https://windrosemechanical.actiondesignstudio.com seeded into deploy/preview-url.txt with explanatory comment. Four artifacts produced: sales/index.html (31.6 KB, zero unresolved {{ tokens, Reviews/Photos proof columns substituted with Credentials/Visuals proof given reviews.json total_verified_reviews=0 and zero project-* files; substitution applied to rendered HTML only, master template untouched); sales/assets/logo.png (byte-identical copy of assets/raw/logo.png); proposal/proposal.pdf (322 KB, 10 pages — Cover, Opportunity, What We Built laptop, What We Built mobile, Winning Formula, Real Proof [credentials substitution], Why It Converts, Investment, Side-by-side Scorecard 44/120→new, Next Step — preview URL embedded pages 3 and 10); proposal/cover.png (170 KB, 1700×2200 branded cover). Voice anchored on Action Studio direct/evidence-anchored with C-NRPP + Red Seal + radon-capital-of-Canada positioning. Zero fabricated review or photo claims. brief.md status → proposal-ready."
     },
     "8": {
       "name": "Deploy & Handoff",
@@ -62,8 +65,8 @@
   },
   "outputs": {
     "site_url": null,
-    "sales_walkthrough_url": null,
-    "proposal_pdf_path": null
+    "sales_walkthrough_url": "https://windrosemechanical-sales.actiondesignstudio.com",
+    "proposal_pdf_path": "clients/windrosemechanical/proposal/proposal.pdf"
   },
   "manual_notes": "Please make sure to keep the colours based on the logo whiich is red and black. Also, make sure the hero section is visible without scrolling."
 }
