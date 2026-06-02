@@ -21,52 +21,60 @@ export interface MergeResult {
   orphans: string[];
 }
 
+export interface InMemoryPage { path: string; html: string; }
+export interface MergePagesResult { pages: InMemoryPage[]; applied: string[]; orphans: string[]; }
+
 function isLink(v: unknown): v is LinkValue {
   return typeof v === "object" && v !== null && "href" in v;
 }
 
-export function mergeSite(opts: MergeOptions): MergeResult {
+/** Pure in-memory merge: apply overrides to a set of pages. Mirrors mergeSite's per-page logic. */
+export function mergePages(pages: InMemoryPage[], overrides: Overrides): MergePagesResult {
   const applied = new Set<string>();
   const colorUpdates: Record<string, string> = {};
-  for (const [id, value] of Object.entries(opts.overrides)) {
+  for (const [id, value] of Object.entries(overrides)) {
     if (id.startsWith("color__") && typeof value === "string") {
       colorUpdates[id.replace(/^color__/, "")] = value;
     }
   }
-
-  const pages = htmlFiles(opts.siteDir).sort();
-  for (const rel of pages) {
-    let html = readFileSync(join(opts.siteDir, rel), "utf8");
+  const outPages = pages.map(({ path, html }) => {
     if (Object.keys(colorUpdates).length) {
       const before = html;
       html = rewriteColors(html, colorUpdates);
       if (html !== before) for (const k of Object.keys(colorUpdates)) applied.add(`color__${k}`);
     }
-
     const $ = cheerio.load(html);
-    for (const [id, value] of Object.entries(opts.overrides)) {
+    for (const [id, value] of Object.entries(overrides)) {
       if (id.startsWith("color__")) continue;
       if (!SAFE_EDIT_ID.test(id)) continue;
       const el = $(`[data-edit="${id}"]`);
       if (!el.length) continue;
-      if (el.is("img")) {
-        el.attr("src", String(value));
-      } else if (el.is("a") && isLink(value)) {
-        el.attr("href", value.href).text(value.label);
-      } else if (el.is("[data-rich]")) {
-        el.html(String(value));
-      } else {
-        // Plain-text branch: intentionally replaces child markup (use data-rich for HTML).
-        el.text(String(value));
-      }
+      if (el.is("img")) el.attr("src", String(value));
+      else if (el.is("a") && isLink(value)) el.attr("href", value.href).text(value.label);
+      else if (el.is("[data-rich]")) el.html(String(value));
+      else el.text(String(value));
       applied.add(id);
     }
+    return { path, html: $.html() };
+  });
+  const orphans = Object.keys(overrides).filter((id) => !applied.has(id));
+  return { pages: outPages, applied: [...applied], orphans };
+}
 
-    const dest = join(opts.outDir, rel);
+export function mergeSite(opts: MergeOptions): MergeResult {
+  const rels = htmlFiles(opts.siteDir).sort();
+  const pagesInput: InMemoryPage[] = rels.map((rel) => ({
+    path: rel,
+    html: readFileSync(join(opts.siteDir, rel), "utf8"),
+  }));
+
+  const result = mergePages(pagesInput, opts.overrides);
+
+  for (const page of result.pages) {
+    const dest = join(opts.outDir, page.path);
     mkdirSync(join(dest, ".."), { recursive: true });
-    writeFileSync(dest, $.html(), "utf8");
+    writeFileSync(dest, page.html, "utf8");
   }
 
-  const orphans = Object.keys(opts.overrides).filter((id) => !applied.has(id));
-  return { pages, applied: [...applied], orphans };
+  return { pages: rels, applied: result.applied, orphans: result.orphans };
 }
