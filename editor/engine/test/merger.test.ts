@@ -55,4 +55,25 @@ describe("mergeSite", () => {
     rmSync(src, { recursive: true, force: true });
     rmSync(out, { recursive: true, force: true });
   });
+
+  it("sets inner HTML for a data-rich element", () => {
+    const html = `<html><body><div data-edit="index__div__1" data-rich>old</div></body></html>`;
+    writeFileSync(join(src, "index.html"), html, "utf8");
+    mergeSite({ siteDir: src, outDir: out, overrides: { "index__div__1": "<strong>bold</strong>" } });
+    const result = readFileSync(join(out, "index.html"), "utf8");
+    expect(result).toContain("<strong>bold</strong>");   // raw HTML, not &lt;strong&gt;
+    expect(result).not.toContain("&lt;strong&gt;");
+    rmSync(src, { recursive: true, force: true });
+    rmSync(out, { recursive: true, force: true });
+  });
+
+  it("treats a malformed override id as an orphan instead of throwing", () => {
+    const result = mergeSite({
+      siteDir: src, outDir: out,
+      overrides: { 'bad"id': "x" },
+    });
+    expect(result.orphans).toContain('bad"id');
+    rmSync(src, { recursive: true, force: true });
+    rmSync(out, { recursive: true, force: true });
+  });
 });

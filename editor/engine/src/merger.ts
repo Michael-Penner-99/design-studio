@@ -4,6 +4,10 @@ import * as cheerio from "cheerio";
 import type { Overrides, LinkValue } from "./types";
 import { rewriteColors } from "./colors";
 
+// Edit ids the engine generates are limited to this charset; anything else
+// (e.g. an id containing a quote) is skipped so it cannot break the selector.
+const SAFE_EDIT_ID = /^[A-Za-z0-9_-]+$/;
+
 export interface MergeOptions {
   siteDir: string;
   outDir: string;
@@ -51,6 +55,7 @@ export function mergeSite(opts: MergeOptions): MergeResult {
     const $ = cheerio.load(html);
     for (const [id, value] of Object.entries(opts.overrides)) {
       if (id.startsWith("color__")) continue;
+      if (!SAFE_EDIT_ID.test(id)) continue;
       const el = $(`[data-edit="${id}"]`);
       if (!el.length) continue;
       if (el.is("img")) {
