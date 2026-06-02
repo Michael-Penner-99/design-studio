@@ -19,6 +19,12 @@ gates:
     check: "site/tailwind.config.js exists; node --check site/tailwind.config.js exits 0"
     pass_when: "file present and parses"
 
+  - id: G-EDIT-01
+    name: "Every page is editor-ready (carries the inline color block)"
+    severity: critical
+    check: "From repo root: cd editor/engine && npx tsx src/cli.ts check ../../clients/{slug}/site . Every built page must contain the inline tailwind.config color block so client color edits propagate to all pages."
+    pass_when: "command prints ok and exits 0; pagesMissingColorBlock is empty"
+
   - id: G-03
     name: "All internal links resolve"
     severity: critical

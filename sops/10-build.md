@@ -22,6 +22,7 @@ Assemble the multi-page site from templates, section partials, copy, and design 
    - For each `{{token}}` placeholder anywhere in the result, resolve via `strategy/copy.md`. Fail loudly if a token is missing.
    - Replace asset placeholders (`{{asset:logo}}`, `{{asset:project-3}}`) with relative paths into `site/assets/`. Copy or symlink the processed asset.
    - Write the result to `site/{path}.html`.
+   - **Every page MUST include `{{section:head}}`** (it carries the inline Tailwind color block). Do not omit it on any page — the editor relies on it for color edits, and QA gate G-EDIT-01 fails the build if any page lacks it.
 
 3. **Sections present per design-direction signatures.** For each signature move in `design-direction.md`:
    - If the named partial exists in `templates/sections/{name}/`, ensure it's used at least once.
