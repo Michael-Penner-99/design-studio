@@ -6,6 +6,7 @@ import { buildManifest } from "./manifest";
 import { mergeSite } from "./merger";
 import { TIERS, type Tier } from "./types";
 import { checkEditorReadiness } from "./readiness";
+import { buildPushPayload } from "./push";
 
 const program = new Command();
 program.name("editor-engine").description("Action Studio client-site editor engine");
@@ -76,6 +77,31 @@ program
       return;
     }
     console.log("ok");
+  });
+
+program
+  .command("push")
+  .argument("<slug>", "client slug under clients/")
+  .requiredOption("--endpoint <url>", "editor app base URL, e.g. https://editor.actiondesignstudio.com")
+  .requiredOption("--token <token>", "operator token (matches OPERATOR_TOKEN on the app)")
+  .option("--root <root>", "repo root", process.cwd())
+  .option("--name <displayName>", "client display name")
+  .option("--tier <tier>", "initial permission tier", "Text only")
+  .action(async (slug, opts) => {
+    const payload = buildPushPayload({
+      slug, root: opts.root, displayName: opts.name ?? slug, tier: opts.tier,
+    });
+    const res = await fetch(`${opts.endpoint.replace(/\/$/, "")}/api/ingest`, {
+      method: "POST",
+      headers: { "content-type": "application/json", authorization: `Bearer ${opts.token}` },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) {
+      console.error(`Push failed: ${res.status} ${await res.text()}`);
+      process.exitCode = 1;
+      return;
+    }
+    console.log(`Pushed ${slug}: ${payload.pages.length} pages, ${payload.manifest.fields.length} fields.`);
   });
 
 program.parse();
