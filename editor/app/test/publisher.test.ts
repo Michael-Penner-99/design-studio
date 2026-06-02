@@ -7,7 +7,7 @@ vi.mock("../src/vercel", () => ({
   getDeploymentState: vi.fn(async () => "READY"),
 }));
 import { publish } from "../src/publisher";
-import { deployFiles } from "../src/vercel";
+import { deployFiles, getDeploymentState } from "../src/vercel";
 
 async function seed(db: any) {
   await repo.upsertClient(db, { slug: "acme", displayName: "Acme", vercelProjectId: "prj_1", customDomain: "https://acme.example.com", tier: "Text only" });
@@ -38,6 +38,13 @@ describe("publish", () => {
     expect(call.target).toBe("production");
     expect(call.projectId).toBe("prj_1");
     expect(await repo.getOverrides(db, "acme", "published")).toEqual({ "index__h1__1": "Live Title" });
+  });
+
+  it("throws when the deployment ends in ERROR state", async () => {
+    const db = await makeTestDb();
+    await seed(db);
+    (getDeploymentState as any).mockResolvedValueOnce("ERROR");
+    await expect(publish(db, "acme", "publish")).rejects.toThrow(/failed: ERROR/);
   });
 
   it("throws if the client has no vercel project id", async () => {

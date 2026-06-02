@@ -43,6 +43,7 @@ export async function deployFiles(input: DeployInput): Promise<DeployResult> {
 
 export async function getDeploymentState(id: string): Promise<string> {
   const token = process.env.VERCEL_TOKEN;
+  if (!token) throw new Error("VERCEL_TOKEN not set");
   const team = process.env.VERCEL_TEAM_ID;
   const res = await fetch(`${API}/v13/deployments/${id}${team ? `?teamId=${team}` : ""}`, {
     headers: { authorization: `Bearer ${token}` },
