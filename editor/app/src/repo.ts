@@ -81,3 +81,48 @@ export async function getOverrides(db: Queryable, slug: string, state: "draft" |
   const d = rows[0].data;
   return typeof d === "string" ? JSON.parse(d) : d;
 }
+
+export interface CredentialRow { username: string; slug: string | null; role: string; password_hash: string; }
+
+export async function setCredential(
+  db: Queryable,
+  c: { username: string; slug: string | null; role: "operator" | "client"; passwordHash: string }
+): Promise<void> {
+  await db.query(
+    `INSERT INTO credentials (username, slug, role, password_hash) VALUES ($1,$2,$3,$4)
+     ON CONFLICT (username) DO UPDATE SET slug=EXCLUDED.slug, role=EXCLUDED.role, password_hash=EXCLUDED.password_hash`,
+    [c.username, c.slug, c.role, c.passwordHash]
+  );
+}
+
+export async function findCredential(db: Queryable, username: string): Promise<CredentialRow | null> {
+  const { rows } = await db.query(
+    `SELECT username, slug, role, password_hash FROM credentials WHERE username=$1`,
+    [username]
+  );
+  return rows[0] ?? null;
+}
+
+export interface SessionRow { id: string; username: string; slug: string | null; role: string; }
+
+export async function createSession(
+  db: Queryable,
+  s: { id: string; username: string; slug: string | null; role: string; expiresAt: Date }
+): Promise<void> {
+  await db.query(
+    `INSERT INTO sessions (id, username, slug, role, expires_at) VALUES ($1,$2,$3,$4,$5)`,
+    [s.id, s.username, s.slug, s.role, s.expiresAt.toISOString()]
+  );
+}
+
+export async function getSessionRow(db: Queryable, id: string): Promise<SessionRow | null> {
+  const { rows } = await db.query(
+    `SELECT id, username, slug, role FROM sessions WHERE id=$1 AND expires_at > now()`,
+    [id]
+  );
+  return rows[0] ?? null;
+}
+
+export async function deleteSession(db: Queryable, id: string): Promise<void> {
+  await db.query(`DELETE FROM sessions WHERE id=$1`, [id]);
+}
