@@ -27,3 +27,14 @@ describe("cli tag", () => {
     rmSync(out, { recursive: true, force: true });
   }, 30000);
 });
+
+describe("cli tag tier validation", () => {
+  it("rejects an invalid --tier", () => {
+    const src = mkdtempSync(join(tmpdir(), "csrc-"));
+    const out = mkdtempSync(join(tmpdir(), "cout-"));
+    writeFileSync(join(src, "index.html"), `<html><body><h1>Hi</h1></body></html>`, "utf8");
+    expect(() => run(["tag", src, out, "--slug", "acme", "--tier", "Banana"])).toThrow();
+    rmSync(src, { recursive: true, force: true });
+    rmSync(out, { recursive: true, force: true });
+  }, 30000);
+});

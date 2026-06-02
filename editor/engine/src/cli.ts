@@ -4,10 +4,20 @@ import { writeFileSync, readFileSync, mkdirSync } from "node:fs";
 import { join } from "node:path";
 import { buildManifest } from "./manifest";
 import { mergeSite } from "./merger";
-import type { Tier } from "./types";
+import { TIERS, type Tier } from "./types";
 
 const program = new Command();
 program.name("editor-engine").description("Action Studio client-site editor engine");
+
+// "custom" is a computed label, not a selectable input tier.
+const INPUT_TIERS = TIERS.filter((t) => t !== "custom");
+
+function validateTier(tier: string): Tier {
+  if (!(INPUT_TIERS as readonly string[]).includes(tier)) {
+    program.error(`invalid --tier "${tier}". Valid tiers: ${INPUT_TIERS.join(", ")}`);
+  }
+  return tier as Tier;
+}
 
 program
   .command("tag")
@@ -17,7 +27,7 @@ program
   .option("--tier <tier>", "initial permission tier", "Text only")
   .action((siteDir, outDir, opts) => {
     mkdirSync(outDir, { recursive: true });
-    const manifest = buildManifest({ slug: opts.slug, siteDir, outDir, tier: opts.tier as Tier });
+    const manifest = buildManifest({ slug: opts.slug, siteDir, outDir, tier: validateTier(opts.tier) });
     writeFileSync(join(outDir, "editable.json"), JSON.stringify(manifest, null, 2), "utf8");
     console.log(`Tagged ${manifest.fields.length} fields → ${outDir}/editable.json`);
   });
@@ -43,7 +53,7 @@ program
     const siteDir = join(opts.root, "clients", slug, "site");
     const outDir = join(opts.root, "clients", slug, "editor", "tagged");
     mkdirSync(outDir, { recursive: true });
-    const manifest = buildManifest({ slug, siteDir, outDir, tier: opts.tier as Tier });
+    const manifest = buildManifest({ slug, siteDir, outDir, tier: validateTier(opts.tier) });
     writeFileSync(join(opts.root, "clients", slug, "editor", "editable.json"),
       JSON.stringify(manifest, null, 2), "utf8");
     console.log(`Retrofitted ${slug}: ${manifest.fields.length} fields.`);

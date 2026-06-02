@@ -1,8 +1,9 @@
-import { readdirSync, readFileSync, writeFileSync, mkdirSync } from "node:fs";
-import { join, relative } from "node:path";
+import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
+import { join } from "node:path";
 import * as cheerio from "cheerio";
 import type { Overrides, LinkValue } from "./types";
 import { rewriteColors } from "./colors";
+import { htmlFiles } from "./fs-walk";
 
 // Edit ids the engine generates are limited to this charset; anything else
 // (e.g. an id containing a quote) is skipped so it cannot break the selector.
@@ -18,16 +19,6 @@ export interface MergeResult {
   pages: string[];
   applied: string[];
   orphans: string[];
-}
-
-function htmlFiles(dir: string, base = dir): string[] {
-  const out: string[] = [];
-  for (const entry of readdirSync(dir, { withFileTypes: true })) {
-    const full = join(dir, entry.name);
-    if (entry.isDirectory()) out.push(...htmlFiles(full, base));
-    else if (entry.name.endsWith(".html")) out.push(relative(base, full));
-  }
-  return out;
 }
 
 function isLink(v: unknown): v is LinkValue {
@@ -65,6 +56,7 @@ export function mergeSite(opts: MergeOptions): MergeResult {
       } else if (el.is("[data-rich]")) {
         el.html(String(value));
       } else {
+        // Plain-text branch: intentionally replaces child markup (use data-rich for HTML).
         el.text(String(value));
       }
       applied.add(id);

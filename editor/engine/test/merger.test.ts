@@ -76,4 +76,36 @@ describe("mergeSite", () => {
     rmSync(src, { recursive: true, force: true });
     rmSync(out, { recursive: true, force: true });
   });
+
+  it("rewrites color on every page including nested subdirs, and applies nested text overrides", () => {
+    const page = (id: string) =>
+      `<html><head><script>tailwind.config={theme:{extend:{colors:{primary:'#E5524F'}}}};</script></head>` +
+      `<body><h1 data-edit="${id}__h1__1">Old</h1></body></html>`;
+    writeFileSync(join(src, "index.html"), page("index"), "utf8");
+    mkdirSync(join(src, "services"), { recursive: true });
+    writeFileSync(join(src, "services", "plumbing.html"), page("services-plumbing"), "utf8");
+
+    const result = mergeSite({
+      siteDir: src, outDir: out,
+      overrides: { "color__primary": "#0000FF", "services-plumbing__h1__1": "Nested!" },
+    });
+
+    expect(result.pages.length).toBe(2);
+    expect(readFileSync(join(out, "index.html"), "utf8")).toContain("primary: '#0000FF'");
+    const nested = readFileSync(join(out, "services", "plumbing.html"), "utf8");
+    expect(nested).toContain("primary: '#0000FF'");
+    expect(nested).toContain(">Nested!<");
+    expect(result.applied).toContain("color__primary");
+    expect(result.applied).toContain("services-plumbing__h1__1");
+    rmSync(src, { recursive: true, force: true });
+    rmSync(out, { recursive: true, force: true });
+  });
+
+  it("marks a color override as orphan when that color appears on no page", () => {
+    // src already has the default index.html from beforeEach (no inline color block).
+    const result = mergeSite({ siteDir: src, outDir: out, overrides: { "color__ghost": "#111111" } });
+    expect(result.orphans).toContain("color__ghost");
+    rmSync(src, { recursive: true, force: true });
+    rmSync(out, { recursive: true, force: true });
+  });
 });

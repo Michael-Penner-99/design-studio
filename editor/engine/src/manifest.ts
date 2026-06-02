@@ -1,10 +1,11 @@
-import { readdirSync, readFileSync, writeFileSync, mkdirSync } from "node:fs";
-import { join, relative } from "node:path";
+import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
+import { join } from "node:path";
 import type { Field, Manifest, Tier } from "./types";
 import { tagPage } from "./tagger";
 import { readColors } from "./colors";
 import { colorId } from "./ids";
 import { applyTier } from "./permissions";
+import { htmlFiles } from "./fs-walk";
 
 export interface BuildManifestOptions {
   slug: string;
@@ -13,18 +14,9 @@ export interface BuildManifestOptions {
   tier?: Tier;
 }
 
-function htmlFiles(dir: string, base = dir): string[] {
-  const out: string[] = [];
-  for (const entry of readdirSync(dir, { withFileTypes: true })) {
-    const full = join(dir, entry.name);
-    if (entry.isDirectory()) out.push(...htmlFiles(full, base));
-    else if (entry.name.endsWith(".html")) out.push(relative(base, full));
-  }
-  return out;
-}
-
 export function buildManifest(opts: BuildManifestOptions): Manifest {
   const tier: Tier = opts.tier ?? "Text only";
+  // "custom" is not a permission preset; fall back to the safest tier.
   const effectiveTier = tier === "custom" ? "Text only" : tier;
   const fields: Field[] = [];
   let colorsCaptured = false;
