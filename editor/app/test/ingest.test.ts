@@ -13,6 +13,7 @@ const payload = {
     { id: "index__h1__1", page: "index.html", section: "Hero", label: "Hi", type: "text" as const, value: "Hi", clientEditable: true },
   ] },
   pages: [{ path: "index.html", html: '<h1 data-edit="index__h1__1">Hi</h1>' }],
+  assets: [{ path: "assets/logo.png", base64: "AAA" }],
 };
 
 describe("ingest", () => {
@@ -35,5 +36,11 @@ describe("ingest", () => {
 
   it("rejects a payload with a bad manifest", () => {
     expect(() => IngestPayloadSchema.parse({ ...payload, manifest: { nope: true } })).toThrow();
+  });
+
+  it("persists assets during ingest", async () => {
+    const db = await makeTestDb();
+    await ingest(db, payload);
+    expect(await repo.getAssets(db, "acme")).toEqual([{ path: "assets/logo.png", base64: "AAA" }]);
   });
 });
