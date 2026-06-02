@@ -27,7 +27,7 @@ export async function POST(
   try {
     const { stdout } = await run(
       "npx",
-      ["tsx", engineCli, "push", slug, "--root", repoRoot, "--endpoint", endpoint, "--token", token],
+      ["tsx", engineCli, "push", slug, "--root", repoRoot, "--endpoint", endpoint],
       { cwd: repoRoot, env: process.env },
     );
     return NextResponse.json({ ok: true, output: stdout.trim() });

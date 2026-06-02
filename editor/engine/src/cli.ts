@@ -83,17 +83,23 @@ program
   .command("push")
   .argument("<slug>", "client slug under clients/")
   .requiredOption("--endpoint <url>", "editor app base URL, e.g. https://editor.actiondesignstudio.com")
-  .requiredOption("--token <token>", "operator token (matches OPERATOR_TOKEN on the app)")
+  .option("--token <token>", "operator token (falls back to OPERATOR_TOKEN env)")
   .option("--root <root>", "repo root", process.cwd())
   .option("--name <displayName>", "client display name")
   .option("--tier <tier>", "initial permission tier", "Text only")
   .action(async (slug, opts) => {
+    const token = opts.token ?? process.env.OPERATOR_TOKEN;
+    if (!token) {
+      console.error("Operator token required: pass --token or set OPERATOR_TOKEN.");
+      process.exitCode = 1;
+      return;
+    }
     const payload = buildPushPayload({
-      slug, root: opts.root, displayName: opts.name ?? slug, tier: opts.tier,
+      slug, root: opts.root, displayName: opts.name ?? slug, tier: validateTier(opts.tier),
     });
     const res = await fetch(`${opts.endpoint.replace(/\/$/, "")}/api/ingest`, {
       method: "POST",
-      headers: { "content-type": "application/json", authorization: `Bearer ${opts.token}` },
+      headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
       body: JSON.stringify(payload),
     });
     if (!res.ok) {
