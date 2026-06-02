@@ -13,3 +13,14 @@ export async function sessionFromRequest(db: Queryable, req: NextRequest): Promi
 export function authorizeSlug(session: SessionRow, slug: string): boolean {
   return session.role === "operator" || session.slug === slug;
 }
+
+/** Operator access if a valid operator session OR the configured operator bearer token is presented. */
+export function operatorAuthorized(
+  session: SessionRow | null,
+  bearerToken: string | null,
+  expectedToken: string | undefined
+): boolean {
+  if (session?.role === "operator") return true;
+  if (expectedToken && bearerToken && bearerToken === expectedToken) return true;
+  return false;
+}
