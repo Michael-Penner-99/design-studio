@@ -1,8 +1,10 @@
 // @vitest-environment jsdom
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor, cleanup } from "@testing-library/react";
 import EditorForm from "../app/edit/EditorForm";
 import type { PageGroup } from "../src/view";
+
+afterEach(cleanup);
 
 const groups: PageGroup[] = [{
   page: "index.html",
@@ -29,7 +31,7 @@ describe("EditorForm", () => {
 
   it("Publish button calls /api/publish", async () => {
     render(<EditorForm slug="acme" groups={groups} initialOverrides={{}} />);
-    fireEvent.click(screen.getAllByText("Publish")[0]);
+    fireEvent.click(screen.getByText("Publish"));
     await waitFor(() => {
       expect((globalThis.fetch as any).mock.calls.some((c: any[]) => c[0] === "/api/publish")).toBe(true);
     });
