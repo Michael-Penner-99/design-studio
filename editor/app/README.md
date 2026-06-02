@@ -41,3 +41,10 @@ curl -X POST "$EDITOR_APP_URL/api/admin/credentials" \
 ```
 Then send the client the `/login` link, their username (the slug), and the password.
 **Follow-up:** add a session-protected admin credentials route so the button works in-browser.
+
+## Operator login
+The single operator account is configured via env (no DB row needed):
+- `OPERATOR_USERNAME` — your operator username.
+- `OPERATOR_PASSWORD_HASH` — bcrypt hash of your password. Generate it with:
+  `node scripts/hash-operator-password.mjs '<your-password>'`
+Sign in at `/login` with these; you'll land on the operator admin. Client accounts are created from the admin panel.
