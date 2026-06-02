@@ -16,15 +16,28 @@ export interface LoginResult { sessionId: string; role: string; slug: string | n
 
 /** Returns a session on success, or null on bad username/password (no user enumeration). */
 export async function login(db: Queryable, username: string, password: string, now: number = Date.now()): Promise<LoginResult | null> {
-  const cred = await findCredential(db, username);
-  if (!cred) return null;
-  if (!(await verifyPassword(password, cred.password_hash))) return null;
+  let role: string;
+  let slug: string | null;
+  let resolvedUsername: string;
+
+  const envUser = process.env.OPERATOR_USERNAME;
+  const envHash = process.env.OPERATOR_PASSWORD_HASH;
+  if (envUser && envHash && username === envUser) {
+    if (!(await verifyPassword(password, envHash))) return null;
+    role = "operator"; slug = null; resolvedUsername = envUser;
+  } else {
+    const cred = await findCredential(db, username);
+    if (!cred) return null;
+    if (!(await verifyPassword(password, cred.password_hash))) return null;
+    role = cred.role; slug = cred.slug; resolvedUsername = cred.username;
+  }
+
   const sessionId = randomUUID();
   await createSession(db, {
-    id: sessionId, username: cred.username, slug: cred.slug, role: cred.role,
+    id: sessionId, username: resolvedUsername, slug, role,
     expiresAt: new Date(now + SESSION_TTL_MS),
   });
-  return { sessionId, role: cred.role, slug: cred.slug };
+  return { sessionId, role, slug };
 }
 
 export async function getSession(db: Queryable, sessionId: string): Promise<SessionRow | null> {
