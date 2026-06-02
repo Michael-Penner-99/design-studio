@@ -12,6 +12,7 @@ export interface PushPayload {
   tier: string;
   manifest: Manifest;
   pages: { path: string; html: string }[];
+  assets: { path: string; base64: string }[];
 }
 
 export interface BuildPushPayloadOptions {
@@ -28,6 +29,16 @@ function readDeployInfo(root: string, slug: string): { projectId: string | null;
   } catch {
     return { projectId: null, domain: null };
   }
+}
+
+function readAssets(dir: string, base = dir): { path: string; base64: string }[] {
+  const out: { path: string; base64: string }[] = [];
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    const full = join(dir, entry.name);
+    if (entry.isDirectory()) out.push(...readAssets(full, base));
+    else if (!entry.name.endsWith(".html")) out.push({ path: relative(base, full), base64: readFileSync(full).toString("base64") });
+  }
+  return out;
 }
 
 function readAllPages(dir: string, base = dir): { path: string; html: string }[] {
@@ -48,6 +59,7 @@ export function buildPushPayload(opts: BuildPushPayloadOptions): PushPayload {
   const outDir = mkdtempSync(join(tmpdir(), `push-tagged-${opts.slug}-`));
   const manifest = buildManifest({ slug: opts.slug, siteDir, outDir, tier });
   const pages = readAllPages(outDir);
+  const assets = readAssets(siteDir);
   const { projectId, domain } = readDeployInfo(opts.root, opts.slug);
 
   return {
@@ -58,5 +70,6 @@ export function buildPushPayload(opts: BuildPushPayloadOptions): PushPayload {
     tier,
     manifest,
     pages,
+    assets,
   };
 }

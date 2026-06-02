@@ -39,4 +39,21 @@ describe("buildPushPayload", () => {
     expect(p.customDomain).toBeNull();
     rmSync(root, { recursive: true, force: true });
   });
+
+  it("collects non-HTML files as base64 assets", () => {
+    const siteDir = join(root, "clients", "acme2", "site");
+    mkdirSync(join(siteDir, "assets"), { recursive: true });
+    writeFileSync(join(siteDir, "index.html"),
+      `<html><head><script>tailwind.config={theme:{extend:{colors:{primary:'#111'}}}};</script></head><body><h1>Hi</h1></body></html>`, "utf8");
+    writeFileSync(join(siteDir, "assets", "logo.png"), Buffer.from([0x89, 0x50, 0x4e, 0x47]));
+    writeFileSync(join(siteDir, "tailwind.config.js"), "module.exports={};", "utf8");
+
+    const p = buildPushPayload({ slug: "acme2", root, displayName: "Acme2", tier: "Text only" });
+    const paths = p.assets.map((a) => a.path).sort();
+    expect(paths).toEqual(["assets/logo.png", "tailwind.config.js"]);
+    const png = p.assets.find((a) => a.path === "assets/logo.png")!;
+    expect(png.base64).toBe(Buffer.from([0x89, 0x50, 0x4e, 0x47]).toString("base64"));
+    expect(p.pages.some((pg) => pg.path === "index.html")).toBe(true);
+    expect(p.assets.some((a) => a.path === "index.html")).toBe(false);
+  });
 });
