@@ -53,4 +53,22 @@ describe("tagPage", () => {
     const second = tagPage("index.html", first.html);
     expect(second.fields.map((f) => f.id)).toEqual(first.fields.map((f) => f.id));
   });
+
+  it("types a data-rich element as richtext with inner HTML as value", () => {
+    const html = `<section id="s"><p data-rich>Bold <strong>text</strong></p></section>`;
+    const { fields } = tagPage("index.html", html);
+    const rich = fields.find((f) => f.id === "index__p__1")!;
+    expect(rich.type).toBe("richtext");
+    expect(rich.value).toBe("Bold <strong>text</strong>");
+  });
+
+  it("derives section from heading text when no id, and 'Page' when outside any section", () => {
+    const withHeading = `<section><h2>Our Story</h2><p>Founded here.</p></section>`;
+    const { fields: f1 } = tagPage("about.html", withHeading);
+    expect(f1.find((f) => f.id === "about__p__1")!.section).toBe("Our Story");
+
+    const noSection = `<div><p>Loose paragraph.</p></div>`;
+    const { fields: f2 } = tagPage("loose.html", noSection);
+    expect(f2.find((f) => f.id === "loose__p__1")!.section).toBe("Page");
+  });
 });
