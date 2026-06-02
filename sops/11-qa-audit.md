@@ -17,6 +17,7 @@ Run every gate in `quality-gates/checklist.yml` against the built site. Produce 
    - **DOM count** — count elements matching a selector.
    - **JSON traceability** — check that a claim on the page traces to a row in `evidence/`.
    - **Visual / judgment** — read a section and assess against the spec.
+   - **Editor-readiness (G-EDIT-01).** From repo root run `cd editor/engine && npx tsx src/cli.ts check ../../clients/{slug}/site`. It must print `ok` and exit 0. If it lists pages missing the color block, that is a critical FAIL — route to the iterator to re-inject `{{section:head}}` into those pages.
 3. **Write `qa/report.md`** with one entry per gate:
    ```
    ### Gate: G-04 — Real review evidence on Home

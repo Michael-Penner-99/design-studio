@@ -11,8 +11,8 @@
       {{cta_body}}
     </p>
     <div class="mt-7 flex flex-wrap justify-center gap-4">
-      <a href="tel:{{phone_tel}}" class="btn-gold font-body font-bold text-[11px] uppercase tracking-wider px-6 py-3.5">{{cta_phone_label}}</a>
-      <a href="#quote" class="glass font-body font-bold text-[11px] uppercase tracking-wider px-6 py-3.5 hover:border-[{{brand.color.accent}}] transition-colors">{{cta_secondary_label}}</a>
+      <a href="tel:{{phone_tel}}" data-cta class="btn-gold font-body font-bold text-[11px] uppercase tracking-wider px-6 py-3.5">{{cta_phone_label}}</a>
+      <a href="#quote" data-cta class="glass font-body font-bold text-[11px] uppercase tracking-wider px-6 py-3.5 hover:border-[{{brand.color.accent}}] transition-colors">{{cta_secondary_label}}</a>
     </div>
   </div>
 </section>

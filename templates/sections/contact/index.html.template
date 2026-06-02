@@ -19,8 +19,8 @@
           {{contact_intro}}
         </p>
         <div class="mt-7 flex flex-wrap gap-4">
-          <a href="tel:{{phone_tel}}" class="btn-gold font-body font-bold text-[11px] uppercase tracking-wider px-6 py-3.5">{{contact_cta_phone_label}}</a>
-          <a href="#quote" class="glass font-body font-bold text-[11px] uppercase tracking-wider px-6 py-3.5 hover:border-[{{brand.color.accent}}] transition-colors">{{contact_cta_secondary_label}}</a>
+          <a href="tel:{{phone_tel}}" data-cta class="btn-gold font-body font-bold text-[11px] uppercase tracking-wider px-6 py-3.5">{{contact_cta_phone_label}}</a>
+          <a href="#quote" data-cta class="glass font-body font-bold text-[11px] uppercase tracking-wider px-6 py-3.5 hover:border-[{{brand.color.accent}}] transition-colors">{{contact_cta_secondary_label}}</a>
         </div>
       </div>
       <div class="overflow-hidden" style="background: rgba(15,23,42,0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); box-shadow: rgba(0,0,0,0.55) 0px 20px 60px, rgba(0,0,0,0.3) 0px 4px 16px;">

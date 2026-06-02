@@ -19,7 +19,7 @@
             </div>
           {{/loop:process_steps}}
         </div>
-        <a href="#quote" class="mt-7 inline-flex items-center gap-2 btn-gold font-body font-bold text-[11px] uppercase tracking-wider px-6 py-3.5">
+        <a href="#quote" data-cta class="mt-7 inline-flex items-center gap-2 btn-gold font-body font-bold text-[11px] uppercase tracking-wider px-6 py-3.5">
           {{process_cta_label}}
         </a>
       </div>
