@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const FIELD_TYPES = ["text", "richtext", "image", "color", "link", "list"] as const;
+export const FIELD_TYPES = ["text", "richtext", "image", "color", "link", "list", "section"] as const;
 export type FieldType = (typeof FIELD_TYPES)[number];
 
 export const TIERS = [
