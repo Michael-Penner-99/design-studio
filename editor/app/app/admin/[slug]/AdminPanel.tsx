@@ -24,7 +24,8 @@ export default function AdminPanel({ slug, tier, fields }: { slug: string; tier:
       method: "POST", headers: { "content-type": "application/json" },
       body: JSON.stringify({ username: slug, slug, password: pw }),
     });
-    setPwMsg(res.ok ? "Password set. Send the client the editor link + this password." : "Failed (operator token required server-side).");
+    const j = await res.json().catch(() => ({}));
+    setPwMsg(res.ok ? "Password set. Send the client the /login link, username, and this password." : `Failed: ${j.error ?? res.status}`);
   }
 
   return (
@@ -48,7 +49,7 @@ export default function AdminPanel({ slug, tier, fields }: { slug: string; tier:
       <section>
         <h2>Client password</h2>
         <input type="text" value={pw} onChange={(e) => setPw(e.target.value)} placeholder="new password (min 8)" />
-        <button onClick={setPassword} style={{ marginLeft: 8 }}>Set password</button>
+        <button onClick={setPassword} disabled={pw.length < 8} style={{ marginLeft: 8 }}>Set password</button>
         <span style={{ marginLeft: 12 }}>{pwMsg}</span>
         <p>Editor link to send: <code>/login</code> (username: <code>{slug}</code>)</p>
       </section>
