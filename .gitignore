@@ -26,3 +26,6 @@ Thumbs.db
 .vercel
 .env*.local
 .runs/
+
+# editor engine generated tagged sites (regenerable)
+clients/*/editor/tagged/
