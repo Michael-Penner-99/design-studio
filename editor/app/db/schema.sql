@@ -43,3 +43,15 @@ CREATE TABLE IF NOT EXISTS sessions (
   role       TEXT NOT NULL,
   expires_at TIMESTAMPTZ NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS assets (
+  slug   TEXT NOT NULL,
+  path   TEXT NOT NULL,
+  base64 TEXT NOT NULL,
+  PRIMARY KEY (slug, path)
+);
+
+CREATE TABLE IF NOT EXISTS publish_locks (
+  slug        TEXT PRIMARY KEY,
+  acquired_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);

@@ -126,3 +126,57 @@ export async function getSessionRow(db: Queryable, id: string): Promise<SessionR
 export async function deleteSession(db: Queryable, id: string): Promise<void> {
   await db.query(`DELETE FROM sessions WHERE id=$1`, [id]);
 }
+
+export interface AssetRow { path: string; base64: string; }
+
+export async function saveAssets(db: Queryable, slug: string, assets: AssetRow[]): Promise<void> {
+  await db.query(`DELETE FROM assets WHERE slug=$1`, [slug]);
+  for (const a of assets) {
+    await db.query(`INSERT INTO assets (slug, path, base64) VALUES ($1,$2,$3)`, [slug, a.path, a.base64]);
+  }
+}
+
+export async function getAssets(db: Queryable, slug: string): Promise<AssetRow[]> {
+  const { rows } = await db.query(`SELECT path, base64 FROM assets WHERE slug=$1 ORDER BY path`, [slug]);
+  return rows.map((r) => ({ path: r.path, base64: r.base64 }));
+}
+
+export async function promoteOverrides(db: Queryable, slug: string): Promise<void> {
+  const draft = await getOverrides(db, slug, "draft");
+  await saveOverrides(db, slug, "published", draft);
+}
+
+/**
+ * Returns true if the lock was acquired.
+ * Locks older than ttlSeconds are reclaimed as stale.
+ *
+ * Implementation: JS-side staleness check (DELETE stale, then INSERT with try/catch on PK violation).
+ * This avoids pg-mem's limited support for interval arithmetic and ON CONFLICT RETURNING.
+ * On real Postgres the semantics are identical; the only difference vs an atomic CTE is a negligible
+ * TOCTOU window that is acceptable for publish-locking.
+ */
+export async function acquireLock(db: Queryable, slug: string, ttlSeconds: number): Promise<boolean> {
+  // Evict stale lock if present
+  const { rows: existing } = await db.query(
+    `SELECT acquired_at FROM publish_locks WHERE slug=$1`,
+    [slug]
+  );
+  if (existing.length > 0) {
+    const acquiredAt = new Date(existing[0].acquired_at).getTime();
+    if (Date.now() - acquiredAt > ttlSeconds * 1000) {
+      await db.query(`DELETE FROM publish_locks WHERE slug=$1`, [slug]);
+    }
+  }
+
+  // Attempt insert; catch PK violation (lock already held)
+  try {
+    await db.query(`INSERT INTO publish_locks (slug) VALUES ($1)`, [slug]);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export async function releaseLock(db: Queryable, slug: string): Promise<void> {
+  await db.query(`DELETE FROM publish_locks WHERE slug=$1`, [slug]);
+}

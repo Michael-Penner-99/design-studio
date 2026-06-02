@@ -11,6 +11,7 @@ export const IngestPayloadSchema = z.object({
   tier: z.string().min(1),
   manifest: ManifestSchema,
   pages: z.array(z.object({ path: z.string().min(1), html: z.string() })),
+  assets: z.array(z.object({ path: z.string().min(1), base64: z.string() })).optional().default([]),
 });
 export type IngestPayload = z.infer<typeof IngestPayloadSchema>;
 
@@ -25,4 +26,5 @@ export async function ingest(db: Queryable, payload: IngestPayload): Promise<voi
   });
   await repo.saveManifest(db, payload.slug, payload.manifest);
   await repo.saveTaggedPages(db, payload.slug, payload.pages);
+  await repo.saveAssets(db, payload.slug, payload.assets);
 }
