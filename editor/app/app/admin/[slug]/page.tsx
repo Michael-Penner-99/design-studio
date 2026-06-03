@@ -1,9 +1,11 @@
 import { cookies } from "next/headers";
 import { getDb } from "../../../src/db";
 import { getSession } from "../../../src/auth";
-import { getManifest, getClient } from "../../../src/repo";
+import { getManifest, getClient, getOverrides } from "../../../src/repo";
 import { SESSION_COOKIE } from "../../../src/session-cookie";
+import { visibleFields, groupFields } from "../../../src/view";
 import AdminPanel from "./AdminPanel";
+import EditorForm from "../../edit/EditorForm";
 
 export const dynamic = "force-dynamic";
 
@@ -16,6 +18,15 @@ export default async function AdminPage({ params }: { params: { slug: string } }
   const manifest = await getManifest(db, params.slug);
   const client = await getClient(db, params.slug);
   if (!manifest || !client) return <main style={{ padding: 24 }}><p>Unknown client.</p></main>;
-  return <AdminPanel slug={params.slug} tier={client.permission_tier}
-    fields={manifest.fields.map((f) => ({ id: f.id, label: f.label, type: f.type, clientEditable: f.clientEditable }))} />;
+
+  const overrides = await getOverrides(db, params.slug, "draft");
+  const groups = groupFields(visibleFields(manifest, "operator"));
+
+  return (
+    <>
+      <AdminPanel slug={params.slug} tier={client.permission_tier}
+        fields={manifest.fields.map((f) => ({ id: f.id, label: f.label, type: f.type, clientEditable: f.clientEditable }))} />
+      <EditorForm slug={params.slug} groups={groups} initialOverrides={overrides} />
+    </>
+  );
 }
