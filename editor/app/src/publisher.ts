@@ -1,4 +1,4 @@
-import { mergePages } from "@action-studio/editor-engine";
+import { mergePages, injectOperatorEditButton } from "@action-studio/editor-engine";
 import type { Queryable } from "./db";
 import * as repo from "./repo";
 import { deployFiles, getDeploymentState } from "./vercel";
@@ -40,11 +40,16 @@ export async function publish(db: Queryable, slug: string, mode: PublishMode): P
 
     const merged = mergePages(taggedPages.map((p) => ({ path: p.path, html: p.html })), overrides);
 
+    const editorUrl = process.env.EDITOR_PUBLIC_URL;
+    const pages = editorUrl
+      ? merged.pages.map((p) => ({ path: p.path, html: injectOperatorEditButton(p.html, { editorUrl, slug }) }))
+      : merged.pages;
+
     const result = await deployFiles({
       projectId: client.vercel_project_id,
       projectName: `${slug}-site`,
       target: mode === "publish" ? "production" : undefined,
-      files: merged.pages.map((p) => ({ path: p.path, content: p.html })),
+      files: pages.map((p) => ({ path: p.path, content: p.html })),
       assets: assets.map((a) => ({ path: a.path, base64: a.base64 })),
     });
     await waitForReady(result.id);

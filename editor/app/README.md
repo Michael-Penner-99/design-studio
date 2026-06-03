@@ -48,3 +48,9 @@ The single operator account is configured via env (no DB row needed):
 - `OPERATOR_PASSWORD_HASH` — bcrypt hash of your password. Generate it with:
   `node scripts/hash-operator-password.mjs '<your-password>'`
 Sign in at `/login` with these; you'll land on the operator admin. Client accounts are created from the admin panel.
+
+## Operator edit fast-path
+- Set `EDITOR_PUBLIC_URL` (e.g. `https://editor.actiondesignstudio.com`) on the editor app. When set, every published page gets a hidden operator **Edit** button.
+- Reveal it on any client's live page by appending `?edit` (or `#edit`) to the URL, then click **✎ Edit site** → it opens `/admin/{slug}` (operator login required) where you set the permission tier, set the client password, and edit the site content with Preview/Publish — all on one page.
+- The button is hidden from the public and only links to the editor (login still gates every action), so the `?edit` marker is not a secret.
+- Injection happens at publish time: **already-deployed sites get the button on their next Publish**, and a freshly pushed client needs one publish to show it.

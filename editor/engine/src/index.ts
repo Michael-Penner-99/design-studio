@@ -8,3 +8,4 @@ export * from "./merger";
 export * from "./permissions";
 export * from "./readiness";
 export * from "./push";
+export * from "./edit-button";
