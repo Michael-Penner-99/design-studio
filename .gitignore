@@ -31,3 +31,6 @@ Thumbs.db
 
 # editor engine generated tagged sites (regenerable)
 clients/*/editor/tagged/
+
+# Vercel link for the agency site (per-machine)
+clients/action-design-studio/site/.vercel/

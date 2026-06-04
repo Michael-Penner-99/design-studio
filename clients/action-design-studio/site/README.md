@@ -7,11 +7,11 @@ Everything below must be swapped before the site goes live. Check each item off 
 - [ ] **Logo** — `assets/logo.svg`
   Already done (faithful vector wordmark). Drop in the full original art here if preferred.
 
-- [ ] **Prices** — `pricing.html`
-  Replace each `$PLACEHOLDER` with real monthly prices.
+- [x] **Prices** — `pricing.html`
+  Set: Contractor Advanced $297 USD/mo + add-ons (Stone Systems style). Edit here to change.
 
-- [ ] **Project screenshots / results** — `work.html`
-  Replace the 6 sample portfolio cards with real screenshots, client names, and result stats.
+- [x] **Project screenshots / results** — `work.html`
+  Now shows 3 live factory-built sites (Sask Air, Platinum Plumbing & Heating, Wind Rose Mechanical) with live screenshots (WordPress mShots) linking to the deployed sites. Add more cards as you ship new sites; swap mShots for committed screenshots if you want them self-hosted.
 
 - [ ] **Testimonials** — `testimonials.html` and `index.html`
   Replace placeholder quote cards with real reviews, OR paste a live review-widget embed into the `<div id="live-reviews">` slot (see the `LIVE REVIEW WIDGET DROP-IN` comment) and remove the placeholder carousel.
@@ -25,8 +25,8 @@ Everything below must be swapped before the site goes live. Check each item off 
 - [ ] **Founder bio** — `about.html`
   Replace the bio placeholder line and photo placeholder.
 
-- [ ] **Legal details** — `privacy.html` and `terms.html`
-  Fill the company legal name, effective date, and governing-law placeholders.
+- [x] **Legal name + effective date** — `privacy.html` / `terms.html` — set to "Action Design Studio", effective June 4, 2026.
+- [ ] **Governing-law jurisdiction** — `terms.html` (one `PLACEHOLDER (jurisdiction)` remains — set your province/state).
 
 ---
 
