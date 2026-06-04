@@ -1,0 +1,54 @@
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg" />
+<meta name="theme-color" content="#0A1A33" />
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          navy: '#0A1A33', blue: '#16385F', 'blue-bright': '#2C5C92',
+          silver: '#C9D0D8', mist: '#EEF1F5', gold: '#C9A23F',
+          'gold-deep': '#A8842F', ink: '#14181D',
+        },
+        fontFamily: {
+          heading: ['Barlow Condensed', 'Arial Narrow', 'sans-serif'],
+          body: ['Barlow', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+        },
+        fontSize: {
+          h1: ['3.25rem', { lineHeight: '1.08', letterSpacing: '-0.02em' }],
+          h2: ['2.25rem', { lineHeight: '1.15', letterSpacing: '-0.015em' }],
+          h3: ['1.5rem', { lineHeight: '1.25', letterSpacing: '-0.01em' }],
+          body: ['1.0625rem', { lineHeight: '1.65' }],
+          small: ['0.875rem', { lineHeight: '1.5' }],
+          tiny: ['0.75rem', { lineHeight: '1.45', letterSpacing: '0.04em' }],
+        },
+      },
+    },
+  };
+</script>
+<style>
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Barlow', sans-serif; color: #14181D; background: #fff; }
+  h1, h2, h3, h4, .font-heading { font-family: 'Barlow Condensed', sans-serif; }
+  .gold-text { color: #C9A23F; }
+  .btn-gold { display: inline-flex; align-items: center; justify-content: center;
+    gap: .5rem; background: #C9A23F; color: #0A1A33; font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700; letter-spacing: .08em; text-transform: uppercase; border-radius: .5rem;
+    transition: background .15s ease; }
+  .btn-gold:hover { background: #A8842F; }
+  .btn-ghost { display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+    border: 1px solid rgba(201,208,216,.5); color: #fff; font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700; letter-spacing: .08em; text-transform: uppercase; border-radius: .5rem;
+    transition: border-color .15s ease, background .15s ease; }
+  .btn-ghost:hover { border-color: #C9A23F; background: rgba(201,162,63,.08); }
+  .glass { background: rgba(255,255,255,.04); border: 1px solid rgba(201,208,216,.14);
+    backdrop-filter: blur(6px); border-radius: .75rem; }
+  .card { background: #fff; border: 1px solid #E2E6EC; border-radius: .9rem;
+    box-shadow: 0 1px 2px rgba(10,26,51,.04); }
+  .marquee-track { display: flex; gap: 3rem; animation: marquee 28s linear infinite; white-space: nowrap; }
+  @keyframes marquee { from { transform: translateX(0);} to { transform: translateX(-50%);} }
+  @media (prefers-reduced-motion: reduce) { .marquee-track { animation: none; } html { scroll-behavior: auto; } }
+</style>
