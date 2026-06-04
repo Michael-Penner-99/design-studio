@@ -7,6 +7,8 @@
 clients/*
 !clients/_deployed.json
 !clients/.gitkeep
+# The studio's own marketing site is source-controlled
+!clients/action-design-studio/
 
 # Env files
 .env
