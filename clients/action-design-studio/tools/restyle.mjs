@@ -1,35 +1,11 @@
-<link rel="icon" type="image/svg+xml" href="/assets/logo.svg" />
-<meta name="theme-color" content="#0A1A33" />
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet" />
-<script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        colors: {
-          navy: '#0A1A33', blue: '#16385F', 'blue-bright': '#2C5C92',
-          silver: '#C9D0D8', mist: '#EEF1F5', gold: '#C9A23F',
-          'gold-deep': '#A8842F', ink: '#14181D',
-        },
-        fontFamily: {
-          heading: ['Barlow Condensed', 'Arial Narrow', 'sans-serif'],
-          body: ['Barlow', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
-        },
-        fontSize: {
-          h1: ['3.25rem', { lineHeight: '1.08', letterSpacing: '-0.02em' }],
-          h2: ['2.25rem', { lineHeight: '1.15', letterSpacing: '-0.015em' }],
-          h3: ['1.5rem', { lineHeight: '1.25', letterSpacing: '-0.01em' }],
-          body: ['1.0625rem', { lineHeight: '1.65' }],
-          small: ['0.875rem', { lineHeight: '1.5' }],
-          tiny: ['0.75rem', { lineHeight: '1.45', letterSpacing: '0.04em' }],
-        },
-      },
-    },
-  };
-</script>
-<style>
+// Propagate a new <style> design-system block to every served page + the shared source.
+// No build step exists, so the style block is duplicated per page; this rewrites it everywhere.
+import { readFileSync, writeFileSync, readdirSync, statSync } from 'node:fs';
+import { join, resolve } from 'node:path';
+
+const ROOT = resolve('clients/action-design-studio/site');
+
+const NEW_STYLE = `<style>
   *,*::before,*::after { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
   body { font-family: 'Barlow', sans-serif; color: #14181D; background: #fff; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
@@ -78,4 +54,20 @@
   ::-webkit-scrollbar-thumb { background: #C9A23F; }
   ::-webkit-scrollbar-thumb:hover { background: #B68C2C; }
   @media (prefers-reduced-motion: reduce) { .marquee-track { animation: none; } html { scroll-behavior: auto; } }
-</style>
+</style>`;
+
+const files = [];
+(function walk(d){ for (const n of readdirSync(d)) { const p = join(d,n);
+  if (statSync(p).isDirectory()) { if (n==='assets') continue; walk(p); }
+  else if (n.endsWith('.html')) files.push(p);
+} })(ROOT);
+
+let changed = 0;
+const re = /<style>[\s\S]*?<\/style>/;
+for (const f of files) {
+  const html = readFileSync(f,'utf8');
+  if (!re.test(html)) { console.log('NO <style>:', f.replace(ROOT+'/','')); continue; }
+  const out = html.replace(re, NEW_STYLE);
+  if (out !== html) { writeFileSync(f, out); changed++; }
+}
+console.log(`restyled ${changed}/${files.length} files`);
