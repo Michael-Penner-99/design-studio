@@ -53,15 +53,16 @@ describe("publish", () => {
     await expect(publish(db, "bare", "publish")).rejects.toThrow(/project/i);
   });
 
-  it("injects the operator edit button into deployed pages when EDITOR_PUBLIC_URL is set", async () => {
+  it("injects the editor embed loader into deployed pages when EDITOR_PUBLIC_URL is set", async () => {
     vi.stubEnv("EDITOR_PUBLIC_URL", "https://editor.example.com");
     const db = await makeTestDb();
     await seed(db);
     await publish(db, "acme", "publish");
     const call = (deployFiles as any).mock.calls.at(-1)[0];
     const idx = call.files.find((f: any) => f.path === "index.html").content;
-    expect(idx).toContain("data-op-edit");
-    expect(idx).toContain("https://editor.example.com/admin/acme");
+    expect(idx).toContain("data-editor-embed");
+    expect(idx).toContain("https://editor.example.com");
+    expect(idx).toContain("/embed.js");
     vi.unstubAllEnvs();
   });
 
@@ -71,7 +72,7 @@ describe("publish", () => {
     await seed(db);
     await publish(db, "acme", "publish");
     const call = (deployFiles as any).mock.calls.at(-1)[0];
-    expect(call.files.find((f: any) => f.path === "index.html").content).not.toContain("data-op-edit");
+    expect(call.files.find((f: any) => f.path === "index.html").content).not.toContain("data-editor-embed");
     vi.unstubAllEnvs();
   });
 });
