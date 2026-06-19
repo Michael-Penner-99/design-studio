@@ -5,6 +5,7 @@ import { sessionFromRequest, authorizeSlug } from "../../../src/session-request"
 import { getManifest } from "../../../src/repo";
 import { canEditField } from "../../../src/overrides-edit";
 import { validateUpload, blobKey } from "../../../src/upload-helper";
+import { corsForReq } from "../../../src/cors";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -31,5 +32,9 @@ export async function POST(req: NextRequest) {
   }
 
   const blob = await put(blobKey(slug, fieldId, file.name), file, { access: "public" });
-  return NextResponse.json({ ok: true, url: blob.url });
+  return NextResponse.json({ ok: true, url: blob.url }, { headers: corsForReq(req) });
+}
+
+export function OPTIONS(req: NextRequest) {
+  return new NextResponse(null, { status: 204, headers: corsForReq(req) });
 }

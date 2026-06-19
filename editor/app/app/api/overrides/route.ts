@@ -5,6 +5,7 @@ import { getDb } from "../../../src/db";
 import { sessionFromRequest, authorizeSlug } from "../../../src/session-request";
 import { getManifest, getOverrides, saveOverrides } from "../../../src/repo";
 import { canEditField, applyFieldOverride } from "../../../src/overrides-edit";
+import { corsForReq } from "../../../src/cors";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -15,7 +16,7 @@ export async function GET(req: NextRequest) {
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const slug = req.nextUrl.searchParams.get("slug") ?? "";
   if (!authorizeSlug(session, slug)) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-  return NextResponse.json({ overrides: await getOverrides(db, slug, "draft") });
+  return NextResponse.json({ overrides: await getOverrides(db, slug, "draft") }, { headers: corsForReq(req) });
 }
 
 const PutBody = z.object({
@@ -42,5 +43,9 @@ export async function PUT(req: NextRequest) {
   }
   const draft = await getOverrides(db, body.slug, "draft");
   await saveOverrides(db, body.slug, "draft", applyFieldOverride(draft, body.fieldId, body.value));
-  return NextResponse.json({ ok: true });
+  return NextResponse.json({ ok: true }, { headers: corsForReq(req) });
+}
+
+export function OPTIONS(req: NextRequest) {
+  return new NextResponse(null, { status: 204, headers: corsForReq(req) });
 }

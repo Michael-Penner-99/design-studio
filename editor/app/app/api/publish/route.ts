@@ -3,6 +3,7 @@ import { z } from "zod";
 import { getDb } from "../../../src/db";
 import { sessionFromRequest, authorizeSlug } from "../../../src/session-request";
 import { publish } from "../../../src/publisher";
+import { corsForReq } from "../../../src/cors";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -21,8 +22,12 @@ export async function POST(req: NextRequest) {
 
   try {
     const r = await publish(db, body.slug, "publish");
-    return NextResponse.json({ ok: true, url: r.url });
+    return NextResponse.json({ ok: true, url: r.url }, { headers: corsForReq(req) });
   } catch (e: any) {
     return NextResponse.json({ error: "Publish failed", detail: String(e?.message ?? e) }, { status: 500 });
   }
+}
+
+export function OPTIONS(req: NextRequest) {
+  return new NextResponse(null, { status: 204, headers: corsForReq(req) });
 }
