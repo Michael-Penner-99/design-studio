@@ -54,3 +54,15 @@ Sign in at `/login` with these; you'll land on the operator admin. Client accoun
 - Reveal it on any client's live page by appending `?edit` (or `#edit`) to the URL, then click **✎ Edit site** → it opens `/admin/{slug}` (operator login required) where you set the permission tier, set the client password, and edit the site content with Preview/Publish — all on one page.
 - The button is hidden from the public and only links to the editor (login still gates every action), so the `?edit` marker is not a secret.
 - Injection happens at publish time: **already-deployed sites get the button on their next Publish**, and a freshly pushed client needs one publish to show it.
+
+## Inline editor (`?edit`)
+
+Append `?edit` to any deployed site URL to load the inline editor. Sign in with your
+operator credentials (edit everything) or a client's credentials (edit only granted fields).
+
+- The factory bakes a loader into every page; on `?edit` it loads `/embed.js` from this app.
+- Auth is bearer-token based (no third-party cookies). Set `EDITOR_ALLOWED_ORIGINS` to the
+  site origins permitted to call the API.
+- Admin password and client passwords are managed in `/admin/{slug}`. The operator credential
+  is seeded from `OPERATOR_USERNAME`/`OPERATOR_PASSWORD_HASH` on first login, then changeable in-app.
+- `npm run build` and `npm run dev` rebuild `public/embed.js` automatically (esbuild).

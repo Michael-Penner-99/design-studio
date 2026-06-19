@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
 import { makeTestDb } from "./helpers/pgmem";
 import * as repo from "../src/repo";
-import { hashPassword, verifyPassword, login, getSession } from "../src/auth";
+import { hashPassword, verifyPassword, login, getSession, seedOperator, changeOperatorPassword } from "../src/auth";
 
 describe("auth", () => {
   it("hashes and verifies a password", async () => {
@@ -24,6 +24,69 @@ describe("auth", () => {
 
     expect(await login(db, "acme", "bad")).toBeNull();
     expect(await login(db, "nobody", "pw")).toBeNull();
+  });
+});
+
+describe("operator seeding + DB-authoritative login", () => {
+  afterEach(() => vi.unstubAllEnvs());
+
+  it("seeds the operator row once and is idempotent", async () => {
+    const db = await makeTestDb();
+    vi.stubEnv("OPERATOR_USERNAME", "michael");
+    vi.stubEnv("OPERATOR_PASSWORD_HASH", await hashPassword("oppass"));
+    await seedOperator(db);
+    await seedOperator(db);
+    const cred = await repo.findCredential(db, "michael");
+    expect(cred?.role).toBe("operator");
+    expect(cred?.slug).toBeNull();
+  });
+
+  it("does not overwrite a changed operator password on re-seed", async () => {
+    const db = await makeTestDb();
+    vi.stubEnv("OPERATOR_USERNAME", "michael");
+    vi.stubEnv("OPERATOR_PASSWORD_HASH", await hashPassword("oppass"));
+    await seedOperator(db);
+    await repo.setCredential(db, { username: "michael", slug: null, role: "operator", passwordHash: await hashPassword("newpass") });
+    await seedOperator(db); // must not reset to env hash
+    expect(await login(db, "michael", "newpass")).not.toBeNull();
+    expect(await login(db, "michael", "oppass")).toBeNull();
+  });
+});
+
+describe("changeOperatorPassword", () => {
+  afterEach(() => vi.unstubAllEnvs());
+
+  it("rotates the operator password when the current one is correct", async () => {
+    const db = await makeTestDb();
+    vi.stubEnv("OPERATOR_USERNAME", "michael");
+    vi.stubEnv("OPERATOR_PASSWORD_HASH", await hashPassword("oppass"));
+    await seedOperator(db);
+    expect(await changeOperatorPassword(db, "michael", "oppass", "brandnew8")).toBe(true);
+    expect(await login(db, "michael", "brandnew8")).not.toBeNull();
+    expect(await login(db, "michael", "oppass")).toBeNull();
+  });
+
+  it("rejects a wrong current password", async () => {
+    const db = await makeTestDb();
+    vi.stubEnv("OPERATOR_USERNAME", "michael");
+    vi.stubEnv("OPERATOR_PASSWORD_HASH", await hashPassword("oppass"));
+    await seedOperator(db);
+    expect(await changeOperatorPassword(db, "michael", "WRONG", "brandnew8")).toBe(false);
+  });
+
+  it("refuses to change a non-operator credential", async () => {
+    const db = await makeTestDb();
+    await repo.setCredential(db, { username: "acme", slug: "acme", role: "client", passwordHash: await hashPassword("pw") });
+    expect(await changeOperatorPassword(db, "acme", "pw", "brandnew8")).toBe(false);
+  });
+
+  it("rejects a new password shorter than 8 chars and leaves old password intact", async () => {
+    const db = await makeTestDb();
+    vi.stubEnv("OPERATOR_USERNAME", "michael");
+    vi.stubEnv("OPERATOR_PASSWORD_HASH", await hashPassword("oppass"));
+    await seedOperator(db);
+    expect(await changeOperatorPassword(db, "michael", "oppass", "short")).toBe(false);
+    expect(await login(db, "michael", "oppass")).not.toBeNull();
   });
 });
 

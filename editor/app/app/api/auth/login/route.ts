@@ -3,6 +3,7 @@ import { z } from "zod";
 import { getDb } from "../../../../src/db";
 import { login } from "../../../../src/auth";
 import { SESSION_COOKIE, sessionCookieOptions } from "../../../../src/session-cookie";
+import { corsForReq } from "../../../../src/cors";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -12,12 +13,19 @@ const Body = z.object({ username: z.string().min(1), password: z.string().min(1)
 export async function POST(req: NextRequest) {
   let body;
   try { body = Body.parse(await req.json()); }
-  catch { return NextResponse.json({ error: "Invalid" }, { status: 400 }); }
+  catch { return NextResponse.json({ error: "Invalid" }, { status: 400, headers: corsForReq(req) }); }
 
   const result = await login(getDb(), body.username, body.password);
-  if (!result) return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
+  if (!result) return NextResponse.json({ error: "Invalid credentials" }, { status: 401, headers: corsForReq(req) });
 
-  const res = NextResponse.json({ ok: true, role: result.role, slug: result.slug });
+  const res = NextResponse.json(
+    { ok: true, role: result.role, slug: result.slug, token: result.sessionId },
+    { headers: corsForReq(req) }
+  );
   res.cookies.set(SESSION_COOKIE, result.sessionId, sessionCookieOptions(60 * 60 * 24 * 14));
   return res;
+}
+
+export function OPTIONS(req: NextRequest) {
+  return new NextResponse(null, { status: 204, headers: corsForReq(req) });
 }

@@ -1,14 +1,17 @@
 "use client";
 import { useState } from "react";
+import { buildInvite } from "../../../src/invite";
 
 const TIERS = ["Text only", "Text + Pictures", "Text + Pictures + Colours", "Everything"] as const;
 type FieldLite = { id: string; label: string; type: string; clientEditable: boolean };
 
-export default function AdminPanel({ slug, tier, fields }: { slug: string; tier: string; fields: FieldLite[] }) {
+export default function AdminPanel({ slug, tier, siteUrl, fields }: { slug: string; tier: string; siteUrl: string; fields: FieldLite[] }) {
   const [sel, setSel] = useState<string>((TIERS as readonly string[]).includes(tier) ? tier : TIERS[0]);
   const [perField, setPerField] = useState<Record<string, boolean>>({});
   const [msg, setMsg] = useState("");
   const [pw, setPw] = useState(""); const [pwMsg, setPwMsg] = useState("");
+  const [invite, setInvite] = useState<{ text: string; mailto: string } | null>(null);
+  const [curPw, setCurPw] = useState(""); const [newPw, setNewPw] = useState(""); const [accountMsg, setAccountMsg] = useState("");
 
   async function savePerms() {
     setMsg("Saving…");
@@ -19,18 +22,36 @@ export default function AdminPanel({ slug, tier, fields }: { slug: string; tier:
     const j = await res.json();
     setMsg(res.ok ? `Saved (tier: ${j.tier})` : `Error: ${j.error}`);
   }
+
   async function setPassword() {
     const res = await fetch("/api/admin/credentials", {
       method: "POST", headers: { "content-type": "application/json" },
       body: JSON.stringify({ username: slug, slug, password: pw }),
     });
     const j = await res.json().catch(() => ({}));
-    setPwMsg(res.ok ? "Password set. Send the client the /login link, username, and this password." : `Failed: ${j.error ?? res.status}`);
+    if (res.ok) {
+      setPwMsg("Password set.");
+      setInvite(buildInvite({ link: `${siteUrl.replace(/\/$/, "")}/?edit`, username: slug, password: pw }));
+    } else {
+      setPwMsg(`Failed: ${j.error ?? res.status}`); setInvite(null);
+    }
+  }
+
+  async function changeMyPassword() {
+    setAccountMsg("Updating…");
+    const res = await fetch("/api/account/password", {
+      method: "PUT", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ currentPassword: curPw, newPassword: newPw }),
+    });
+    const j = await res.json().catch(() => ({}));
+    setAccountMsg(res.ok ? "Your password was changed." : `Failed: ${j.error ?? res.status}`);
+    if (res.ok) { setCurPw(""); setNewPw(""); }
   }
 
   return (
     <main style={{ maxWidth: 760, margin: "24px auto", fontFamily: "system-ui" }}>
       <h1>Admin — {slug}</h1>
+
       <section>
         <h2>Permission tier</h2>
         <select value={sel} onChange={(e) => setSel(e.target.value)} data-testid="tier-select">
@@ -46,12 +67,29 @@ export default function AdminPanel({ slug, tier, fields }: { slug: string; tier:
           </label>
         ))}
       </section>
+
       <section>
-        <h2>Client password</h2>
-        <input type="text" value={pw} onChange={(e) => setPw(e.target.value)} placeholder="new password (min 8)" />
+        <h2>Client password &amp; invite</h2>
+        <input type="text" data-testid="client-pw" value={pw} onChange={(e) => setPw(e.target.value)} placeholder="new password (min 8)" />
         <button onClick={setPassword} disabled={pw.length < 8} style={{ marginLeft: 8 }}>Set password</button>
         <span style={{ marginLeft: 12 }}>{pwMsg}</span>
-        <p>Editor link to send: <code>/login</code> (username: <code>{slug}</code>)</p>
+        {invite && (
+          <div style={{ marginTop: 12, padding: 12, border: "1px solid #ddd", borderRadius: 8 }}>
+            <strong>Invite to send</strong>
+            <pre data-testid="invite-text" style={{ whiteSpace: "pre-wrap", fontFamily: "system-ui", margin: "8px 0" }}>{invite.text}</pre>
+            <button onClick={() => navigator.clipboard?.writeText(invite.text)}>Copy</button>
+            <a data-testid="invite-mailto" href={invite.mailto} style={{ marginLeft: 8 }}>Open in email</a>
+            <p style={{ fontSize: 12, color: "#777" }}>The password is only shown here, now. To re-send later, set a new password.</p>
+          </div>
+        )}
+      </section>
+
+      <section>
+        <h2>My password</h2>
+        <input type="password" data-testid="cur-pw" value={curPw} onChange={(e) => setCurPw(e.target.value)} placeholder="current password" />
+        <input type="password" data-testid="new-pw" value={newPw} onChange={(e) => setNewPw(e.target.value)} placeholder="new password (min 8)" style={{ marginLeft: 8 }} />
+        <button onClick={changeMyPassword} disabled={newPw.length < 8 || curPw.length < 1} style={{ marginLeft: 8 }}>Change my password</button>
+        <span style={{ marginLeft: 12 }}>{accountMsg}</span>
       </section>
     </main>
   );

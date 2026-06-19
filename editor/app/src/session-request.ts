@@ -5,9 +5,15 @@ import type { SessionRow } from "./repo";
 import { SESSION_COOKIE } from "./session-cookie";
 
 export async function sessionFromRequest(db: Queryable, req: NextRequest): Promise<SessionRow | null> {
-  const id = req.cookies.get(SESSION_COOKIE)?.value;
-  if (!id) return null;
-  return getSession(db, id);
+  const cookieId = req.cookies.get(SESSION_COOKIE)?.value;
+  if (cookieId) {
+    const fromCookie = await getSession(db, cookieId);
+    if (fromCookie) return fromCookie;
+  }
+  const auth = req.headers.get("authorization");
+  const m = auth?.match(/^Bearer\s+(.+)$/i);
+  if (m) return getSession(db, m[1]);
+  return null;
 }
 
 export function authorizeSlug(session: SessionRow, slug: string): boolean {
