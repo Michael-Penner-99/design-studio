@@ -13,18 +13,18 @@ const Body = z.object({ slug: z.string().min(1) });
 export async function POST(req: NextRequest) {
   const db = getDb();
   const session = await sessionFromRequest(db, req);
-  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401, headers: corsForReq(req) });
 
   let body;
   try { body = Body.parse(await req.json()); }
-  catch { return NextResponse.json({ error: "Invalid" }, { status: 400 }); }
-  if (!authorizeSlug(session, body.slug)) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  catch { return NextResponse.json({ error: "Invalid" }, { status: 400, headers: corsForReq(req) }); }
+  if (!authorizeSlug(session, body.slug)) return NextResponse.json({ error: "Forbidden" }, { status: 403, headers: corsForReq(req) });
 
   try {
     const r = await publish(db, body.slug, "publish");
     return NextResponse.json({ ok: true, url: r.url }, { headers: corsForReq(req) });
   } catch (e: any) {
-    return NextResponse.json({ error: "Publish failed", detail: String(e?.message ?? e) }, { status: 500 });
+    return NextResponse.json({ error: "Publish failed", detail: String(e?.message ?? e) }, { status: 500, headers: corsForReq(req) });
   }
 }
 

@@ -13,10 +13,10 @@ const Body = z.object({ username: z.string().min(1), password: z.string().min(1)
 export async function POST(req: NextRequest) {
   let body;
   try { body = Body.parse(await req.json()); }
-  catch { return NextResponse.json({ error: "Invalid" }, { status: 400 }); }
+  catch { return NextResponse.json({ error: "Invalid" }, { status: 400, headers: corsForReq(req) }); }
 
   const result = await login(getDb(), body.username, body.password);
-  if (!result) return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
+  if (!result) return NextResponse.json({ error: "Invalid credentials" }, { status: 401, headers: corsForReq(req) });
 
   const res = NextResponse.json(
     { ok: true, role: result.role, slug: result.slug, token: result.sessionId },
