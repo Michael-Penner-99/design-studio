@@ -38,4 +38,13 @@ describe("sessionFromRequest bearer token", () => {
     const s = await sessionFromRequest(db, fakeReq({ cookie: "cookie-1", bearer: "ignored" }));
     expect(s?.role).toBe("operator");
   });
+
+  it("falls through to bearer token when cookie is invalid/expired", async () => {
+    const db = await makeTestDb();
+    await repo.createSession(db, { id: "bearer-1", username: "client-user", slug: "acme", role: "client", expiresAt: new Date(Date.now() + 60000) });
+    const s = await sessionFromRequest(db, fakeReq({ cookie: "invalid-cookie-id", bearer: "bearer-1" }));
+    expect(s?.role).toBe("client");
+    expect(s?.slug).toBe("acme");
+    expect(s?.id).toBe("bearer-1");
+  });
 });
