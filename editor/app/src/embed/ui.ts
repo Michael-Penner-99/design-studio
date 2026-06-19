@@ -3,7 +3,8 @@ const OVERLAY_STYLE = "position:fixed;inset:0;z-index:2147483647;display:flex;al
 const CARD_STYLE = "background:#fff;color:#111;padding:24px;border-radius:10px;font:14px system-ui;display:flex;flex-direction:column;gap:10px;min-width:280px";
 
 export function renderLogin(root: HTMLElement, onSubmit: (u: string, p: string) => void, onError?: () => void): { showError(msg: string): void; remove(): void } {
-  const overlay = document.createElement("div"); overlay.setAttribute("style", OVERLAY_STYLE); overlay.setAttribute("data-embed", "login");
+  const doc = root.ownerDocument ?? document;
+  const overlay = doc.createElement("div"); overlay.setAttribute("style", OVERLAY_STYLE); overlay.setAttribute("data-embed", "login");
   overlay.innerHTML =
     `<div style="${CARD_STYLE}"><strong>Sign in to edit</strong>` +
     `<input data-embed="username" placeholder="Username" style="padding:8px;border:1px solid #ccc;border-radius:6px">` +
@@ -23,7 +24,8 @@ export function renderLogin(root: HTMLElement, onSubmit: (u: string, p: string) 
 }
 
 export function renderActionBar(root: HTMLElement, opts: { onPreview(): void; onPublish(): void; onExit(): void }): { setStatus(s: string): void } {
-  const bar = document.createElement("div"); bar.setAttribute("style", BAR_STYLE); bar.setAttribute("data-embed", "bar");
+  const doc = root.ownerDocument ?? document;
+  const bar = doc.createElement("div"); bar.setAttribute("style", BAR_STYLE); bar.setAttribute("data-embed", "bar");
   bar.innerHTML =
     `<span data-embed="status" style="opacity:.8">Ready</span>` +
     `<button data-embed="preview" style="cursor:pointer">Preview</button>` +
@@ -37,15 +39,16 @@ export function renderActionBar(root: HTMLElement, opts: { onPreview(): void; on
 }
 
 export function renderColorControls(root: HTMLElement, fields: { id: string; label: string; value: string }[], onColor: (id: string, value: string) => void): void {
+  const doc = root.ownerDocument ?? document;
   if (!fields.length) return;
-  const box = document.createElement("div");
+  const box = doc.createElement("div");
   box.setAttribute("style", "position:fixed;bottom:64px;right:16px;z-index:2147483647;background:#fff;color:#111;padding:10px;border-radius:8px;font:12px system-ui;display:flex;flex-direction:column;gap:6px");
   box.setAttribute("data-embed", "colors");
   for (const f of fields) {
-    const row = document.createElement("label"); row.style.display = "flex"; row.style.gap = "6px"; row.style.alignItems = "center";
-    const input = document.createElement("input"); input.type = "color"; input.value = f.value; input.setAttribute("data-embed", `color-${f.id}`);
+    const row = doc.createElement("label"); row.style.display = "flex"; row.style.gap = "6px"; row.style.alignItems = "center";
+    const input = doc.createElement("input"); input.type = "color"; input.value = f.value; input.setAttribute("data-embed", `color-${f.id}`);
     input.addEventListener("change", () => onColor(f.id, input.value));
-    row.append(input, document.createTextNode(f.label));
+    row.append(input, doc.createTextNode(f.label));
     box.appendChild(row);
   }
   root.appendChild(box);
