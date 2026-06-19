@@ -15,13 +15,14 @@ The operator wants: append `?edit` to a live site URL → log in with username/p
 
 ## Goal
 
-Replace the "link-away form" UX with **true click-to-edit inline editing that mounts on the live site itself**, reusing the existing, working backend (auth, permissions, override storage, preview/publish pipeline) with only small additive changes.
+Replace the "link-away form" UX with **true click-to-edit inline editing that mounts on the live site itself**, reusing the existing, working backend (auth, permissions, override storage, preview/publish pipeline) with only small additive changes. Add **credential management** (admin changes own password; admin sets/resets client passwords) and a **copy-paste client invite** (link + username + password) in the admin panel.
 
 ## Non-goals
 
-- **No new permission-granting UI.** Granting a client access to fields/sections stays in the existing `/admin/{slug}` panel (tiers + per-field toggles). This work covers the **editing** experience only.
+- **No new permission-granting UI.** Granting a client access to fields/sections stays in the existing `/admin/{slug}` panel (tiers + per-field toggles). This work covers the **editing** experience plus credential/invite management.
 - **No new publish/review workflow.** Both admin and client can Save → Preview → Publish using the existing pipeline. (Decision: clients may self-publish.)
-- **No DB schema change.**
+- **No email-provider integration.** The app **generates** the invite (link + username + password) for the operator to send via their own email client — Copy button + `mailto:`. No Resend/SMTP/sending infrastructure. (Could be added later if desired.)
+- **No client password self-service.** Clients use the password the admin sets/emails; only the admin changes passwords.
 - **No new editable surfaces beyond the engine's already-tagged fields.** We edit what the tagger marks; we don't introduce free-form page editing.
 
 ---
@@ -100,6 +101,14 @@ Lazy-loaded only in edit mode. Responsibilities, in order:
 - `/api/auth/login`: include `token` in the JSON response.
 - CORS + `OPTIONS` on the embed-called routes, restricted to configured site origins (env: `EDITOR_ALLOWED_ORIGINS`, or derive from `*.actiondesignstudio.com` + each client's custom domain).
 - Serve `embed.js` (a route or static asset in `editor/app`).
+- **Operator seed:** on first run, insert an `operator` credential row from env if none exists; `login()` prefers the DB row, falls back to env.
+- **`PUT /api/account/password`** (operator-only): change the admin's own password (verify current, store new hash).
+
+### 4. Admin panel additions (`/admin/{slug}` + a global Account control)
+
+- "Change my password" (admin's own).
+- "Set / reset client password" (already backed by `/api/admin/credentials`; surface it).
+- "Invite" block: link + username + just-set password, with **Copy** and **`mailto:`** buttons. No email provider.
 
 ---
 
@@ -123,6 +132,40 @@ Lazy-loaded only in edit mode. Responsibilities, in order:
 
 ---
 
+## Credential management & client invite (new)
+
+All of this lives in the existing `/admin/{slug}` panel (and a small global "Account" control for the admin's own password) — consistent with the decision to keep management out of the inline editor.
+
+### Admin changes their own password
+
+Today the operator credential is env-only (`OPERATOR_USERNAME` / `OPERATOR_PASSWORD_HASH`), which can't change at runtime. Fix:
+
+- **Seed the operator credential into the `credentials` table** (role `operator`, `slug = NULL`) from the env vars on first run if no operator row exists. The `credentials` table already has the needed columns, so **no schema change**.
+- `login()` resolves the operator from the DB row when present, falling back to the env vars otherwise (keeps existing deployments working before the seed runs).
+- New **`PUT /api/account/password`** (operator session/token required): verifies current password, writes a new bcrypt hash via the existing `setCredential` upsert.
+- UI: a small "Change my password" control (current + new + confirm) in the admin area.
+
+### Admin sets / resets a client's password
+
+Already supported by `setCredential` (upsert by username) via `POST /api/admin/credentials`. Surface it cleanly in `/admin/{slug}`:
+
+- Set or reset the client's password (operator-only, min 8 chars — matches the existing route).
+- Generating a strong password is a convenience button (client-side random), but the operator may type one.
+- **The plaintext is shown to the operator only at set-time** (it's bcrypt-hashed at rest and never retrievable later) — so the invite is generated from the value the operator just set.
+
+### Client invite (copy-paste, no email infra)
+
+After setting a client password, the admin panel shows an **Invite** block containing:
+
+- **Link:** `https://{slug}.actiondesignstudio.com/?edit` (or the client's custom domain if configured).
+- **Username** and the **password just set**.
+- A **Copy** button (copies a clean, formatted invite message to clipboard).
+- A **`mailto:`** button that opens the operator's own email client with subject + body prefilled.
+
+Because the password is only known in plaintext at set-time, the invite is generated in the same step as setting the password. Re-sending later requires resetting the password again (and noting that invalidates the old one).
+
+---
+
 ## Error handling
 
 | Case | Behavior |
@@ -142,7 +185,7 @@ Lazy-loaded only in edit mode. Responsibilities, in order:
 2. Implement `embed-loader` injection in the engine, replacing `injectOperatorEditButton`'s link-button output. Keep QA gate **G-EDIT-01**.
 3. Swap the factory build/QA step that injects the old button to inject the loader.
 4. Re-push existing clients so they receive the new loader (ops step already tracked in project memory).
-5. Set `EDITOR_ALLOWED_ORIGINS` (and confirm `OPERATOR_USERNAME` / `OPERATOR_PASSWORD_HASH` are provisioned).
+5. Set `EDITOR_ALLOWED_ORIGINS` (and confirm `OPERATOR_USERNAME` / `OPERATOR_PASSWORD_HASH` are provisioned — they seed the DB operator row on first run, after which the admin can change the password in-app).
 
 The old `/edit` form route can remain temporarily as a fallback but is no longer the primary path; remove once the inline editor is validated on a live client.
 
@@ -158,12 +201,20 @@ The old `/edit` form route can remain temporarily as a fallback but is no longer
 - `/api/auth/login` returns `token` on success; still sets cookie.
 - CORS headers present on embed-called routes; `OPTIONS` preflight returns allowed methods/headers.
 - `/api/overrides` PUT still rejects non-permitted field for `client` (regression).
+- Operator seed: with no operator row, env creds still log in and a row is created; after seed, DB password is authoritative.
+- `PUT /api/account/password`: rejects wrong current password; updates hash; old password no longer logs in, new one does; non-operator forbidden.
+- `/api/admin/credentials` set/reset client password (existing) still operator-gated (regression).
 
 **Embed (front-end)**
 - Login gate: no token → overlay; valid token → editing.
 - Permission-driven editability: client sees affordances only on `clientEditable` fields; admin sees all.
 - Edit → PUT called with correct `{slug, fieldId, value}`; 403 reverts on-page change.
 - Action bar: Preview/Publish call correct endpoints; Exit clears token and reloads without `?edit`.
+
+**Admin panel (front-end)**
+- Set client password → invite block renders link + username + the just-set password.
+- Copy button copies the formatted invite; `mailto:` href contains the right subject/body.
+- "Change my password" calls `PUT /api/account/password` with current + new.
 
 ---
 
@@ -173,3 +224,4 @@ The old `/edit` form route can remain temporarily as a fallback but is no longer
 - How `embed.js` is bundled/served (Next route handler vs. static asset) and cache headers.
 - Origin allow-list source of truth (env list vs. derived from client records).
 - Whether to keep or delete the legacy `/edit` form route after validation.
+- Invite delivery: copy/`mailto:` for now; whether to add app-side auto-send (Resend/SMTP) later.
