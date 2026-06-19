@@ -48,22 +48,21 @@ export async function boot(doc: Document = document): Promise<void> {
     renderColorControls(root, colorFields, async (id, value) => { bar.setStatus("Saving…"); const ok = await api.putOverride(slug, id, value); bar.setStatus(ok ? "Saved" : "Permission denied"); });
   }
 
-  const login = renderLogin(root, async (u, p) => {
-    const r = await api.login(u, p);
-    if (!r) { login.showError("Invalid credentials"); return; }
-    sessionStorage.setItem(TOKEN_KEY, r.token);
-    const role = r.role === "operator" ? "operator" : "client";
-    sessionStorage.setItem(ROLE_KEY, role);
-    login.remove();
-    await startEditing(role);
-  });
-
   // Resume an existing session without re-login.
   const existing = getToken();
   if (existing) {
     const role = (sessionStorage.getItem(ROLE_KEY) === "operator" ? "operator" : "client");
-    login.remove();
     await startEditing(role);
+  } else {
+    const login = renderLogin(root, async (u, p) => {
+      const r = await api.login(u, p);
+      if (!r) { login.showError("Invalid credentials"); return; }
+      sessionStorage.setItem(TOKEN_KEY, r.token);
+      const role = r.role === "operator" ? "operator" : "client";
+      sessionStorage.setItem(ROLE_KEY, role);
+      login.remove();
+      await startEditing(role);
+    });
   }
 }
 
