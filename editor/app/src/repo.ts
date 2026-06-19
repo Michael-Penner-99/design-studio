@@ -30,6 +30,13 @@ export async function upsertClient(db: Queryable, c: UpsertClientInput): Promise
   );
 }
 
+export async function listClients(db: Queryable): Promise<ClientRow[]> {
+  const { rows } = await db.query(
+    `SELECT slug, display_name, vercel_project_id, custom_domain, permission_tier FROM clients ORDER BY display_name`
+  );
+  return rows;
+}
+
 export async function getClient(db: Queryable, slug: string): Promise<ClientRow | null> {
   const { rows } = await db.query(
     `SELECT slug, display_name, vercel_project_id, custom_domain, permission_tier FROM clients WHERE slug=$1`,

@@ -14,6 +14,14 @@ describe("repo", () => {
     expect(c?.vercel_project_id).toBe("prj_1");
   });
 
+  it("lists clients ordered by display name", async () => {
+    const db = await makeTestDb();
+    await repo.upsertClient(db, { slug: "zebra", displayName: "Zebra Co", vercelProjectId: null, customDomain: null, tier: "Text only" });
+    await repo.upsertClient(db, { slug: "acme", displayName: "Acme", vercelProjectId: null, customDomain: null, tier: "Everything" });
+    const list = await repo.listClients(db);
+    expect(list.map((c) => c.slug)).toEqual(["acme", "zebra"]);
+  });
+
   it("saves and reads the manifest and tagged pages", async () => {
     const db = await makeTestDb();
     await repo.upsertClient(db, { slug: "acme", displayName: "Acme", vercelProjectId: null, customDomain: null, tier: "Text only" });

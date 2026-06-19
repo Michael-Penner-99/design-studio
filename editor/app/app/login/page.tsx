@@ -9,7 +9,7 @@ export default function LoginPage() {
       method: "POST", headers: { "content-type": "application/json" },
       body: JSON.stringify({ username: u, password: p }),
     });
-    if (res.ok) { const j = await res.json(); window.location.href = j.role === "operator" ? "/admin/" + (j.slug ?? "") : "/edit"; }
+    if (res.ok) { const j = await res.json(); window.location.href = j.role === "operator" ? "/admin" : "/edit"; }
     else setErr("Invalid credentials");
   }
   return (
