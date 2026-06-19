@@ -55,6 +55,17 @@ export async function login(db: Queryable, username: string, password: string, n
   return { sessionId, role, slug };
 }
 
+export async function changeOperatorPassword(
+  db: Queryable, username: string, currentPassword: string, newPassword: string
+): Promise<boolean> {
+  await seedOperator(db);
+  const cred = await findCredential(db, username);
+  if (!cred || cred.role !== "operator") return false;
+  if (!(await verifyPassword(currentPassword, cred.password_hash))) return false;
+  await setCredential(db, { username: cred.username, slug: null, role: "operator", passwordHash: await hashPassword(newPassword) });
+  return true;
+}
+
 export async function getSession(db: Queryable, sessionId: string): Promise<SessionRow | null> {
   return getSessionRow(db, sessionId);
 }
