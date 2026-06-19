@@ -58,6 +58,7 @@ export async function login(db: Queryable, username: string, password: string, n
 export async function changeOperatorPassword(
   db: Queryable, username: string, currentPassword: string, newPassword: string
 ): Promise<boolean> {
+  if (newPassword.length < 8) return false;
   await seedOperator(db);
   const cred = await findCredential(db, username);
   if (!cred || cred.role !== "operator") return false;

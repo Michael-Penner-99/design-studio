@@ -79,6 +79,15 @@ describe("changeOperatorPassword", () => {
     await repo.setCredential(db, { username: "acme", slug: "acme", role: "client", passwordHash: await hashPassword("pw") });
     expect(await changeOperatorPassword(db, "acme", "pw", "brandnew8")).toBe(false);
   });
+
+  it("rejects a new password shorter than 8 chars and leaves old password intact", async () => {
+    const db = await makeTestDb();
+    vi.stubEnv("OPERATOR_USERNAME", "michael");
+    vi.stubEnv("OPERATOR_PASSWORD_HASH", await hashPassword("oppass"));
+    await seedOperator(db);
+    expect(await changeOperatorPassword(db, "michael", "oppass", "short")).toBe(false);
+    expect(await login(db, "michael", "oppass")).not.toBeNull();
+  });
 });
 
 describe("env-based operator login", () => {

@@ -22,7 +22,10 @@ export default async function AdminPage({ params }: { params: { slug: string } }
   const overrides = await getOverrides(db, params.slug, "draft");
   const groups = groupFields(visibleFields(manifest, "operator"));
 
-  const siteUrl = client.custom_domain ?? `https://${params.slug}.actiondesignstudio.com`;
+  const customDomain = client.custom_domain
+    ? (/^https?:\/\//.test(client.custom_domain) ? client.custom_domain : `https://${client.custom_domain}`)
+    : null;
+  const siteUrl = customDomain ?? `https://${params.slug}.actiondesignstudio.com`;
 
   return (
     <>

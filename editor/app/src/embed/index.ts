@@ -42,9 +42,9 @@ export async function boot(doc: Document = document): Promise<void> {
       },
     });
 
-    const colorFields = (manifest.fields as any[])
-      .filter((f) => f.type === "color" && (role === "operator" || f.clientEditable))
-      .map((f) => ({ id: f.id, label: f.label, value: String(overrides[f.id] ?? f.value) }));
+    const colorFields = manifest.fields
+      .filter((f: any) => f.type === "color" && (role === "operator" || f.clientEditable))
+      .map((f: any) => ({ id: f.id, label: f.label, value: String(overrides[f.id] ?? f.value) }));
     renderColorControls(root, colorFields, async (id, value) => { bar.setStatus("Saving…"); const ok = await api.putOverride(slug, id, value); bar.setStatus(ok ? "Saved" : "Permission denied"); });
   }
 

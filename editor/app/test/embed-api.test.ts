@@ -29,4 +29,16 @@ describe("embed api", () => {
     expect((init as any).headers.Authorization).toBe("Bearer tok123");
     expect(JSON.parse((init as any).body)).toEqual({ slug: "acme", fieldId: "f1", value: "hello" });
   });
+
+  it("getManifest and publish both send the bearer token", async () => {
+    const fetchMock = vi.fn(async () => ({ ok: true, json: async () => ({ manifest: {}, overrides: {}, url: "u" }) }));
+    vi.stubGlobal("fetch", fetchMock);
+    const api = createApi("https://e.com", () => "tok123");
+    await api.getManifest("acme");
+    await api.publish("acme");
+    const [, getInit] = fetchMock.mock.calls[0] as unknown as [string, RequestInit];
+    const [, postInit] = fetchMock.mock.calls[1] as unknown as [string, RequestInit];
+    expect((getInit as any).headers.Authorization).toBe("Bearer tok123");
+    expect((postInit as any).headers.Authorization).toBe("Bearer tok123");
+  });
 });
