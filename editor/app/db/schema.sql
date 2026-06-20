@@ -45,9 +45,10 @@ CREATE TABLE IF NOT EXISTS sessions (
 );
 
 CREATE TABLE IF NOT EXISTS assets (
-  slug   TEXT NOT NULL,
-  path   TEXT NOT NULL,
-  base64 TEXT NOT NULL,
+  slug     TEXT NOT NULL,
+  path     TEXT NOT NULL,
+  blob_url TEXT NOT NULL,
+  size     INTEGER NOT NULL,
   PRIMARY KEY (slug, path)
 );
 

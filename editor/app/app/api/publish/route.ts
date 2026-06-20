@@ -7,6 +7,7 @@ import { corsForReq } from "../../../src/cors";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+export const maxDuration = 300;
 
 const Body = z.object({ slug: z.string().min(1) });
 

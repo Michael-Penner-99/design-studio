@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach } from "vitest";
 import { mkdtempSync, rmSync, mkdirSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { buildPushPayload } from "../src/push";
+import { buildPushPayload, batchAssets } from "../src/push";
 
 describe("buildPushPayload", () => {
   let root: string;
@@ -55,5 +55,20 @@ describe("buildPushPayload", () => {
     expect(png.base64).toBe(Buffer.from([0x89, 0x50, 0x4e, 0x47]).toString("base64"));
     expect(p.pages.some((pg) => pg.path === "index.html")).toBe(true);
     expect(p.assets.some((a) => a.path === "index.html")).toBe(false);
+  });
+});
+
+describe("batchAssets", () => {
+  it("groups assets so each batch's base64 size stays under the limit", () => {
+    const a = (p: string, n: number) => ({ path: p, base64: "x".repeat(n) });
+    const batches = batchAssets([a("1", 3), a("2", 3), a("3", 3)], 7);
+    expect(batches.map((b) => b.map((x) => x.path))).toEqual([["1", "2"], ["3"]]);
+  });
+  it("puts a single oversized asset in its own batch", () => {
+    const batches = batchAssets([{ path: "big", base64: "x".repeat(100) }], 10);
+    expect(batches).toEqual([[{ path: "big", base64: "x".repeat(100) }]]);
+  });
+  it("returns no batches for no assets", () => {
+    expect(batchAssets([], 10)).toEqual([]);
   });
 });

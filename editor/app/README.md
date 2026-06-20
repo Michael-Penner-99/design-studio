@@ -66,3 +66,35 @@ operator credentials (edit everything) or a client's credentials (edit only gran
 - Admin password and client passwords are managed in `/admin/{slug}`. The operator credential
   is seeded from `OPERATOR_USERNAME`/`OPERATOR_PASSWORD_HASH` on first login, then changeable in-app.
 - `npm run build` and `npm run dev` rebuild `public/embed.js` automatically (esbuild).
+
+## Onboarding a client
+
+After a factory run completes (Phase 8 deploy done), load the client into the editor end-to-end with one command:
+
+```bash
+OPERATOR_TOKEN=…          # editor API bearer token
+POSTGRES_URL=…            # Supabase / Postgres connection string
+VERCEL_TOKEN=…            # Vercel personal access token
+VERCEL_TEAM_ID=…          # Vercel team ID (e.g. team_…)
+EDITOR_BASE=…             # editor app URL, e.g. https://editor.actiondesignstudio.com
+OPERATOR_PASSWORD=…       # your operator login password (OPERATOR_USERNAME defaults to "michael")
+scripts/onboard-editor-client.sh <slug> "<Display Name>" [tier]
+```
+
+Example:
+```bash
+OPERATOR_TOKEN=tok_… POSTGRES_URL=postgresql://… VERCEL_TOKEN=… VERCEL_TEAM_ID=team_… \
+  EDITOR_BASE=https://editor.actiondesignstudio.com OPERATOR_PASSWORD=… \
+  scripts/onboard-editor-client.sh saskair "SaskAir Heating & Cooling" Everything
+```
+
+The script (in order):
+1. Pushes the client's pages + assets to the editor via the engine CLI.
+2. Sets `vercel_project_id` and `custom_domain` (the `*.vercel.app` origin) in the DB.
+3. Generates a random passphrase password and posts it to `/api/admin/credentials`.
+4. Disables Vercel deployment protection on the client's project (so the inline editor can reach the API).
+5. Publishes the site (re-deploys with the loader injected).
+
+At the end it prints the client's edit link, username, and password to paste into the invite.
+
+**Custom domains** are attached manually in Vercel afterward (Dashboard → Project → Domains); the script uses the `*.vercel.app` URL as the initial `custom_domain` value and it can be updated in-app or via DB once the domain is live.

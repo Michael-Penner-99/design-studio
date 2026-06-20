@@ -7,7 +7,7 @@ export type PublishMode = "preview" | "publish";
 export interface PublishResult { url: string; deploymentId: string; }
 
 const LOCK_TTL = 300;
-const READY_TIMEOUT_MS = 60_000;
+const READY_TIMEOUT_MS = 240_000;
 const POLL_INTERVAL_MS = 2_000;
 
 async function waitForReady(id: string): Promise<void> {
@@ -36,7 +36,7 @@ export async function publish(db: Queryable, slug: string, mode: PublishMode): P
     const state = mode === "publish" ? "published" : "draft";
     const overrides = await repo.getOverrides(db, slug, state);
     const taggedPages = await repo.getTaggedPages(db, slug);
-    const assets = await repo.getAssets(db, slug);
+    const assetRows = await repo.getAssets(db, slug);
 
     const merged = mergePages(taggedPages.map((p) => ({ path: p.path, html: p.html })), overrides);
 
@@ -45,12 +45,20 @@ export async function publish(db: Queryable, slug: string, mode: PublishMode): P
       ? merged.pages.map((p) => ({ path: p.path, html: injectEditorEmbed(p.html, { editorUrl, slug }) }))
       : merged.pages;
 
+    const pageFiles = pages.map((p) => ({ path: p.path, bytes: Buffer.from(p.html, "utf8") }));
+    const assetFiles = await Promise.all(
+      assetRows.map(async (a) => {
+        const res = await fetch(a.blob_url);
+        if (!res.ok) throw new Error(`asset unavailable: ${a.path} (${res.status})`);
+        return { path: a.path, bytes: Buffer.from(await res.arrayBuffer()) };
+      })
+    );
+
     const result = await deployFiles({
       projectId: client.vercel_project_id,
       projectName: `${slug}-site`,
       target: mode === "publish" ? "production" : undefined,
-      files: pages.map((p) => ({ path: p.path, content: p.html })),
-      assets: assets.map((a) => ({ path: a.path, base64: a.base64 })),
+      files: [...pageFiles, ...assetFiles],
     });
     await waitForReady(result.id);
     return { url: result.url, deploymentId: result.id };

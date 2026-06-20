@@ -5,9 +5,9 @@ import * as repo from "../src/repo";
 describe("assets + locks + promote", () => {
   it("saves and reads assets (replace on re-save)", async () => {
     const db = await makeTestDb();
-    await repo.saveAssets(db, "acme", [{ path: "assets/logo.png", base64: "AAA" }]);
-    await repo.saveAssets(db, "acme", [{ path: "assets/logo.png", base64: "BBB" }]);
-    expect(await repo.getAssets(db, "acme")).toEqual([{ path: "assets/logo.png", base64: "BBB" }]);
+    await repo.saveAssets(db, "acme", [{ path: "assets/logo.png", blobUrl: "https://blob/aaa", size: 100 }]);
+    await repo.saveAssets(db, "acme", [{ path: "assets/logo.png", blobUrl: "https://blob/bbb", size: 200 }]);
+    expect(await repo.getAssets(db, "acme")).toEqual([{ path: "assets/logo.png", blob_url: "https://blob/bbb", size: 200 }]);
   });
 
   it("promotes draft overrides to published", async () => {

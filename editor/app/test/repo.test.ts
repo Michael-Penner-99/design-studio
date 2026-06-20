@@ -46,4 +46,19 @@ describe("repo", () => {
     expect(await repo.getOverrides(db, "acme", "draft")).toEqual({ "index__h1__1": "Hello" });
     expect(await repo.getOverrides(db, "acme", "published")).toEqual({});
   });
+
+  it("saves, upserts, and reads assets as blob refs", async () => {
+    const db = await makeTestDb();
+    await repo.saveAssets(db, "acme", [
+      { path: "assets/a.webp", blobUrl: "https://blob/a", size: 10 },
+      { path: "assets/b.webp", blobUrl: "https://blob/b", size: 20 },
+    ]);
+    expect(await repo.getAssets(db, "acme")).toEqual([
+      { path: "assets/a.webp", blob_url: "https://blob/a", size: 10 },
+      { path: "assets/b.webp", blob_url: "https://blob/b", size: 20 },
+    ]);
+    await repo.upsertAsset(db, "acme", { path: "assets/a.webp", blobUrl: "https://blob/a2", size: 11 });
+    const rows = await repo.getAssets(db, "acme");
+    expect(rows.find((r) => r.path === "assets/a.webp")).toEqual({ path: "assets/a.webp", blob_url: "https://blob/a2", size: 11 });
+  });
 });
