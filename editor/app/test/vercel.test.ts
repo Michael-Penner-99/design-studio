@@ -50,6 +50,29 @@ describe("deployFiles (SHA upload)", () => {
     ]);
   });
 
+  it("omits teamId query param when VERCEL_TEAM_ID is not set", async () => {
+    vi.stubEnv("VERCEL_TOKEN", "tok");
+    // VERCEL_TEAM_ID intentionally not set — afterEach unstubs between tests
+    const calls: any[] = [];
+    vi.stubGlobal("fetch", vi.fn(async (url: string, init: any) => {
+      calls.push({ url, init });
+      if (url.includes("/v2/files")) return { ok: true, status: 200, json: async () => ({}) } as any;
+      return { ok: true, status: 200, json: async () => ({ id: "dpl_1", url: "x.vercel.app" }) } as any;
+    }));
+
+    await deployFiles({
+      projectId: "prj_2", projectName: "no-team-site",
+      files: [{ path: "index.html", bytes: Buffer.from("hello") }],
+    });
+
+    const uploads = calls.filter((c) => c.url.includes("/v2/files"));
+    expect(uploads).toHaveLength(1);
+    expect(uploads[0].url).not.toContain("teamId=");
+
+    const deploy = calls.find((c) => c.url.includes("/v13/deployments"));
+    expect(deploy.url).not.toContain("teamId=");
+  });
+
   it("retries a file upload once on 5xx then fails", async () => {
     vi.stubEnv("VERCEL_TOKEN", "tok");
     let n = 0;

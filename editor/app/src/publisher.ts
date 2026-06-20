@@ -7,7 +7,7 @@ export type PublishMode = "preview" | "publish";
 export interface PublishResult { url: string; deploymentId: string; }
 
 const LOCK_TTL = 300;
-const READY_TIMEOUT_MS = 60_000;
+const READY_TIMEOUT_MS = 240_000;
 const POLL_INTERVAL_MS = 2_000;
 
 async function waitForReady(id: string): Promise<void> {
