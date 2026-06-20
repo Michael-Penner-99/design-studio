@@ -26,7 +26,6 @@ async function uploadFile(bytes: Buffer, sha: string): Promise<void> {
         authorization: `Bearer ${token}`,
         "content-type": "application/octet-stream",
         "x-vercel-digest": sha,
-        "content-length": String(bytes.length),
       },
       body: new Uint8Array(bytes),
     });

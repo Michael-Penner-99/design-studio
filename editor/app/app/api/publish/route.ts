@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
     const r = await publish(db, body.slug, "publish");
     return NextResponse.json({ ok: true, url: r.url }, { headers: corsForReq(req) });
   } catch (e: any) {
-    return NextResponse.json({ error: "Publish failed", detail: String(e?.message ?? e) }, { status: 500, headers: corsForReq(req) });
+    return NextResponse.json({ error: "Publish failed", detail: String(e?.message ?? e), cause: String(e?.cause?.message ?? e?.cause ?? "") }, { status: 500, headers: corsForReq(req) });
   }
 }
 
