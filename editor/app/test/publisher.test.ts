@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, afterEach } from "vitest";
 import { makeTestDb } from "./helpers/pgmem";
 import * as repo from "../src/repo";
 
@@ -9,10 +9,12 @@ vi.mock("../src/vercel", () => ({
 import { publish } from "../src/publisher";
 import { deployFiles, getDeploymentState } from "../src/vercel";
 
+afterEach(() => { vi.unstubAllGlobals(); });
+
 async function seed(db: any) {
   await repo.upsertClient(db, { slug: "acme", displayName: "Acme", vercelProjectId: "prj_1", customDomain: "https://acme.example.com", tier: "Text only" });
   await repo.saveTaggedPages(db, "acme", [{ path: "index.html", html: '<html><body><h1 data-edit="index__h1__1">Old</h1></body></html>' }]);
-  await repo.saveAssets(db, "acme", [{ path: "assets/logo.png", base64: "AAA" }]);
+  await repo.saveAssets(db, "acme", [{ path: "assets/logo.png", blobUrl: "https://blob/acme/logo.png", size: 3 }]);
 }
 
 describe("publish", () => {
@@ -20,18 +22,26 @@ describe("publish", () => {
     const db = await makeTestDb();
     await seed(db);
     await repo.saveOverrides(db, "acme", "draft", { "index__h1__1": "Draft Title" });
+    vi.stubGlobal("fetch", vi.fn(async (_url: string) => ({
+      ok: true, arrayBuffer: async () => new Uint8Array([65, 65, 65]).buffer,
+    } as any)));
     const r = await publish(db, "acme", "preview");
     expect(r.url).toBe("https://preview-xyz.vercel.app");
     const call = (deployFiles as any).mock.calls.at(-1)[0];
     expect(call.target).toBeUndefined();
-    expect(call.files.find((f: any) => f.path === "index.html").content).toContain(">Draft Title<");
-    expect(call.assets).toEqual([{ path: "assets/logo.png", base64: "AAA" }]);
+    const idx = call.files.find((f: any) => f.path === "index.html");
+    expect(idx.bytes.toString("utf8")).toContain(">Draft Title<");
+    const logo = call.files.find((f: any) => f.path === "assets/logo.png");
+    expect(logo.bytes.toString("utf8")).toBe("AAA");
   });
 
   it("publish promotes draft→published, deploys with production target", async () => {
     const db = await makeTestDb();
     await seed(db);
     await repo.saveOverrides(db, "acme", "draft", { "index__h1__1": "Live Title" });
+    vi.stubGlobal("fetch", vi.fn(async (_url: string) => ({
+      ok: true, arrayBuffer: async () => new Uint8Array([65, 65, 65]).buffer,
+    } as any)));
     const r = await publish(db, "acme", "publish");
     expect(r.url).toBeTruthy();
     const call = (deployFiles as any).mock.calls.at(-1)[0];
@@ -43,6 +53,9 @@ describe("publish", () => {
   it("throws when the deployment ends in ERROR state", async () => {
     const db = await makeTestDb();
     await seed(db);
+    vi.stubGlobal("fetch", vi.fn(async (_url: string) => ({
+      ok: true, arrayBuffer: async () => new Uint8Array([65, 65, 65]).buffer,
+    } as any)));
     (getDeploymentState as any).mockResolvedValueOnce("ERROR");
     await expect(publish(db, "acme", "publish")).rejects.toThrow(/failed: ERROR/);
   });
@@ -55,11 +68,14 @@ describe("publish", () => {
 
   it("injects the editor embed loader into deployed pages when EDITOR_PUBLIC_URL is set", async () => {
     vi.stubEnv("EDITOR_PUBLIC_URL", "https://editor.example.com");
+    vi.stubGlobal("fetch", vi.fn(async (_url: string) => ({
+      ok: true, arrayBuffer: async () => new Uint8Array([65, 65, 65]).buffer,
+    } as any)));
     const db = await makeTestDb();
     await seed(db);
     await publish(db, "acme", "publish");
     const call = (deployFiles as any).mock.calls.at(-1)[0];
-    const idx = call.files.find((f: any) => f.path === "index.html").content;
+    const idx = call.files.find((f: any) => f.path === "index.html").bytes.toString("utf8");
     expect(idx).toContain("data-editor-embed");
     expect(idx).toContain("https://editor.example.com");
     expect(idx).toContain("/embed.js");
@@ -68,11 +84,14 @@ describe("publish", () => {
 
   it("does not inject when EDITOR_PUBLIC_URL is unset", async () => {
     vi.stubEnv("EDITOR_PUBLIC_URL", "");
+    vi.stubGlobal("fetch", vi.fn(async (_url: string) => ({
+      ok: true, arrayBuffer: async () => new Uint8Array([65, 65, 65]).buffer,
+    } as any)));
     const db = await makeTestDb();
     await seed(db);
     await publish(db, "acme", "publish");
     const call = (deployFiles as any).mock.calls.at(-1)[0];
-    expect(call.files.find((f: any) => f.path === "index.html").content).not.toContain("data-editor-embed");
+    expect(call.files.find((f: any) => f.path === "index.html").bytes.toString("utf8")).not.toContain("data-editor-embed");
     vi.unstubAllEnvs();
   });
 });
