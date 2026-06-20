@@ -11,7 +11,7 @@ export const IngestPayloadSchema = z.object({
   tier: z.string().min(1),
   manifest: ManifestSchema,
   pages: z.array(z.object({ path: z.string().min(1), html: z.string() })),
-  assets: z.array(z.object({ path: z.string().min(1), base64: z.string() })).optional().default([]),
+  assets: z.array(z.object({ path: z.string().min(1), blobUrl: z.string(), size: z.number().int() })).optional().default([]),
 });
 export type IngestPayload = z.infer<typeof IngestPayloadSchema>;
 

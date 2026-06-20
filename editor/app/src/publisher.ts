@@ -50,7 +50,7 @@ export async function publish(db: Queryable, slug: string, mode: PublishMode): P
       projectName: `${slug}-site`,
       target: mode === "publish" ? "production" : undefined,
       files: pages.map((p) => ({ path: p.path, content: p.html })),
-      assets: assets.map((a) => ({ path: a.path, base64: a.base64 })),
+      assets: assets.map((a) => ({ path: a.path, blob_url: a.blob_url, size: a.size })),
     });
     await waitForReady(result.id);
     return { url: result.url, deploymentId: result.id };

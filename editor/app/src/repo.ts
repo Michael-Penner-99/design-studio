@@ -134,18 +134,26 @@ export async function deleteSession(db: Queryable, id: string): Promise<void> {
   await db.query(`DELETE FROM sessions WHERE id=$1`, [id]);
 }
 
-export interface AssetRow { path: string; base64: string; }
+export interface AssetRow { path: string; blob_url: string; size: number; }
 
-export async function saveAssets(db: Queryable, slug: string, assets: AssetRow[]): Promise<void> {
+export async function saveAssets(db: Queryable, slug: string, assets: { path: string; blobUrl: string; size: number }[]): Promise<void> {
   await db.query(`DELETE FROM assets WHERE slug=$1`, [slug]);
   for (const a of assets) {
-    await db.query(`INSERT INTO assets (slug, path, base64) VALUES ($1,$2,$3)`, [slug, a.path, a.base64]);
+    await db.query(`INSERT INTO assets (slug, path, blob_url, size) VALUES ($1,$2,$3,$4)`, [slug, a.path, a.blobUrl, a.size]);
   }
 }
 
+export async function upsertAsset(db: Queryable, slug: string, a: { path: string; blobUrl: string; size: number }): Promise<void> {
+  await db.query(
+    `INSERT INTO assets (slug, path, blob_url, size) VALUES ($1,$2,$3,$4)
+     ON CONFLICT (slug, path) DO UPDATE SET blob_url=EXCLUDED.blob_url, size=EXCLUDED.size`,
+    [slug, a.path, a.blobUrl, a.size]
+  );
+}
+
 export async function getAssets(db: Queryable, slug: string): Promise<AssetRow[]> {
-  const { rows } = await db.query(`SELECT path, base64 FROM assets WHERE slug=$1 ORDER BY path`, [slug]);
-  return rows.map((r) => ({ path: r.path, base64: r.base64 }));
+  const { rows } = await db.query(`SELECT path, blob_url, size FROM assets WHERE slug=$1 ORDER BY path`, [slug]);
+  return rows.map((r) => ({ path: r.path, blob_url: r.blob_url, size: r.size }));
 }
 
 export async function promoteOverrides(db: Queryable, slug: string): Promise<void> {
