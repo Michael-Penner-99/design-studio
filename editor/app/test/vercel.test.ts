@@ -36,6 +36,10 @@ describe("deployFiles (SHA upload)", () => {
     expect(uploads[0].init.headers["x-vercel-digest"]).toBe("a9993e364706816aba3e25717850c26c9cd0d89d");
     expect(uploads[0].init.method).toBe("POST");
 
+    const toBytes = (b: any) => new Uint8Array(b instanceof Uint8Array ? b : Buffer.from(b));
+    expect(toBytes(uploads[0].init.body)).toEqual(new Uint8Array(Buffer.from("abc")));
+    expect(toBytes(uploads[1].init.body)).toEqual(new Uint8Array(Buffer.from("logo-bytes")));
+
     const deploy = calls.find((c) => c.url.includes("/v13/deployments"));
     const body = JSON.parse(deploy.init.body);
     expect(body.project).toBe("prj_1");

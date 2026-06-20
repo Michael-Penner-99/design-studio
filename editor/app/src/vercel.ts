@@ -28,7 +28,7 @@ async function uploadFile(bytes: Buffer, sha: string): Promise<void> {
         "x-vercel-digest": sha,
         "content-length": String(bytes.length),
       },
-      body: bytes.buffer as ArrayBuffer,
+      body: new Uint8Array(bytes),
     });
     if (res.ok) return;
     if (res.status >= 500 && attempt === 0) continue;
