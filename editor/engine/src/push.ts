@@ -51,6 +51,22 @@ function readAllPages(dir: string, base = dir): { path: string; html: string }[]
   return out;
 }
 
+export function batchAssets(
+  assets: { path: string; base64: string }[], maxBytes: number
+): { path: string; base64: string }[][] {
+  const batches: { path: string; base64: string }[][] = [];
+  let cur: { path: string; base64: string }[] = [];
+  let curSize = 0;
+  for (const a of assets) {
+    const sz = a.base64.length;
+    if (cur.length && curSize + sz > maxBytes) { batches.push(cur); cur = []; curSize = 0; }
+    cur.push(a);
+    curSize += sz;
+  }
+  if (cur.length) batches.push(cur);
+  return batches;
+}
+
 export function buildPushPayload(opts: BuildPushPayloadOptions): PushPayload {
   const tier: Tier = opts.tier ?? "Text only";
   const siteDir = join(opts.root, "clients", opts.slug, "site");

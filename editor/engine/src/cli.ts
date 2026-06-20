@@ -6,7 +6,7 @@ import { buildManifest } from "./manifest";
 import { mergeSite } from "./merger";
 import { TIERS, type Tier } from "./types";
 import { checkEditorReadiness } from "./readiness";
-import { buildPushPayload } from "./push";
+import { buildPushPayload, batchAssets } from "./push";
 
 const program = new Command();
 program.name("editor-engine").description("Action Studio client-site editor engine");
@@ -97,17 +97,28 @@ program
     const payload = buildPushPayload({
       slug, root: opts.root, displayName: opts.name ?? slug, tier: validateTier(opts.tier),
     });
-    const res = await fetch(`${opts.endpoint.replace(/\/$/, "")}/api/ingest`, {
-      method: "POST",
-      headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
-      body: JSON.stringify(payload),
+    const base = opts.endpoint.replace(/\/$/, "");
+    const headers = { "content-type": "application/json", authorization: `Bearer ${token}` };
+
+    const ingestRes = await fetch(`${base}/api/ingest`, {
+      method: "POST", headers,
+      body: JSON.stringify({
+        slug: payload.slug, displayName: payload.displayName,
+        vercelProjectId: payload.vercelProjectId, customDomain: payload.customDomain,
+        tier: payload.tier, manifest: payload.manifest, pages: payload.pages,
+      }),
     });
-    if (!res.ok) {
-      console.error(`Push failed: ${res.status} ${await res.text()}`);
-      process.exitCode = 1;
-      return;
+    if (!ingestRes.ok) { console.error(`Push failed: ${ingestRes.status} ${await ingestRes.text()}`); process.exitCode = 1; return; }
+
+    const MAX_ASSET_BATCH_BYTES = 3_500_000;
+    const batches = batchAssets(payload.assets, MAX_ASSET_BATCH_BYTES);
+    for (let i = 0; i < batches.length; i++) {
+      const res = await fetch(`${base}/api/ingest/assets`, {
+        method: "POST", headers, body: JSON.stringify({ slug: payload.slug, assets: batches[i] }),
+      });
+      if (!res.ok) { console.error(`Asset batch ${i + 1}/${batches.length} failed: ${res.status} ${await res.text()}`); process.exitCode = 1; return; }
     }
-    console.log(`Pushed ${slug}: ${payload.pages.length} pages, ${payload.manifest.fields.length} fields.`);
+    console.log(`Pushed ${payload.slug}: ${payload.pages.length} pages, ${payload.manifest.fields.length} fields, ${payload.assets.length} assets in ${batches.length} batch(es).`);
   });
 
 program.parse();
