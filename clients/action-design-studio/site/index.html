@@ -3,40 +3,41 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Action Design Studio | Marketing Systems That Get Contractors Booked</title>
-<meta name="description" content="Websites, reviews, and automation that turn local contractors into the obvious choice. Built fast, backed by real results." />
+<title>Patient Recovery for Hearing Clinics | Action Design Studio</title>
+<meta name="description" content="We help independent hearing clinics recover tested-not-sold and upgrade-due patients from their existing database — booked onto your calendar. Pay only when it books evaluations." />
+<link rel="canonical" href="https://actiondesignstudio.com/" />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Action Design Studio" />
-<meta property="og:title" content="Action Design Studio | Marketing Systems That Get Contractors Booked" />
-<meta property="og:description" content="Websites, reviews, and automation that turn local contractors into the obvious choice. Built fast, backed by real results." />
+<meta property="og:title" content="Patient Recovery for Hearing Clinics | Action Design Studio" />
+<meta property="og:description" content="Recover tested-not-sold and upgrade-due patients from your existing database — booked onto your calendar. Pay only when it books evaluations." />
 <meta property="og:url" content="https://actiondesignstudio.com/" />
+<meta name="theme-color" content="#0E2A47" />
 <link rel="icon" type="image/svg+xml" href="/assets/logo.svg" />
-<meta name="theme-color" content="#0A1A33" />
-<script src="https://cdn.tailwindcss.com"></script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+<script src="https://cdn.tailwindcss.com"></script>
 <script>
   tailwind.config = {
     theme: {
       extend: {
         colors: {
-          navy: '#0A1A33', blue: '#16385F', 'blue-bright': '#2C5C92',
-          silver: '#C9D0D8', mist: '#EEF1F5', gold: '#C9A23F',
-          'gold-deep': '#A8842F', ink: '#14181D',
+          navy:   '#0E2A47',
+          'navy-deep': '#0A2038',
+          teal:   '#2E8BC0',
+          'teal-deep': '#226B96',
+          amber:  '#E8A33D',
+          'amber-deep': '#CC8A26',
+          cream:  '#FBF8F3',
+          ink:    '#1B2733',
+          'ink-soft': '#46566A',
         },
         fontFamily: {
-          heading: ['Barlow Condensed', 'Arial Narrow', 'sans-serif'],
-          body: ['Barlow', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+          sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
         },
-        fontSize: {
-          h1: ['3.25rem', { lineHeight: '1.08', letterSpacing: '-0.02em' }],
-          h2: ['2.25rem', { lineHeight: '1.15', letterSpacing: '-0.015em' }],
-          h3: ['1.5rem', { lineHeight: '1.25', letterSpacing: '-0.01em' }],
-          body: ['1.0625rem', { lineHeight: '1.65' }],
-          small: ['0.875rem', { lineHeight: '1.5' }],
-          tiny: ['0.75rem', { lineHeight: '1.45', letterSpacing: '0.04em' }],
-        },
+        maxWidth: { content: '1100px' },
       },
     },
   };
@@ -44,355 +45,448 @@
 <style>
   *,*::before,*::after { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
-  body { font-family: 'Barlow', sans-serif; color: #14181D; background: #fff; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
-  h1,h2,h3,h4,.font-heading { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; letter-spacing: -0.01em; }
-  a { transition: color .15s ease; }
-  ::selection { background: #C9A23F; color: #0A1A33; }
-  /* squared, premium buttons */
-  .btn-gold { display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
-    background: linear-gradient(180deg,#D6AE48 0%,#C9A23F 55%,#B68C2C 100%); color: #0A1A33;
-    font-family: 'Barlow Condensed', sans-serif; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
-    border: 1px solid rgba(0,0,0,.08); border-radius: 2px;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.35), 0 8px 18px -10px rgba(201,162,63,.7);
-    transition: transform .16s ease, box-shadow .16s ease, filter .16s ease; }
-  .btn-gold:hover { transform: translateY(-2px); filter: brightness(1.05);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.4), 0 14px 26px -12px rgba(201,162,63,.85); }
-  .btn-gold:active { transform: translateY(0); }
-  .btn-ghost { display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
-    border: 1px solid rgba(201,208,216,.45); color: #fff; background: transparent;
-    font-family: 'Barlow Condensed', sans-serif; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; border-radius: 2px;
-    transition: transform .16s ease, border-color .16s ease, background .16s ease; }
-  .btn-ghost:hover { transform: translateY(-2px); border-color: #C9A23F; background: rgba(201,162,63,.1); }
-  .btn-gold:focus-visible,.btn-ghost:focus-visible { outline: 2px solid #C9A23F; outline-offset: 3px; }
-  /* squared, refined cards */
-  .card { background: #fff; border: 1px solid #E5E9EF; border-radius: 2px; box-shadow: 0 1px 2px rgba(10,26,51,.05);
-    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
-  .card:hover { box-shadow: 0 18px 40px -22px rgba(10,26,51,.30); border-color: #D3DAE3; }
-  .glass { background: rgba(255,255,255,.035); border: 1px solid rgba(201,208,216,.16); backdrop-filter: blur(6px); border-radius: 2px;
-    transition: border-color .18s ease, background .18s ease; }
-  .glass:hover { border-color: rgba(201,162,63,.35); background: rgba(255,255,255,.05); }
-  .gold-text { color: #C9A23F; }
-  /* depth on full-bleed sections (overrides flat utility via higher specificity) */
-  section.bg-navy { background-color: #0A1A33;
-    background-image: radial-gradient(1100px 480px at 82% -12%, rgba(44,92,146,.30), transparent 60%),
-                      radial-gradient(820px 460px at -5% 112%, rgba(201,162,63,.07), transparent 55%); }
-  footer.bg-navy { background-color: #0A1A33; }
-  section.bg-mist { background-color: #EEF1F5; border-top: 1px solid #E2E7EE; border-bottom: 1px solid #E2E7EE; }
-  /* form fields */
-  input,textarea,select { border-radius: 2px; }
-  input:focus,textarea:focus { outline: none; border-color: #C9A23F !important; box-shadow: 0 0 0 3px rgba(201,162,63,.18); }
-  /* marquee */
-  .marquee-track { display: flex; gap: 3.5rem; animation: marquee 30s linear infinite; white-space: nowrap; }
-  @keyframes marquee { from { transform: translateX(0);} to { transform: translateX(-50%);} }
-  /* scrollbar */
-  ::-webkit-scrollbar { width: 11px; height: 11px; }
-  ::-webkit-scrollbar-track { background: #0A1A33; }
-  ::-webkit-scrollbar-thumb { background: #C9A23F; }
-  ::-webkit-scrollbar-thumb:hover { background: #B68C2C; }
-  @media (prefers-reduced-motion: reduce) { .marquee-track { animation: none; } html { scroll-behavior: auto; } }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 18px; line-height: 1.65; color: #1B2733; background: #FBF8F3;
+    -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility;
+  }
+  h1,h2,h3,h4 { line-height: 1.12; letter-spacing: -0.02em; color: #0E2A47; font-weight: 800; }
+
+  /* ONE action color — every primary CTA */
+  .btn-primary {
+    display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+    background: #E8A33D; color: #2A1A02; font-weight: 700; font-size: 1.0625rem;
+    padding: 0.95rem 1.5rem; border-radius: 10px; border: 1px solid rgba(0,0,0,.06);
+    box-shadow: 0 10px 24px -12px rgba(232,163,61,.85); text-decoration: none;
+    transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+    min-height: 52px;
+  }
+  .btn-primary:hover { background: #F0B255; transform: translateY(-2px); box-shadow: 0 16px 30px -14px rgba(232,163,61,.95); }
+  .btn-primary:active { transform: translateY(0); }
+  .btn-primary:focus-visible { outline: 3px solid #2E8BC0; outline-offset: 3px; }
+
+  /* small header CTA variant */
+  .btn-sm { padding: 0.6rem 1rem; font-size: .95rem; min-height: 44px; }
+
+  a.link-quiet { color: #226B96; text-decoration: none; font-weight: 600; }
+  a.link-quiet:hover { text-decoration: underline; }
+
+  .card {
+    background: #fff; border: 1px solid #E7E0D4; border-radius: 14px;
+    box-shadow: 0 1px 2px rgba(14,42,71,.04);
+    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+  }
+  .card:hover { transform: translateY(-3px); box-shadow: 0 22px 44px -26px rgba(14,42,71,.35); border-color: #D9D0C0; }
+
+  /* numbered step badge */
+  .step-num {
+    width: 48px; height: 48px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center;
+    background: #2E8BC0; color: #fff; font-weight: 800; font-size: 1.25rem; flex: none;
+  }
+
+  /* FAQ accordion */
+  details.faq { border-bottom: 1px solid #E4DCCE; }
+  details.faq summary {
+    list-style: none; cursor: pointer; padding: 1.25rem 0; display: flex; align-items: center; justify-content: space-between;
+    gap: 1rem; font-weight: 700; font-size: 1.15rem; color: #0E2A47;
+  }
+  details.faq summary::-webkit-details-marker { display: none; }
+  details.faq summary .chev { flex: none; transition: transform .2s ease; color: #2E8BC0; }
+  details.faq[open] summary .chev { transform: rotate(180deg); }
+  details.faq .faq-body { padding: 0 0 1.35rem; color: #46566A; max-width: 60ch; }
+  details.faq summary:focus-visible { outline: 3px solid #2E8BC0; outline-offset: 4px; border-radius: 6px; }
+
+  /* range sliders */
+  input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 8px; border-radius: 999px; background: #D7E5EF; outline: none; }
+  input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 28px; height: 28px; border-radius: 50%; background: #2E8BC0; border: 3px solid #fff; box-shadow: 0 2px 6px rgba(14,42,71,.3); cursor: pointer; }
+  input[type="range"]::-moz-range-thumb { width: 28px; height: 28px; border-radius: 50%; background: #2E8BC0; border: 3px solid #fff; box-shadow: 0 2px 6px rgba(14,42,71,.3); cursor: pointer; }
+  input[type="range"]:focus-visible { box-shadow: 0 0 0 3px rgba(46,139,192,.35); }
+  input[type="number"] { font-variant-numeric: tabular-nums; }
+  input[type="number"]:focus { outline: none; border-color: #2E8BC0 !important; box-shadow: 0 0 0 3px rgba(46,139,192,.2); }
+
+  /* placeholder chip */
+  .ph { display: inline-block; font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+    color: #8A6B1F; background: #FBEFD6; border: 1px dashed #E8A33D; border-radius: 6px; padding: .15rem .5rem; }
+
+  :focus-visible { outline: 3px solid #2E8BC0; outline-offset: 2px; }
+  .skip-link { position: absolute; left: -999px; top: 0; background: #0E2A47; color:#fff; padding:.6rem 1rem; border-radius: 0 0 8px 0; z-index: 100; }
+  .skip-link:focus { left: 0; }
 </style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "Action Design Studio",
+  "description": "Patient-recovery system for independent hearing clinics and audiology practices. Recover tested-not-sold and upgrade-due patients from your existing database.",
+  "url": "https://actiondesignstudio.com/",
+  "telephone": "[PHONE]",
+  "email": "[EMAIL]",
+  "areaServed": "US",
+  "address": { "@type": "PostalAddress", "addressLocality": "[CITY]" }
+}
+</script>
 </head>
-<body class="antialiased">
-<header class="sticky top-0 inset-x-0 z-50 bg-navy/95 backdrop-blur border-b border-white/10">
-  <div class="max-w-7xl mx-auto px-6">
-    <div class="flex items-center justify-between py-3.5">
-      <a href="/" class="flex items-center gap-3">
-        <img src="/assets/logo.svg" alt="Action Design Studio" class="h-9 w-auto" />
-        <span class="leading-none">
-          <span class="block font-heading text-2xl tracking-wide text-white">ACTION</span>
-          <span class="block text-[8px] tracking-[0.46em] gold-text font-bold mt-1">DESIGN STUDIO</span>
-        </span>
+
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- (A) STICKY HEADER -->
+<header class="sticky top-0 z-50 bg-cream/95 backdrop-blur border-b border-[#E7E0D4]">
+  <div class="max-w-content mx-auto px-5 py-3 flex items-center justify-between gap-4">
+    <a href="/" class="flex items-center gap-2 text-navy font-extrabold tracking-tight text-lg">
+      <span class="inline-block w-2.5 h-2.5 rounded-sm bg-amber"></span>
+      Action Design Studio
+    </a>
+    <div class="flex items-center gap-3 sm:gap-5">
+      <a href="tel:[PHONE]" class="hidden sm:inline link-quiet whitespace-nowrap">[PHONE]</a>
+      <a href="[BOOKING_LINK]" class="btn-primary btn-sm">
+        <span class="hidden sm:inline">Book your free Patient Recovery Audit →</span>
+        <span class="sm:hidden">Book your free audit →</span>
       </a>
-      <nav class="hidden lg:flex items-center gap-7 text-[13px] font-semibold" aria-label="Primary">
-        <a href="/services/" class="text-white/85 hover:text-gold transition-colors">Services</a>
-        <a href="/pricing.html" class="text-white/85 hover:text-gold transition-colors">Pricing</a>
-        <a href="/work.html" class="text-white/85 hover:text-gold transition-colors">Our Work</a>
-        <a href="/testimonials.html" class="text-white/85 hover:text-gold transition-colors">Testimonials</a>
-        <a href="/process.html" class="text-white/85 hover:text-gold transition-colors">Process</a>
-        <a href="/about.html" class="text-white/85 hover:text-gold transition-colors">About</a>
-      </nav>
-      <div class="flex items-center gap-4">
-        <a href="tel:+16395713298" class="hidden md:flex items-center gap-2 text-sm font-bold text-white">
-          <span class="w-2.5 h-2.5 rounded-full bg-green-500 shadow-[0_0_8px_2px_rgba(34,197,94,0.6)]"></span>
-          639-571-3298
-        </a>
-        <a href="/contact.html" class="btn-gold text-sm px-5 py-2.5">Book a Call</a>
-        <button id="navToggle" class="lg:hidden text-white p-2" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNav">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
-        </button>
-      </div>
     </div>
-    <nav id="mobileNav" class="hidden lg:hidden pb-4 flex-col gap-1 text-sm font-semibold" aria-label="Mobile">
-      <a href="/services/" class="block py-2 text-white/85 hover:text-gold">Services</a>
-      <a href="/pricing.html" class="block py-2 text-white/85 hover:text-gold">Pricing</a>
-      <a href="/work.html" class="block py-2 text-white/85 hover:text-gold">Our Work</a>
-      <a href="/testimonials.html" class="block py-2 text-white/85 hover:text-gold">Testimonials</a>
-      <a href="/process.html" class="block py-2 text-white/85 hover:text-gold">Process</a>
-      <a href="/about.html" class="block py-2 text-white/85 hover:text-gold">About</a>
-      <a href="/faq.html" class="block py-2 text-white/85 hover:text-gold">FAQ</a>
-      <a href="/contact.html" class="block py-2 text-gold">Book a Call</a>
-    </nav>
   </div>
 </header>
-<main>
-  <!-- HERO -->
-  <section class="bg-navy text-white relative overflow-hidden">
-    <div class="absolute inset-0 opacity-[0.06] bg-[radial-gradient(circle_at_30%_20%,#C9A23F,transparent_55%)]"></div>
-    <div class="max-w-7xl mx-auto px-6 py-20 md:py-28 relative">
-      <p class="font-heading tracking-[0.3em] text-gold text-tiny uppercase mb-4">MARKETING SYSTEMS FOR CONTRACTORS</p>
-      <h1 class="font-heading text-4xl md:text-h1 max-w-3xl">Stop chasing leads. Become the contractor everyone calls.</h1>
-      <p class="mt-5 text-white/70 text-lg max-w-2xl">We build the website, reviews, and follow-up system that makes your phone ring — and we back every claim with real results, not promises.</p>
-      <div class="mt-8 flex flex-wrap gap-4">
-        <a href="/contact.html" class="btn-gold px-7 py-3.5 text-sm">Book a Call</a>
-        <a href="/services/" class="btn-ghost px-7 py-3.5 text-sm">See What We Do</a>
-      </div>
-      <div class="flex flex-wrap items-center gap-6 mt-10">
-        <!-- PLACEHOLDER review badges — swap counts/links when live -->
-        <div class="flex items-center gap-2"><span class="gold-text text-lg">★★★★★</span><span class="text-white/70 text-sm">Google <span class="text-white/40">(reviews coming soon)</span></span></div>
-        <div class="flex items-center gap-2"><span class="gold-text text-lg">★★★★★</span><span class="text-white/70 text-sm">Facebook <span class="text-white/40">(reviews coming soon)</span></span></div>
-      </div>
-    </div>
-  </section>
 
-  <!-- SERVICES -->
-  <section class="bg-white">
-    <div class="max-w-7xl mx-auto px-6 py-20">
-      <div class="text-center max-w-2xl mx-auto mb-12">
-        <p class="font-heading tracking-[0.3em] gold-text text-tiny uppercase mb-3">WHAT WE BUILD</p>
-        <h2 class="font-heading text-3xl md:text-h2 text-ink">One system. Six moving parts.</h2>
-        <p class="mt-3 text-ink/60">Each piece works on its own. Together they make you unbeatable locally.</p>
-      </div>
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <a href="/services/conversion-website.html" class="card p-7 block hover:-translate-y-1 transition-transform">
-          <div class="w-11 h-11 rounded-none bg-navy flex items-center justify-center gold-text font-heading text-xl mb-4">W</div>
-          <h3 class="font-heading text-xl text-ink">Conversion Website</h3>
-          <p class="mt-2 text-ink/60 text-small">A fast, bespoke site built to turn visitors into booked jobs.</p>
-          <span class="mt-4 inline-block gold-text text-sm font-bold">Learn more →</span>
-        </a>
-        <a href="/services/review-engine.html" class="card p-7 block hover:-translate-y-1 transition-transform">
-          <div class="w-11 h-11 rounded-none bg-navy flex items-center justify-center gold-text font-heading text-xl mb-4">★</div>
-          <h3 class="font-heading text-xl text-ink">5-Star Review Engine</h3>
-          <p class="mt-2 text-ink/60 text-small">Automatically turn happy customers into public 5-star reviews.</p>
-          <span class="mt-4 inline-block gold-text text-sm font-bold">Learn more →</span>
-        </a>
-        <a href="/services/missed-call-text-back.html" class="card p-7 block hover:-translate-y-1 transition-transform">
-          <div class="w-11 h-11 rounded-none bg-navy flex items-center justify-center gold-text font-heading text-xl mb-4">T</div>
-          <h3 class="font-heading text-xl text-ink">Missed-Call Text-Back</h3>
-          <p class="mt-2 text-ink/60 text-small">Every missed call gets an instant auto-text so no lead goes cold.</p>
-          <span class="mt-4 inline-block gold-text text-sm font-bold">Learn more →</span>
-        </a>
-        <a href="/services/local-seo.html" class="card p-7 block hover:-translate-y-1 transition-transform">
-          <div class="w-11 h-11 rounded-none bg-navy flex items-center justify-center gold-text font-heading text-xl mb-4">S</div>
-          <h3 class="font-heading text-xl text-ink">Local SEO</h3>
-          <p class="mt-2 text-ink/60 text-small">Rank in the local map pack for your trade and city.</p>
-          <span class="mt-4 inline-block gold-text text-sm font-bold">Learn more →</span>
-        </a>
-        <a href="/services/one-click-campaigns.html" class="card p-7 block hover:-translate-y-1 transition-transform">
-          <div class="w-11 h-11 rounded-none bg-navy flex items-center justify-center gold-text font-heading text-xl mb-4">C</div>
-          <h3 class="font-heading text-xl text-ink">One-Click Campaigns</h3>
-          <p class="mt-2 text-ink/60 text-small">Blast seasonal offers to your whole customer list in one click.</p>
-          <span class="mt-4 inline-block gold-text text-sm font-bold">Learn more →</span>
-        </a>
-        <a href="/services/all-in-one-inbox.html" class="card p-7 block hover:-translate-y-1 transition-transform">
-          <div class="w-11 h-11 rounded-none bg-navy flex items-center justify-center gold-text font-heading text-xl mb-4">I</div>
-          <h3 class="font-heading text-xl text-ink">All-In-One Inbox</h3>
-          <p class="mt-2 text-ink/60 text-small">Calls, texts, emails, web chat, and DMs in a single inbox.</p>
-          <span class="mt-4 inline-block gold-text text-sm font-bold">Learn more →</span>
-        </a>
-      </div>
-    </div>
-  </section>
+<main id="main">
 
-  <!-- TRADES MARQUEE -->
-  <section class="bg-mist border-y border-silver/40 py-7 overflow-hidden">
-    <div class="marquee-track font-heading text-ink/40 text-lg tracking-wide uppercase">
-      <span>Roofing</span><span>HVAC</span><span>Plumbing</span><span>Landscaping</span><span>Remodeling</span><span>Electrical</span><span>Concrete</span><span>Painting</span><span>Fencing</span><span>Cleaning</span>
-      <span>Roofing</span><span>HVAC</span><span>Plumbing</span><span>Landscaping</span><span>Remodeling</span><span>Electrical</span><span>Concrete</span><span>Painting</span><span>Fencing</span><span>Cleaning</span>
+<!-- (B) HERO -->
+<section class="bg-cream">
+  <div class="max-w-content mx-auto px-5 pt-14 pb-16 md:pt-20 md:pb-24 grid md:grid-cols-2 gap-12 items-center">
+    <div>
+      <h1 class="text-4xl md:text-5xl leading-tight">
+        The patients you already tested are worth six figures. We bring them back.
+      </h1>
+      <p class="mt-6 text-ink-soft text-lg md:text-xl max-w-[34ch] md:max-w-none">
+        Action Design Studio helps independent hearing clinics recover tested-not-sold and
+        upgrade-due patients from their existing database — booked straight onto your calendar.
+        No new ad spend. You only pay when it books evaluations.
+      </p>
+      <div class="mt-8">
+        <a href="[BOOKING_LINK]" class="btn-primary text-lg">Book your free Patient Recovery Audit →</a>
+      </div>
+      <p class="mt-5 text-[15px] text-ink-soft font-medium">
+        HIPAA-conscious · Works with Sycle, Blueprint OMS &amp; CounselEAR · Built only for hearing care.
+      </p>
     </div>
-  </section>
 
-  <!-- PROCESS -->
-  <section class="bg-white">
-    <div class="max-w-7xl mx-auto px-6 py-20">
-      <div class="text-center max-w-2xl mx-auto mb-12">
-        <p class="font-heading tracking-[0.3em] gold-text text-tiny uppercase mb-3">HOW IT WORKS</p>
-        <h2 class="font-heading text-3xl md:text-h2 text-ink">Live in days, not months.</h2>
+    <!-- Results dashboard mockup placeholder -->
+    <div class="card p-0 overflow-hidden">
+      <div class="bg-navy px-5 py-3 flex items-center gap-2">
+        <span class="w-3 h-3 rounded-full bg-[#E8A33D]"></span>
+        <span class="w-3 h-3 rounded-full bg-[#3a557a]"></span>
+        <span class="w-3 h-3 rounded-full bg-[#3a557a]"></span>
+        <span class="ml-3 text-white/70 text-sm font-medium">Recovery Dashboard</span>
       </div>
-      <div class="grid md:grid-cols-3 gap-8">
-        <div class="relative">
-          <div class="font-heading text-5xl text-silver">01</div>
-          <h3 class="font-heading text-xl text-ink mt-2">Book a call</h3>
-          <p class="mt-2 text-ink/60 text-small">We learn your trade, your market, and your goals on a quick demo call.</p>
-        </div>
-        <div class="relative">
-          <div class="font-heading text-5xl text-silver">02</div>
-          <h3 class="font-heading text-xl text-ink mt-2">We build your system</h3>
-          <p class="mt-2 text-ink/60 text-small">We design and assemble your site and automations — backed by real assets and reviews.</p>
-        </div>
-        <div class="relative">
-          <div class="font-heading text-5xl text-silver">03</div>
-          <h3 class="font-heading text-xl text-ink mt-2">You launch</h3>
-          <p class="mt-2 text-ink/60 text-small">Go live, start capturing leads, and watch the system work while you work.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- WHY US -->
-  <section class="bg-navy text-white">
-    <div class="max-w-7xl mx-auto px-6 py-20">
-      <div class="text-center max-w-2xl mx-auto mb-12">
-        <p class="font-heading tracking-[0.3em] gold-text text-tiny uppercase mb-3">WHY US</p>
-        <h2 class="font-heading text-3xl md:text-h2">Why contractors pick us</h2>
-      </div>
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div class="glass p-6"><div class="gold-text font-heading text-lg mb-2">✦ Evidence-backed</div><p class="text-white/60 text-small">Every claim on your site traces to a real review or a real photo — never stock.</p></div>
-        <div class="glass p-6"><div class="gold-text font-heading text-lg mb-2">✦ Built fast</div><p class="text-white/60 text-small">Agency-grade sites shipped in days, not months.</p></div>
-        <div class="glass p-6"><div class="gold-text font-heading text-lg mb-2">✦ No long contracts</div><p class="text-white/60 text-small">Stay because it works, not because you're locked in.</p></div>
-        <div class="glass p-6"><div class="gold-text font-heading text-lg mb-2">✦ Done-for-you</div><p class="text-white/60 text-small">We build and run the system so you can stay on the tools.</p></div>
-        <div class="glass p-6"><div class="gold-text font-heading text-lg mb-2">✦ Local-first</div><p class="text-white/60 text-small">Everything is tuned to win your city, your trade.</p></div>
-        <div class="glass p-6"><div class="gold-text font-heading text-lg mb-2">✦ One partner</div><p class="text-white/60 text-small">Website, reviews, SEO, and follow-up under one roof.</p></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- TESTIMONIALS -->
-  <section class="bg-mist">
-    <div class="max-w-5xl mx-auto px-6 py-20">
-      <div class="text-center max-w-2xl mx-auto mb-12">
-        <p class="font-heading tracking-[0.3em] gold-text text-tiny uppercase mb-3">TESTIMONIALS</p>
-        <h2 class="font-heading text-3xl md:text-h2 text-ink">What contractors say</h2>
-        <p class="mt-3 text-ink/60">Real reviews coming soon as we launch with our first clients.</p>
-      </div>
-      <div class="relative overflow-hidden">
-        <div data-carousel-track class="flex transition-transform duration-500">
-          <figure class="min-w-full px-2">
-            <div class="card p-8 text-center max-w-2xl mx-auto">
-              <div class="gold-text text-xl mb-4">★★★★★</div>
-              <blockquote class="text-ink text-lg italic">"Your real customer testimonial will appear right here — a happy contractor describing how the system filled their schedule."</blockquote>
-              <figcaption class="mt-5 flex items-center justify-center gap-3"><span class="w-10 h-10 rounded-full bg-silver/60"></span><span class="text-left"><span class="block font-bold text-ink text-sm">Client Name</span><span class="block text-ink/50 text-xs">Roofing · Regina</span></span></figcaption>
+      <figure class="m-0">
+        <div class="bg-white p-7" role="img" aria-label="Mockup of a patient-recovery results dashboard showing evaluations booked this month, no-shows rescued, and recall reactivations.">
+          <p class="text-sm font-semibold text-ink-soft uppercase tracking-wide">Evaluations booked this month</p>
+          <p class="text-6xl font-extrabold text-navy mt-1">[XX]</p>
+          <div class="mt-6 grid grid-cols-2 gap-4">
+            <div class="rounded-xl bg-cream p-4">
+              <p class="text-xs font-semibold text-ink-soft uppercase tracking-wide">No-shows rescued</p>
+              <p class="text-2xl font-extrabold text-teal mt-1">[X]</p>
             </div>
-          </figure>
-          <figure class="min-w-full px-2">
-            <div class="card p-8 text-center max-w-2xl mx-auto">
-              <div class="gold-text text-xl mb-4">★★★★★</div>
-              <blockquote class="text-ink text-lg italic">"Another real review will live here once we collect it — in your customer's own words."</blockquote>
-              <figcaption class="mt-5 flex items-center justify-center gap-3"><span class="w-10 h-10 rounded-full bg-silver/60"></span><span class="text-left"><span class="block font-bold text-ink text-sm">Client Name</span><span class="block text-ink/50 text-xs">HVAC · Saskatoon</span></span></figcaption>
+            <div class="rounded-xl bg-cream p-4">
+              <p class="text-xs font-semibold text-ink-soft uppercase tracking-wide">Recall reactivations</p>
+              <p class="text-2xl font-extrabold text-teal mt-1">[X]</p>
             </div>
-          </figure>
-          <figure class="min-w-full px-2">
-            <div class="card p-8 text-center max-w-2xl mx-auto">
-              <div class="gold-text text-xl mb-4">★★★★★</div>
-              <blockquote class="text-ink text-lg italic">"A third testimonial slot, ready for a real quote about more calls, more booked jobs, and a phone that finally rings."</blockquote>
-              <figcaption class="mt-5 flex items-center justify-center gap-3"><span class="w-10 h-10 rounded-full bg-silver/60"></span><span class="text-left"><span class="block font-bold text-ink text-sm">Client Name</span><span class="block text-ink/50 text-xs">Plumbing · Regina</span></span></figcaption>
-            </div>
-          </figure>
+          </div>
+          <div class="mt-5 h-24 rounded-xl bg-gradient-to-t from-[#E7F0F7] to-white border border-[#E1E9F0] flex items-end gap-1.5 p-3" aria-hidden="true">
+            <span class="flex-1 bg-teal/30 rounded-t" style="height:40%"></span>
+            <span class="flex-1 bg-teal/40 rounded-t" style="height:55%"></span>
+            <span class="flex-1 bg-teal/50 rounded-t" style="height:48%"></span>
+            <span class="flex-1 bg-teal/60 rounded-t" style="height:70%"></span>
+            <span class="flex-1 bg-teal/70 rounded-t" style="height:62%"></span>
+            <span class="flex-1 bg-teal rounded-t" style="height:88%"></span>
+          </div>
         </div>
-        <button data-carousel-prev class="absolute left-0 top-1/2 -translate-y-1/2 w-10 h-10 card flex items-center justify-center" aria-label="Previous testimonial">‹</button>
-        <button data-carousel-next class="absolute right-0 top-1/2 -translate-y-1/2 w-10 h-10 card flex items-center justify-center" aria-label="Next testimonial">›</button>
-      </div>
-      <!-- ===================================================================
-           LIVE REVIEW WIDGET DROP-IN
-           Paste your Google / Trustindex / Elfsight embed code below, then
-           delete the placeholder carousel above. The container is pre-styled.
-      ==================================================================== -->
-      <div id="live-reviews" class="mt-10"><!-- LIVE REVIEW WIDGET EMBED GOES HERE --></div>
-    </div>
-  </section>
-
-  <!-- FAQ TEASER -->
-  <section class="bg-white">
-    <div class="max-w-3xl mx-auto px-6 py-20">
-      <div class="text-center mb-10">
-        <p class="font-heading tracking-[0.3em] gold-text text-tiny uppercase mb-3">FAQ</p>
-        <h2 class="font-heading text-3xl md:text-h2 text-ink">Questions, answered</h2>
-      </div>
-      <div class="card divide-y divide-silver/40">
-        <div>
-          <button data-acc-trigger aria-expanded="false" class="w-full flex items-center justify-between text-left p-5 font-heading text-lg text-ink"><span>How fast can my site go live?</span><span data-acc-icon class="gold-text text-2xl leading-none transition-transform">+</span></button>
-          <div class="hidden px-5 pb-5 text-ink/65 text-small">Most sites launch in days, not months. After our call we build your system and hand you a launch date up front.</div>
-        </div>
-        <div>
-          <button data-acc-trigger aria-expanded="false" class="w-full flex items-center justify-between text-left p-5 font-heading text-lg text-ink"><span>Do I have to sign a long contract?</span><span data-acc-icon class="gold-text text-2xl leading-none transition-transform">+</span></button>
-          <div class="hidden px-5 pb-5 text-ink/65 text-small">No. You stay because the system works, not because you're locked in.</div>
-        </div>
-        <div>
-          <button data-acc-trigger aria-expanded="false" class="w-full flex items-center justify-between text-left p-5 font-heading text-lg text-ink"><span>How much does it cost?</span><span data-acc-icon class="gold-text text-2xl leading-none transition-transform">+</span></button>
-          <div class="hidden px-5 pb-5 text-ink/65 text-small">See our pricing page for plans, or book a call for a custom quote. We're upfront about price before you commit.</div>
-        </div>
-      </div>
-      <div class="text-center mt-8"><a href="/faq.html" class="gold-text font-bold text-sm">See all FAQs →</a></div>
-    </div>
-  </section>
-
-  <!-- FINAL CTA -->
-  <section class="bg-navy text-white">
-    <div class="max-w-4xl mx-auto px-6 py-20 text-center">
-      <h2 class="font-heading text-3xl md:text-h2">Ready to be the contractor everyone calls?</h2>
-      <p class="mt-3 text-white/70">Book a free 15-minute call. We'll show you exactly what your system would look like.</p>
-      <div class="mt-8 flex flex-wrap justify-center gap-4">
-        <a href="/contact.html" class="btn-gold px-8 py-4 text-sm">Book a Call</a>
-        <a href="tel:+16395713298" class="btn-ghost px-8 py-4 text-sm">639-571-3298</a>
-      </div>
-    </div>
-  </section>
-</main>
-<footer class="bg-navy text-white">
-  <div class="max-w-7xl mx-auto px-6 py-14">
-    <div class="grid md:grid-cols-4 gap-10">
-      <div>
-        <a href="/" class="flex items-center gap-3 mb-4">
-          <img src="/assets/logo.svg" alt="Action Design Studio" class="h-9 w-auto" />
-          <span class="leading-none">
-            <span class="block font-heading text-2xl tracking-wide">ACTION</span>
-            <span class="block text-[8px] tracking-[0.46em] gold-text font-bold mt-1">DESIGN STUDIO</span>
-          </span>
-        </a>
-        <p class="text-xs text-white/45 leading-relaxed">Agency-grade contractor marketing systems — built fast, backed by real results.</p>
-        <div class="mt-5 flex gap-3">
-          <!-- PLACEHOLDER: replace # with real social URLs -->
-          <a href="#" class="w-9 h-9 glass flex items-center justify-center gold-text text-xs font-bold" aria-label="Facebook">f</a>
-          <a href="#" class="w-9 h-9 glass flex items-center justify-center gold-text text-xs font-bold" aria-label="Instagram">ig</a>
-          <a href="#" class="w-9 h-9 glass flex items-center justify-center gold-text text-xs font-bold" aria-label="YouTube">yt</a>
-        </div>
-      </div>
-      <div>
-        <h4 class="font-heading text-base tracking-widest mb-4">Company</h4>
-        <ul class="space-y-2.5 text-xs text-white/45">
-          <li><a href="/about.html" class="hover:text-gold transition-colors">About</a></li>
-          <li><a href="/process.html" class="hover:text-gold transition-colors">Process</a></li>
-          <li><a href="/work.html" class="hover:text-gold transition-colors">Our Work</a></li>
-          <li><a href="/blog/" class="hover:text-gold transition-colors">Blog</a></li>
-          <li><a href="/contact.html" class="hover:text-gold transition-colors">Contact</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4 class="font-heading text-base tracking-widest mb-4">Services</h4>
-        <ul class="space-y-2.5 text-xs text-white/45">
-          <li><a href="/services/conversion-website.html" class="hover:text-gold transition-colors">Conversion Website</a></li>
-          <li><a href="/services/review-engine.html" class="hover:text-gold transition-colors">5-Star Review Engine</a></li>
-          <li><a href="/services/missed-call-text-back.html" class="hover:text-gold transition-colors">Missed-Call Text-Back</a></li>
-          <li><a href="/services/local-seo.html" class="hover:text-gold transition-colors">Local SEO</a></li>
-          <li><a href="/services/one-click-campaigns.html" class="hover:text-gold transition-colors">One-Click Campaigns</a></li>
-          <li><a href="/services/all-in-one-inbox.html" class="hover:text-gold transition-colors">All-In-One Inbox</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4 class="font-heading text-base tracking-widest mb-4">Get Started</h4>
-        <ul class="space-y-2.5 text-xs text-white/45">
-          <li><a href="/pricing.html" class="hover:text-gold transition-colors">Pricing</a></li>
-          <li><a href="/contact.html" class="hover:text-gold transition-colors">Book a Call</a></li>
-          <li><a href="mailto:michael@actiondesignstudio.com" class="hover:text-gold transition-colors">michael@actiondesignstudio.com</a></li>
-          <li><a href="tel:+16395713298" class="hover:text-gold transition-colors">639-571-3298</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="mt-12 pt-6 border-t border-white/10 flex flex-col sm:flex-row justify-between gap-3 text-xs text-white/35">
-      <p>&copy; <span data-year>2026</span> Action Design Studio. All rights reserved.</p>
-      <p class="flex gap-4"><a href="/privacy.html" class="hover:text-gold">Privacy</a><a href="/terms.html" class="hover:text-gold">Terms</a></p>
+        <figcaption class="px-7 pb-5 -mt-1"><span class="ph">Placeholder · [DASHBOARD_SCREENSHOT]</span></figcaption>
+      </figure>
     </div>
   </div>
+</section>
+
+<!-- (C) PROOF BAND -->
+<section class="bg-navy text-white" aria-label="Proof">
+  <div class="max-w-content mx-auto px-5 py-12 md:py-14">
+    <figure class="m-0 max-w-3xl mx-auto text-center">
+      <span class="ph">Placeholder — swap for a real quote</span>
+      <blockquote class="mt-4 text-2xl md:text-3xl font-semibold leading-snug text-white">
+        “In 14 days we booked 11 evaluations from our existing patient list.”
+      </blockquote>
+      <figcaption class="mt-4 text-white/70 text-base">
+        — [Owner Name], [Clinic Name], [City]
+      </figcaption>
+    </figure>
+    <p class="mt-8 text-center text-white/55 text-sm font-medium tracking-wide">
+      Trusted by independent clinics using [Sycle / Blueprint OMS / CounselEAR].
+    </p>
+  </div>
+</section>
+
+<!-- (D) THE LEAK -->
+<section class="bg-cream" aria-labelledby="leak-h">
+  <div class="max-w-content mx-auto px-5 py-16 md:py-20">
+    <h2 id="leak-h" class="text-3xl md:text-4xl text-center">Where independent hearing clinics lose money</h2>
+    <div class="mt-12 grid sm:grid-cols-2 gap-6">
+      <div class="card p-7">
+        <p class="text-lg"><strong class="text-navy">97% of tested-not-sold patients never come back</strong> — not because they bought elsewhere, but because no one followed up.</p>
+        <p class="mt-3 text-sm text-ink-soft">Source: Hearing Review, 500-patient study.</p>
+      </div>
+      <div class="card p-7">
+        <p class="text-lg"><strong class="text-navy">Upgrade-due patients drift to OTC and Costco</strong> while their 4-year-old aids fail — because no one reminded them.</p>
+      </div>
+      <div class="card p-7">
+        <p class="text-lg"><strong class="text-navy">Roughly 1 in 5 evaluations no-shows</strong> — and most are never rebooked.</p>
+      </div>
+      <div class="card p-7">
+        <p class="text-lg"><strong class="text-navy">New leads sit unanswered</strong> while the clinic across town texts back in five minutes.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- (E) HOW IT WORKS -->
+<section class="bg-white" aria-labelledby="how-h">
+  <div class="max-w-content mx-auto px-5 py-16 md:py-20">
+    <h2 id="how-h" class="text-3xl md:text-4xl text-center">How it works</h2>
+    <div class="mt-12 grid md:grid-cols-3 gap-8">
+      <div class="flex gap-4">
+        <span class="step-num">1</span>
+        <p class="text-lg">We pull your lists from <strong>Sycle, Blueprint OMS, or CounselEAR</strong> — tested-not-sold, upgrade-due, warranty-expiring.</p>
+      </div>
+      <div class="flex gap-4">
+        <span class="step-num">2</span>
+        <p class="text-lg">We run a <strong>respectful, multi-channel recovery</strong> — voicemail, text, email, and a front-desk call list — inviting patients in for a complimentary hearing check.</p>
+      </div>
+      <div class="flex gap-4">
+        <span class="step-num">3</span>
+        <p class="text-lg">Patients <strong>book themselves onto your calendar.</strong> You just watch evaluations appear.</p>
+      </div>
+    </div>
+    <div class="mt-12 text-center">
+      <a href="[BOOKING_LINK]" class="btn-primary text-lg">Book your free Patient Recovery Audit →</a>
+    </div>
+  </div>
+</section>
+
+<!-- (F) ALWAYS-ON SYSTEM -->
+<section class="bg-cream" aria-labelledby="always-h">
+  <div class="max-w-content mx-auto px-5 py-16 md:py-20">
+    <h2 id="always-h" class="text-3xl md:text-4xl text-center max-w-3xl mx-auto">After the recovery, we keep your schedule full — automatically.</h2>
+    <ul class="mt-10 max-w-2xl mx-auto grid sm:grid-cols-2 gap-x-8 gap-y-4">
+      <li class="flex gap-3 text-lg"><span class="text-teal font-bold mt-0.5" aria-hidden="true">✓</span> 5-minute response on every new lead and missed call</li>
+      <li class="flex gap-3 text-lg"><span class="text-teal font-bold mt-0.5" aria-hidden="true">✓</span> No-show rescue</li>
+      <li class="flex gap-3 text-lg"><span class="text-teal font-bold mt-0.5" aria-hidden="true">✓</span> Monthly recall reactivation</li>
+      <li class="flex gap-3 text-lg"><span class="text-teal font-bold mt-0.5" aria-hidden="true">✓</span> Review generation</li>
+      <li class="flex gap-3 text-lg sm:col-span-2"><span class="text-teal font-bold mt-0.5" aria-hidden="true">✓</span> All HIPAA-conscious, all done for you</li>
+    </ul>
+  </div>
+</section>
+
+<!-- (G) ROI CALCULATOR -->
+<section class="bg-white" aria-labelledby="roi-h">
+  <div class="max-w-content mx-auto px-5 py-16 md:py-20">
+    <h2 id="roi-h" class="text-3xl md:text-4xl text-center max-w-2xl mx-auto">How much is your tested-not-sold list worth?</h2>
+
+    <div class="mt-12 grid md:grid-cols-2 gap-10 items-start">
+      <!-- Inputs -->
+      <form class="card p-7 space-y-7" aria-label="Tested-not-sold value calculator">
+        <div>
+          <div class="flex items-baseline justify-between gap-3">
+            <label for="patients" class="font-semibold text-navy">Patients tested per month</label>
+            <input id="patientsNum" type="number" min="0" max="500" value="25" inputmode="numeric"
+                   class="w-24 text-right border border-[#D9D0C0] rounded-lg px-3 py-1.5 font-semibold" aria-label="Patients tested per month (number)">
+          </div>
+          <input id="patients" type="range" min="0" max="200" step="1" value="25" class="mt-3" aria-describedby="patientsNum">
+        </div>
+
+        <div>
+          <div class="flex items-baseline justify-between gap-3">
+            <label for="buyRate" class="font-semibold text-navy">Same-day buy rate</label>
+            <div class="flex items-center gap-1">
+              <input id="buyRateNum" type="number" min="0" max="100" value="35" inputmode="numeric"
+                     class="w-20 text-right border border-[#D9D0C0] rounded-lg px-3 py-1.5 font-semibold" aria-label="Same-day buy rate percent (number)">
+              <span class="font-semibold text-ink-soft">%</span>
+            </div>
+          </div>
+          <input id="buyRate" type="range" min="0" max="100" step="1" value="35" class="mt-3" aria-describedby="buyRateNum">
+        </div>
+
+        <div>
+          <div class="flex items-baseline justify-between gap-3">
+            <label for="price" class="font-semibold text-navy">Average pair price</label>
+            <div class="flex items-center gap-1">
+              <span class="font-semibold text-ink-soft">$</span>
+              <input id="priceNum" type="number" min="0" max="20000" step="50" value="3600" inputmode="numeric"
+                     class="w-28 text-right border border-[#D9D0C0] rounded-lg px-3 py-1.5 font-semibold" aria-label="Average pair price in dollars (number)">
+            </div>
+          </div>
+          <input id="price" type="range" min="0" max="10000" step="50" value="3600" class="mt-3" aria-describedby="priceNum">
+        </div>
+      </form>
+
+      <!-- Output -->
+      <div class="bg-navy text-white rounded-2xl p-8">
+        <p class="text-xl leading-relaxed">
+          Roughly <span id="walkOut" class="block text-4xl md:text-5xl font-extrabold text-amber my-2" aria-live="polite">$0</span>
+          walks out your door each year.
+        </p>
+        <p class="text-xl leading-relaxed mt-5">
+          We typically help clinics recover around
+          <span id="recoverable" class="block text-4xl md:text-5xl font-extrabold text-white my-2" aria-live="polite">$0</span>
+          of it.
+        </p>
+        <a href="[BOOKING_LINK]" class="btn-primary text-lg mt-7 w-full">Book your free Patient Recovery Audit to go get it →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- (H) RISK REVERSAL -->
+<section class="bg-teal text-white" aria-labelledby="risk-h">
+  <div class="max-w-content mx-auto px-5 py-14 md:py-16 text-center">
+    <h2 id="risk-h" class="text-3xl md:text-4xl text-white max-w-3xl mx-auto leading-tight">We only get paid when it works.</h2>
+    <p class="mt-5 text-xl md:text-2xl text-white/95 max-w-3xl mx-auto">
+      If your first recovery campaign doesn't book at least <strong>8 evaluations in 21 days</strong>, you don't pay. Simple as that.
+    </p>
+  </div>
+</section>
+
+<!-- (I) ABOUT / FOUNDER -->
+<section class="bg-cream" aria-labelledby="about-h">
+  <div class="max-w-content mx-auto px-5 py-16 md:py-20 grid md:grid-cols-[220px_1fr] gap-10 items-center">
+    <figure class="m-0 mx-auto md:mx-0">
+      <div class="w-44 h-44 rounded-2xl bg-white border border-[#E7E0D4] flex items-center justify-center text-center text-ink-soft"
+           role="img" aria-label="Photo of the founder of Action Design Studio">
+        <span class="ph">[FOUNDER_PHOTO]</span>
+      </div>
+    </figure>
+    <div>
+      <h2 id="about-h" class="text-3xl md:text-4xl">Built by one person, for one kind of clinic.</h2>
+      <p class="mt-5 text-lg text-ink-soft">
+        Action Design Studio is run by <strong class="text-navy">[FOUNDER NAME]</strong>. We work with one kind of
+        business — independent hearing clinics — because the patients you've already tested are the most overlooked
+        revenue in your practice, and almost no one is helping you recover them. We build the system, we run it, and we
+        tie our pay to your results.
+      </p>
+      <p class="mt-3 text-ink-soft">Based in [CITY].</p>
+    </div>
+  </div>
+</section>
+
+<!-- (J) FAQ -->
+<section class="bg-white" aria-labelledby="faq-h">
+  <div class="max-w-3xl mx-auto px-5 py-16 md:py-20">
+    <h2 id="faq-h" class="text-3xl md:text-4xl text-center">Questions hearing-clinic owners ask</h2>
+    <div class="mt-10">
+      <details class="faq">
+        <summary>“My buying group already does my marketing.”<svg class="chev" width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+        <div class="faq-body">They send templates for new patients. We recover the ones already in your database — tested-not-sold and upgrade-due — that no one is working. Different leak, and you only pay on results.</div>
+      </details>
+      <details class="faq">
+        <summary>“My patients are older — do they really respond to texts?”<svg class="chev" width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+        <div class="faq-body">We're multi-channel: a warm voicemail and a front-desk call list do the heavy lifting, with text and email as backup. And the adult children who help with care almost always text.</div>
+      </details>
+      <details class="faq">
+        <summary>“Is this HIPAA-compliant?”<svg class="chev" width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+        <div class="faq-body">Yes — we run on a HIPAA-capable platform with a signed BAA, keep clinical detail out of messages, and make opt-out one tap.</div>
+      </details>
+      <details class="faq">
+        <summary>“We already have Sycle/Blueprint — doesn't it do this?”<svg class="chev" width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+        <div class="faq-body">It stores the lists; it won't run a multi-channel recovery, answer leads in 5 minutes, or rescue no-shows for you. We make the database actually work.</div>
+      </details>
+      <details class="faq">
+        <summary>“How fast do we see results?”<svg class="chev" width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+        <div class="faq-body">Most clinics see evaluations booked within the first week of the recovery campaign.</div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- (K) FINAL CTA -->
+<section class="bg-navy text-white" aria-labelledby="final-h">
+  <div class="max-w-content mx-auto px-5 py-16 md:py-20 text-center">
+    <h2 id="final-h" class="text-3xl md:text-5xl text-white max-w-3xl mx-auto leading-tight">Your next 10 patients are already in your database.</h2>
+    <p class="mt-5 text-xl text-white/85 max-w-2xl mx-auto">
+      Let's go get them. Book a free 15-minute Patient Recovery Audit and we'll show you what your list is worth.
+    </p>
+    <div class="mt-9 flex flex-col sm:flex-row items-center justify-center gap-4">
+      <a href="[BOOKING_LINK]" class="btn-primary text-lg">Book your free Patient Recovery Audit →</a>
+      <a href="tel:[PHONE]" class="link-quiet text-white text-lg">Or call [PHONE]</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- (L) FOOTER -->
+<footer class="bg-navy-deep text-white/70">
+  <div class="max-w-content mx-auto px-5 py-12">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+      <a href="/" class="flex items-center gap-2 text-white font-extrabold tracking-tight text-lg">
+        <span class="inline-block w-2.5 h-2.5 rounded-sm bg-amber"></span>
+        Action Design Studio
+      </a>
+      <div class="flex flex-wrap items-center gap-x-6 gap-y-2 text-[15px]">
+        <a href="mailto:[EMAIL]" class="hover:text-white">[EMAIL]</a>
+        <a href="tel:[PHONE]" class="hover:text-white">[PHONE]</a>
+        <span>HIPAA-conscious workflows</span>
+        <a href="[PRIVACY_POLICY_LINK]" class="hover:text-white">Privacy Policy</a>
+      </div>
+    </div>
+    <p class="mt-8 text-sm text-white/45 max-w-3xl">
+      Results vary by clinic, list size, and market. Industry statistics cited from published research.
+    </p>
+  </div>
 </footer>
-<script src="/assets/site.js"></script>
+
+<script>
+  (function () {
+    var USD = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+
+    var patients = document.getElementById('patients');
+    var patientsNum = document.getElementById('patientsNum');
+    var buyRate = document.getElementById('buyRate');
+    var buyRateNum = document.getElementById('buyRateNum');
+    var price = document.getElementById('price');
+    var priceNum = document.getElementById('priceNum');
+    var walkOut = document.getElementById('walkOut');
+    var recoverable = document.getElementById('recoverable');
+
+    function clamp(v, min, max) { v = isNaN(v) ? min : v; return Math.min(max, Math.max(min, v)); }
+
+    function recompute() {
+      var tested = clamp(parseFloat(patientsNum.value), 0, 500);
+      var rate = clamp(parseFloat(buyRateNum.value), 0, 100);
+      var avg = clamp(parseFloat(priceNum.value), 0, 20000);
+
+      var nonBuyersPerYear = tested * (1 - rate / 100) * 12;
+      var revenueWalkingOut = nonBuyersPerYear * avg;
+      var realisticRecoverable = revenueWalkingOut * 0.10;
+
+      walkOut.textContent = USD.format(Math.round(revenueWalkingOut));
+      recoverable.textContent = USD.format(Math.round(realisticRecoverable));
+    }
+
+    // keep slider <-> number field in sync, then recompute
+    function bind(slider, num, min, max) {
+      slider.addEventListener('input', function () { num.value = slider.value; recompute(); });
+      num.addEventListener('input', function () {
+        var v = clamp(parseFloat(num.value), min, max);
+        // reflect into slider only when within its visible range so the thumb tracks
+        slider.value = clamp(v, parseFloat(slider.min), parseFloat(slider.max));
+        recompute();
+      });
+    }
+
+    bind(patients, patientsNum, 0, 500);
+    bind(buyRate, buyRateNum, 0, 100);
+    bind(price, priceNum, 0, 20000);
+
+    recompute();
+  })();
+</script>
 </body>
 </html>
